@@ -27,3 +27,33 @@ describe('series()', function () {
     a.series([b,c],d);
   });
 });
+
+describe('mapSeries()', function () {
+  it('should map array in a series', function (done) {
+    var n = 4;
+    function t (i, done) {
+      done(null, n++);
+    }
+    function d (err, results) {
+      should(err).be.not.ok;
+      results.length.should.equal(2);
+      results.should.equal([4, 5]);
+      done();
+    }
+    a.mapSeries(['b','c'],t,d);
+  });
+
+  it('should map object in a series', function (done) {
+    var n = 4;
+    function t (i, done) {
+      done(null, n++);
+    }
+    function d (err, results) {
+      should(err).be.not.ok;
+      results.length.should.equal(2);
+      results.should.equal({ a: 4, b: 5 });
+      done();
+    }
+    a.mapSeries({ a: 'b', b: 'c' }, t, d);
+  });
+});

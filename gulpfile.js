@@ -5,12 +5,6 @@ var jshint = require('gulp-jshint');
 var stylish = require('jshint-stylish');
 var a = require('./src/a.js');
 
-gulp.task('lint', function () {
-  gulp.src('./src/*.js')
-    .pipe(jshint())
-    .pipe(jshint.reporter(stylish));
-});
-
 gulp.task('bump', function () {
   return gulp.src(['./package.json', './bower.json'])
     .pipe(bump())
@@ -28,5 +22,3 @@ gulp.task('release', ['bump'], function () {
     .pipe(git.push('origin', 'master'))
     .pipe(gulp.dest('./'));
 });
-
-gulp.task('default', ['lint']);
