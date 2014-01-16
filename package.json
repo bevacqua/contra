@@ -24,7 +24,7 @@
     "generator"
   ],
   "scripts": {
-    "test": "jshint test && jshint src && mocha"
+    "test": "mocha && jshint test && jshint src"
   },
   "dependencies": {},
   "devDependencies": {
