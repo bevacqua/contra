@@ -120,6 +120,65 @@ a.parallel({
 });
 ```
 
+## `series(steps[, done])`
+
+Executes steps in series. `done` gets all the results. If you use an object for the steps, the results will be mapped into an object. Otherwise a result array, in the same order as the steps, will be returned.
+
+- `steps` Collection of functions with the `(done)` signature. Can be an array or an object.
+- `done` Optional function with the `(err, results)` signature.
+
+Usage
+
+```js
+a.series([
+  function (done) {
+    setTimeout(function () {
+      done(null, [1, 2, 3]);
+    }, 3000);
+  },
+  function (done) {
+    if (something) {
+      done(new Error('Expected something!')); return;
+    }
+    done(null, 2);
+  },
+  function (done) {
+    done(null, 3 * 3);
+  }
+], function (err, result) {
+  if (err) {
+    console.log(err); return;
+  }
+  console.log(result);
+  // <- [[1, 2, 3], 2, 9]
+});
+```
+
+Or, using objects.
+
+```js
+a.series({
+  things: function (done) {
+    done(null, [1, 2, 3]);
+  },
+  test: function (done) {
+    if (something) {
+      done(new Error('Expected something!')); return;
+    }
+    done(null, 2);
+  },
+  mult: function (done) {
+    done(null, 3 * 3);
+  }
+}, function (err, result) {
+  if (err) {
+    console.log(err); return;
+  }
+  console.log(result);
+  // <- { things: [1, 2, 3], test: 2, mult: 9 }
+});
+```
+
 # License
 
 MIT
