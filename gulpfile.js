@@ -23,21 +23,21 @@ function v () {
 }
 
 function message () {
-  var message = 'Release ' + v();
+  return 'Release ' + v();
 }
 
-gulp.task('release-commit', function () {
-  return gulp.src(['./package.json', './bower.json'])
-    .pipe(git.commit(message()));
+gulp.task('release-commit', ['release-bump'], function () {
+  gulp.src(['./package.json', './bower.json'])
+    .pipe(git.commit(message()))
+    .pipe(gulp.dest('./'));
 });
 
-gulp.task('release-tag', function () {
-
-  return gulp.src('./')
+gulp.task('release-tag', ['release-commit'], function () {
+  gulp.src('./')
     .pipe(git.tag(v(), message()))
-    .pipe(git.push('origin', 'master'));;
+    .pipe(git.push('origin', 'master'))
+    .pipe(gulp.dest('./'));
 });
 
 gulp.task('default', ['lint']);
-
-gulp.task('release', ['release-bump', 'release-commit']);
+gulp.task('release', ['release-tag']);
