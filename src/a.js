@@ -2,7 +2,7 @@
   'use strict';
 
   // core
-  function a (a) { return a instanceof Array; }
+  function a (o) { return o instanceof Array; }
   function atoa (a) { return Array.prototype.slice.call(a); }
   function noop () {}
   function cb (fn, args) { if (!fn) return; tick(function run () { fn.apply(null, args); }); }
@@ -12,13 +12,13 @@
       if (disposed) { return; }
       disposed = true;
       fn.apply(null, arguments);
-    };
+    }
     disposable.discard = function () { disposed = true; };
     return disposable;
   }
   function handle (args, done, disposable) {
     var err = args.shift();
-    if (err) { disposable && disposable.discard(); cb(done, [err]); return true; }
+    if (err) { if (disposable) { disposable.discard(); } cb(done, [err]); return true; }
   }
 
   var tick;
