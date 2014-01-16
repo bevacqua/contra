@@ -23,8 +23,8 @@ gulp.task('release', ['bump'], function () {
   var message = 'Release ' + v;
 
   gulp.src('./')
-    .pipe(git.commit(message()))
-    .pipe(git.tag(v(), message()))
+    .pipe(git.commit(message))
+    .pipe(git.tag(v, message))
     .pipe(git.push('origin', 'master'))
     .pipe(gulp.dest('./'));
 });
