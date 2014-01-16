@@ -23,5 +23,7 @@
     "q",
     "generator"
   ],
-  "dependencies": {}
+  "dependencies": {},
+  "ignore": [".editorconfig", "package.json"],
+  "main": "src/a.js"
 }
