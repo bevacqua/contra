@@ -17,18 +17,24 @@ gulp.task('release-bump', function () {
     .pipe(gulp.dest('./'));
 });
 
+function v () {
+  var pkg = require('./package.json');
+  return 'v' + pkg.version;
+}
+
+function message () {
+  var message = 'Release ' + v();
+}
+
 gulp.task('release-commit', function () {
   return gulp.src(['./package.json', './bower.json'])
-    .pipe(git.commit(message));
+    .pipe(git.commit(message()));
 });
 
 gulp.task('release-tag', function () {
-  var pkg = require('./package.json');
-  var v = 'v' + pkg.version;
-  var message = 'Release ' + v;
 
   return gulp.src('./')
-    .pipe(git.tag(v, message))
+    .pipe(git.tag(v(), message()))
     .pipe(git.push('origin', 'master'));;
 });
 
