@@ -27,7 +27,7 @@ function message () {
 }
 
 gulp.task('release-commit', ['release-bump'], function () {
-  gulp.src(['./package.json', './bower.json'])
+  return gulp.src('./')
     .pipe(git.commit(message()))
     .pipe(gulp.dest('./'));
 });
