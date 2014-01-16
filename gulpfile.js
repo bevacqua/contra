@@ -11,39 +11,27 @@ gulp.task('lint', function () {
     .pipe(jshint.reporter(stylish));
 });
 
-gulp.task('bump', function () {
-  gulp.src(['./package.json', './bower.json'])
+gulp.task('release-bump', function () {
+  return gulp.src(['./package.json', './bower.json'])
     .pipe(bump())
     .pipe(gulp.dest('./'));
 });
 
-gulp.task('tag', function () {
+gulp.task('release-commit', function () {
+  return gulp.src(['./package.json', './bower.json'])
+    .pipe(git.commit(message));
+});
+
+gulp.task('release-tag', function () {
   var pkg = require('./package.json');
   var v = 'v' + pkg.version;
   var message = 'Release ' + v;
 
-  gulp.src(['./package.json', './bower.json'])
-    .pipe(git.commit(message));
-
-  gulp.src('./')
+  return gulp.src('./')
     .pipe(git.tag(v, message))
     .pipe(git.push('origin', 'master'));;
 });
 
-gulp.task('default', function () {
-  gulp.run('lint');
-});
+gulp.task('default', ['lint']);
 
-gulp.task('release', function () {
-  sync('')
-});
-
-
-function sync (tasks, callback) {
-    var sync = tasks.map(function(task) {
-        return function (cb) {
-            gulp.run(task, cb);
-        };
-    });
-    a.series(sync, callback);
-}
+gulp.task('release', ['release-bump', 'release-commit']);
