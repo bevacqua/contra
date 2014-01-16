@@ -1,0 +1,26 @@
+{
+  "name": "a",
+  "description": "Asynchronous control flow with sane debugging capabilities",
+  "homepage": "https://github.com/bevacqua/a",
+  "author": {
+    "name": "Nicolas Bevacqua",
+    "email": "ng@bevacqua.io",
+    "url": "http://bevacqua.io"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/bevacqua/a.git"
+  },
+  "version": "1.0.0",
+  "licenses": "MIT",
+  "keywords": [
+    "async",
+    "a",
+    "asynchronous",
+    "control",
+    "flow",
+    "promises",
+    "q",
+    "generator"
+  ]
+}
