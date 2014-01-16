@@ -1,57 +1,80 @@
 (function () {
   'use strict';
 
+  // core
+  function a (a) { return a instanceof Array; }
   function atoa (a) { return Array.prototype.slice.call(a); }
   function noop () {}
+  function cb (fn, args) { if (!fn) return; tick(function run () { fn.apply(null, args); }); }
+  function once (fn) {
+    var disposed;
+    function disposable () {
+      if (disposed) { return; }
+      disposed = true;
+      fn.apply(null, arguments);
+    };
+    disposable.discard = function () { disposed = true; };
+    return disposable;
+  }
+  function handle (args, done, disposable) {
+    var err = args.shift();
+    if (err) { disposable && disposable.discard(); cb(done, [err]); return true; }
+  }
+
   var tick;
 
+  // methods
   var $ = {
     waterfall: function (steps, done) {
       function next () {
-        var used;
-        var d = done || noop;
-        return function callback () {
-          if (used) { return; }
-          used = true;
+        return once(function callback () {
           var args = atoa(arguments);
           var step = steps.shift();
           if (step) {
-            var err = args.shift();
-            if (err) { d(err); return; }
+            if (handle(args, done)) { return; }
             args.push(next());
-            step.apply(null, args);
+            cb(step, args);
           } else {
-            d.apply(null, arguments);
+            cb(done, arguments);
           }
-        };
+        });
+      }
+      next()();
+    },
+    series: function (tasks, done) {
+      var keys = Object.keys(tasks);
+      var results = a(tasks) ? [] : {};
+      function next () {
+        return once(function callback () {
+          var args = atoa(arguments);
+          var k = keys.shift();
+          var step = tasks[k];
+          if (step) {
+            if (handle(args, done)) { return; }
+            results[k] = args;
+            cb(step, [next()]);
+          } else {
+            cb(done, [null, results]);
+          }
+        });
       }
       next()();
     },
     parallel: function (tasks, done) {
-      var a = tasks instanceof Array;
-      var keys = a ? tasks : Object.keys(tasks);
-      var complete;
+      var keys = Object.keys(tasks);
       var completed = 0, all = keys.length;
-      var results = a ? [] : {};
-      keys.forEach(function iterator (key, i) {
-        var k = a ? i : key;
-        tick(tasks[k](next(k)));
-      });
-
-      function next (k) {
-        var used;
-        var d = done || noop;
-        return function callback () {
-          if (complete || used) { return; }
-          used = true;
+      var results = a(tasks) ? [] : {};
+      keys.forEach(function iterator (key) { cb(tasks[key], [next(key)]); });
+      function next (key) {
+        var fn = once(function callback () {
           var args = $.atoa(arguments);
-          var err = args.shift();
-          if (err) { complete = true; d(err); return; }
-          results[k] = args.shift();
+          if (handle(args, done, fn)) { return; }
+          results[key] = args.shift();
           if (++completed === all) {
-            d(null, results);
+            cb(done, [results]);
           }
-        };
+        });
+        return fn;
       }
     }
   };
@@ -59,23 +82,19 @@
   // cross-platform ticks
   if (typeof process === 'undefined' || !process.nextTick) {
     if (typeof setImmediate === 'function') {
-        tick = function tick (fn) { setImmediate(fn); };
+      tick = function tick (fn) { setImmediate(fn); };
     } else {
       tick = function tick (fn) { setTimeout(fn, 0); };
     }
   } else {
-      if (typeof setImmediate !== 'undefined') {
-          tick = setImmediate;
-      } else {
-          tick = process.nextTick;
-      }
+    tick = typeof setImmediate === 'function' ? setImmediate : process.nextTick;
   }
 
   // cross-platform export
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = $;
   } else if (typeof define !== 'undefined' && define.amd) {
-    define([], function () { return $; });
+    define([], function amd () { return $; });
   } else {
     window.a = $;
   }
