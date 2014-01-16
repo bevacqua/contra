@@ -1,7 +1,7 @@
 {
   "name": "a",
   "description": "Asynchronous control flow with sane debugging capabilities",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "homepage": "https://github.com/bevacqua/a",
   "author": {
     "name": "Nicolas Bevacqua",
