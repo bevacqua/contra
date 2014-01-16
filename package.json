@@ -23,5 +23,10 @@
     "q",
     "generator"
   ],
-  "dependencies": {}
+  "dependencies": {},
+  "devDependencies": {
+    "gulp": "~3.3.4",
+    "gulp-jshint": "~1.3.4",
+    "jshint-stylish": "~0.1.5"
+  }
 }

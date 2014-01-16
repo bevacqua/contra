@@ -1,4 +1,6 @@
-!function ($) {
+(function () {
+  'use strict';
+
   function atoa (a) { return Array.prototype.slice.call(a); }
   function noop () {}
   var tick;
@@ -39,7 +41,7 @@
       function next (k) {
         var used;
         var d = done || noop;
-        return function callback (err) {
+        return function callback () {
           if (complete || used) { return; }
           used = true;
           var args = $.atoa(arguments);
@@ -49,7 +51,7 @@
           if (++completed === all) {
             d(null, results);
           }
-        }
+        };
       }
     }
   };
@@ -77,4 +79,4 @@
   } else {
     window.a = $;
   }
-}();
+})();
