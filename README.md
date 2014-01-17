@@ -1,8 +1,8 @@
-# contr(a)
+![contra.png][logo]
 
 > Asynchronous control flow with a `_` taste to it
 
-Inspired on [async][1], but `contr(a)` aims to stay small and simple, while powerful, that's inspired by [lodash][2. Methods are implemented individually and not as part of a whole. That design helps when considering to export functions individually. If you need all the methods in `async`, then stick with it.
+Inspired on [async][1], `contrλ` aims to stay small and simple, while powerful, which is inspired by [lodash][2]. Methods are implemented individually and not as part of a whole. That design helps when considering to export functions individually. If you need all the methods in `async`, then stick with it.
 
 - [API](#API)
 - [Changelog](CHANGELOG.md)
@@ -31,7 +31,7 @@ You can also use it with AMD. Even if you shouldn't, because AMD kind of _really
 
 # API
 
-These are the methods provided by `contr(a)`.
+These are the methods provided by `contrλ`.
 
 ## `waterfall(steps[, done])`
 
@@ -71,18 +71,19 @@ function done (err, result) {
 }
 ```
 
-In `contr(a)`, [async][1]'s `parallel` is referred to as `concurrent`.
+In `contrλ`, [async][1]'s `parallel` is referred to as `concurrent`.
 
-Methods like `mapSeries` in [async][1] follow the `map.series` convention in `contr(a)`.
+Methods like `mapSeries` in [async][1] follow the `map.series` convention in `contrλ`.
 
-`contr(a)` isn't meant to be a superset of `async`. Rather, it aims to provide a more focused library. Thus, it just includes bits and pieces of `async`'s API deemed reasonable.
+`contrλ` isn't meant to be a superset of `async`. Rather, it aims to provide a more focused library. Thus, it just includes bits and pieces of `async`'s API deemed reasonable.
 
-While `contr(a)` is inspired on `async` and `lodash` it has been written by [@bevacqua][4] from scratch.
+While `contrλ` is inspired on `async` and `lodash` it has been written by [@bevacqua][4] from scratch.
 
 # License
 
 MIT
 
+  [logo]: https://raw.github.com/bevacqua/contra/master/resources/contra.png
   [1]: https://github.com/caolan/async
   [2]: https://github.com/lodash/lodash
   [3]: https://github.com/bevacqua/contra/tree/master/src/contra.js

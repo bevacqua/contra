@@ -24,6 +24,6 @@
     "generator"
   ],
   "dependencies": {},
-  "ignore": [".editorconfig", "package.json", "node_modules", "src", "test"],
+  "ignore": [".editorconfig", "package.json", "node_modules", "src", "test", "resources"],
   "main": "dist/contra.js"
 }
