@@ -32,6 +32,16 @@
     tick = typeof setImmediate === 'function' ? setImmediate : process.nextTick;
   }
 
+  function _apply () {
+    var args = atoa(arguments);
+    var method = args.shift();
+    return function (next) {
+      var copy = atoa(args);
+      copy.push(next);
+      method.apply(method, copy);
+    };
+  }
+
   // { name: 'waterfall', dependencies: ['core'] }
   function _waterfall (steps, done) {
     function next () {
@@ -113,7 +123,7 @@
 
   // dependencies: ['map']
   function _each (flow) {
-    _map(flow, finish);
+    return _map(flow, finish);
     function finish (done) {
       return function (err) {
         done(err); // only return an optional error
@@ -172,14 +182,17 @@
 
   // { name: 'outro', dependencies: ['core'] }
   var $ = {
-    waterfall: _waterfall,
-    series: _series,
+    apply: _apply,
     concurrent: _concurrent,
+    series: _series,
+    waterfall: _waterfall,
+    each: _each(_concurrent),
     map: _map(_concurrent),
     queue: _queue,
     emitter: _emitter
   };
 
+  $.each.series = _each(_series);
   $.map.series = _map(_series);
 
   // cross-platform export

@@ -7,6 +7,7 @@ var concat = require('gulp-concat');
 var clean = require('gulp-clean');
 var rename = require('gulp-rename');
 var uglify = require('gulp-uglify');
+var size = require('gulp-size');
 
 gulp.task('test', function() {
   gulp.src('./src/*.js')
@@ -23,16 +24,18 @@ gulp.task('clean', function () {
       .pipe(clean());
 });
 
-gulp.task('minify', ['test', 'clean'], function () {
+gulp.task('build', ['test', 'clean'], function () {
   return gulp.src('./src/*.js')
     .pipe(concat('contra.js'))
+    .pipe(size())
     .pipe(gulp.dest('./dist'))
     .pipe(rename('contra.min.js'))
     .pipe(uglify())
+    .pipe(size())
     .pipe(gulp.dest('./dist'));
 });
 
-gulp.task('bump', ['minify'], function () {
+gulp.task('bump', ['build'], function () {
   return gulp.src(['./package.json', './bower.json'])
     .pipe(bump())
     .pipe(gulp.dest('./'));

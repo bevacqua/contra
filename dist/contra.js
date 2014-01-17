@@ -188,6 +188,6 @@
   } else if (typeof define !== 'undefined' && define.amd) {
     define([], function amd () { return $; });
   } else {
-    window.a = $;
+    window.contra = $;
   }
 })();

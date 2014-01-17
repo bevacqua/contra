@@ -1,6 +1,6 @@
 {
   "name": "contra",
-  "description": "Asynchronous control flow with a `_` taste to it",
+  "description": "Asynchronous flow control with a `_` taste to it",
   "version": "1.0.5",
   "homepage": "https://github.com/bevacqua/contra",
   "author": {
@@ -17,8 +17,8 @@
     "async",
     "a",
     "asynchronous",
-    "control",
     "flow",
+    "control",
     "promises",
     "q",
     "generator"
@@ -40,6 +40,7 @@
     "gulp-jshint": "~1.3.4",
     "gulp-rename": "~0.2.2",
     "gulp-mocha": "~0.3.0",
-    "gulp-clean": "~0.2.3"
+    "gulp-clean": "~0.2.3",
+    "gulp-size": "~0.1.1"
   }
 }

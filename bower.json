@@ -1,6 +1,6 @@
 {
   "name": "contra",
-  "description": "Asynchronous control flow with a `_` taste to it",
+  "description": "Asynchronous flow control with a `_` taste to it",
   "version": "1.0.5",
   "homepage": "https://github.com/bevacqua/contra",
   "author": {
@@ -17,8 +17,8 @@
     "async",
     "contra",
     "asynchronous",
-    "control",
     "flow",
+    "control",
     "promises",
     "q",
     "generator"

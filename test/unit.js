@@ -171,6 +171,38 @@ describe('concurrent()', function () {
   });
 });
 
+describe('apply()', function () {
+  it('should just work', function (done) {
+    var cb = false, cc = false, cd = false;
+    function b (n, next) {
+      n.should.equal(1);
+      cb = true;
+      cc.should.not.be.ok;
+      next(null, 'a');
+    }
+    function c (p, next) {
+      p.should.eql(['a']);
+      cc = true;
+      cb.should.be.ok;
+      next(null, 'b');
+    }
+    function d (err, results) {
+      cd = true;
+      should(err).be.not.ok;
+      cb.should.be.ok;
+      cc.should.be.ok;
+      should(Object.keys(results).length).equal(2);
+      results.e.should.equal('a');
+      results.f.should.equal('b');
+      done();
+    }
+    λ.series([
+      λ.apply(b, 1),
+      λ.apply(c, ['a']),
+    ], d);
+  });
+});
+
 describe('map()', function () {
   it('should map array concurrently', function (done) {
     var n = 4;
