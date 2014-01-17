@@ -4,7 +4,7 @@
   // core
   function a (o) { return o instanceof Array; }
   function atoa (a) { return Array.prototype.slice.call(a); }
-  function cb (fn, args) { if (!fn) { return; } tick(function run () { fn.apply(null, args || []); }); }
+  function cb (fn, args, ctx) { if (!fn) { return; } tick(function run () { fn.apply(ctx || null, args || []); }); }
   function once (fn) {
     var disposed;
     function disposable () {
@@ -85,17 +85,26 @@
     }
   }
 
-  function _map (flow) {
-    return function map (collection, transformer, done) {
+  function _map (flow, finish) {
+    return function map (collection, iterator, done) {
       var keys = Object.keys(collection);
       var tasks = a(collection) ? [] : {};
-      keys.forEach(function iterator (key) {
-        tasks[key] = function transform (cb) {
-          transformer(collection[key], cb);
+      keys.forEach(function insert (key) {
+        tasks[key] = function iterate (cb) {
+          iterator(collection[key], cb);
         };
       });
-      flow(tasks, done);
+      flow(tasks, finish ? finish(done) : done);
     };
+  }
+
+  function _each (flow) {
+    _each(flow, finish);
+    function finish (done) {
+      return function (err) {
+        done(err); // only return an optional error
+      };
+    }
   }
 
   function _emitter (thing) {
@@ -115,7 +124,7 @@
       var st = sub[type];
       if (type === 'error' && !st) { throw args.length === 1 ? args[0] : args; }
       if (!st) { return; }
-      st.forEach(function (s) { s.call(me, args); });
+      st.forEach(function (s) { cb(s, args, me); });
     };
   }
 
