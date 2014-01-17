@@ -171,6 +171,48 @@ describe('parallel()', function () {
   });
 });
 
+describe('map()', function () {
+  it('should map array in parallel', function (done) {
+    var n = 4;
+    function t (i, done) {
+      done(null, n++);
+    }
+    function d (err, results) {
+      should(err).be.not.ok;
+      results.length.should.equal(2);
+      results.should.eql([4, 5]);
+      done();
+    }
+    a.mapSeries(['b','c'],t,d);
+  });
+
+  it('should map object in parallel', function (done) {
+    var n = 4;
+    function t (i, done) {
+      done(null, n++);
+    }
+    function d (err, results) {
+      should(err).be.not.ok;
+      should(Object.keys(results).length).equal(2);
+      results.should.eql({ a: 4, b: 5 });
+      done();
+    }
+    a.mapSeries({ a: 'b', b: 'c' }, t, d);
+  });
+
+  it('should short-circuit on error', function (done) {
+    function t (i, done) {
+      done(i);
+    }
+    function d (err, results) {
+      should(err).be.ok;
+      should(results).be.not.ok;
+      done();
+    }
+    a.map(['b','c','e'],t,d);
+  });
+});
+
 describe('mapSeries()', function () {
   it('should map array in a series', function (done) {
     var n = 4;

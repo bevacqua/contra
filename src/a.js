@@ -25,15 +25,16 @@
   // methods
   function _waterfall (steps, done) {
     function next () {
+      var d = once(done);
       return once(function callback () {
         var args = atoa(arguments);
         var step = steps.shift();
         if (step) {
-          if (handle(args, done)) { return; }
+          if (handle(args, d)) { return; }
           args.push(next());
           cb(step, args);
         } else {
-          cb(done, arguments);
+          cb(d, arguments);
         }
       });
     }
@@ -41,6 +42,7 @@
   }
 
   function _series (tasks, done) {
+    var d = once(done);
     var keys = Object.keys(tasks);
     var results = a(tasks) ? [] : {};
     var pk;
@@ -50,14 +52,14 @@
         var args = atoa(arguments);
         var step = tasks[k];
         if (pk) {
-          if (handle(args, done)) { return; }
+          if (handle(args, d)) { return; }
           results[pk] = args.shift();
         }
         pk = k;
         if (step) {
           cb(step, [next()]);
         } else {
-          cb(done, [null, results]);
+          cb(d, [null, results]);
         }
       });
     }
@@ -65,6 +67,7 @@
   }
 
   function _parallel (tasks, done) {
+    var d = once(done);
     var keys = Object.keys(tasks);
     var results = a(tasks) ? [] : {};
     var completed = 0, all = keys.length;
@@ -72,10 +75,10 @@
     function next (k) {
       var fn = once(function callback () {
         var args = atoa(arguments);
-        if (handle(args, done, fn)) { return; }
+        if (handle(args, d, fn)) { return; }
         results[k] = args.shift();
         if (++completed === all) {
-          cb(done, [null, results]);
+          cb(d, [null, results]);
         }
       });
       return fn;
