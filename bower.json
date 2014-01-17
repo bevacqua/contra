@@ -25,5 +25,5 @@
   ],
   "dependencies": {},
   "ignore": [".editorconfig", "package.json", "node_modules", "src", "test"],
-  "main": "src/contra.js"
+  "main": "dist/contra.js"
 }
