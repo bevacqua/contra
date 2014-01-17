@@ -43,57 +43,52 @@
   function _series (tasks, done) {
     var keys = Object.keys(tasks);
     var results = a(tasks) ? [] : {};
+    var pk;
     function next () {
       return once(function callback () {
-        var args = atoa(arguments);console.log('ARG',args)
-        var k = keys.shift();console.log('K',k)
+        var k = keys.shift();
+        var args = atoa(arguments);
         var step = tasks[k];
-        if (step) {console.log('STEP',step)
+        if (pk) {
           if (handle(args, done)) { return; }
-          if (k) { results[k] = args[0]; console.log(args[0], 'r',k) }
+          results[pk] = args.shift();
+        }
+        pk = k;
+        if (step) {
           cb(step, [next()]);
-        } else {console.log(results, 'd')
+        } else {
           cb(done, [null, results]);
         }
       });
     }
-    keys.unshift(null);
     next()();
   }
 
   function _parallel (tasks, done) {
-      var a = tasks instanceof Array;
-      var keys = a ? tasks : Object.keys(tasks);
-      var complete;
-      var completed = 0, all = keys.length;
-      var results = a ? [] : {};
-      keys.forEach(function (key, i) {
-        var k = a ? i : key;
-        setTimeout(tasks[k](next(k)), 0);
-      });
-
-      function next (k) {
-        var used;
-        return function (err) {
-          if (complete || used) { return; }
-          used = true;
-          var args = atoa(arguments);
-          var err = args.shift();
-          if (err) { complete = true; done(err); return; }
-          results[k] = args.shift();
-          if (++completed === all) {
-            done(null, results);
-          }
+    var keys = Object.keys(tasks);
+    var results = a(tasks) ? [] : {};
+    var completed = 0, all = keys.length;
+    keys.forEach(function iterator (key) { cb(tasks[key], [next(key)]); });
+    function next (k) {
+      var fn = once(function callback () {
+        var args = atoa(arguments);
+        if (handle(args, done, fn)) { return; }
+        results[k] = args.shift();
+        if (++completed === all) {
+          cb(done, [null, results]);
         }
-      }
+      });
+      return fn;
+    }
   }
 
   function _map (flow) {
     return function map (collection, transformer, done) {
       var keys = Object.keys(collection);
-      var tasks = keys.map(function loop (key) {
-        return function transform (transformed) {
-          transformer(collection[key], transformed);
+      var tasks = a(collection) ? [] : {};
+      keys.forEach(function iterator (key) {
+        tasks[key] = function transform (cb) {
+          transformer(collection[key], cb);
         };
       });
       flow(tasks, done);
