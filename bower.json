@@ -1,7 +1,7 @@
 {
   "name": "contra",
   "description": "Asynchronous control flow with sane debugging capabilities",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "homepage": "https://github.com/bevacqua/contra",
   "author": {
     "name": "Nicolas Bevacqua",
