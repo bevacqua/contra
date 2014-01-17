@@ -85,17 +85,26 @@
     }
   }
 
-  function _map (flow) {
-    return function map (collection, transformer, done) {
+  function _map (flow, finish) {
+    return function map (collection, iterator, done) {
       var keys = Object.keys(collection);
       var tasks = a(collection) ? [] : {};
-      keys.forEach(function iterator (key) {
-        tasks[key] = function transform (cb) {
-          transformer(collection[key], cb);
+      keys.forEach(function insert (key) {
+        tasks[key] = function iterate (cb) {
+          iterator(collection[key], cb);
         };
       });
-      flow(tasks, done);
+      flow(tasks, finish ? finish(done) : done);
     };
+  }
+
+  function _each (flow) {
+    _each(flow, finish);
+    function finish (done) {
+      return function (err) {
+        done(err); // only return an optional error
+      };
+    }
   }
 
   function _emitter (thing) {

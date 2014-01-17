@@ -8,14 +8,14 @@ var clean = require('gulp-clean');
 var rename = require('gulp-rename');
 var uglify = require('gulp-uglify');
 
-gulp.task('lint', function() {
+gulp.task('test', function() {
   gulp.src('./src/*.js')
     .pipe(jshint())
     .pipe(jshint.reporter('jshint-stylish'));
 
   gulp
     .src('./test/*.js')
-    .pipe(mocha({reporter: 'nyan'}));
+    .pipe(mocha({ reporter: 'nyan' }));
 });
 
 gulp.task('clean', function () {
@@ -23,7 +23,7 @@ gulp.task('clean', function () {
       .pipe(clean());
 });
 
-gulp.task('minify', ['lint', 'clean'], function(){
+gulp.task('minify', ['test', 'clean'], function () {
   return gulp.src('./src/*.js')
     .pipe(concat('contra.js'))
     .pipe(gulp.dest('./dist'))
