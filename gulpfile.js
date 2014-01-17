@@ -32,13 +32,13 @@ gulp.task('minify', ['lint', 'clean'], function(){
     .pipe(gulp.dest('./dist'));
 });
 
-gulp.task('bump', function () {
+gulp.task('bump', ['minify'], function () {
   return gulp.src(['./package.json', './bower.json'])
     .pipe(bump())
     .pipe(gulp.dest('./'));
 });
 
-gulp.task('release', ['minify', 'bump'], function () {
+gulp.task('release', ['bump'], function () {
   var pkg = require('./package.json');
   var v = 'v' + pkg.version;
   var message = 'Release ' + v;
