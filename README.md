@@ -1,6 +1,6 @@
 # contr(a)
 
-> Asynchronous control flow with sane debugging capabilities
+> Asynchronous control flow with a `_` taste to it
 
 Inspired on [async][1], but `contr(a)` aims to stay small and simple, while powerful, that's inspired by [lodash][2. Methods are implemented individually and not as part of a whole. That design helps when considering to export functions individually. If you need all the methods in `async`, then stick with it.
 
@@ -71,13 +71,13 @@ function done (err, result) {
 }
 ```
 
-In `contra`, [async][1]'s `parallel` is referred to as `concurrent`.
+In `contr(a)`, [async][1]'s `parallel` is referred to as `concurrent`.
 
-Methods like `mapSeries` in [async][1] follow the `map.series` convention in `contra`.
+Methods like `mapSeries` in [async][1] follow the `map.series` convention in `contr(a)`.
 
-`contra` isn't meant to be a superset of `async`. Rather, it aims to provide a more focused library. Thus, it just includes bits and pieces of `async`'s API deemed reasonable.
+`contr(a)` isn't meant to be a superset of `async`. Rather, it aims to provide a more focused library. Thus, it just includes bits and pieces of `async`'s API deemed reasonable.
 
-While `contra` is inspired on `async` and `lodash` it has been written by [@bevacqua][4] from scratch.
+While `contr(a)` is inspired on `async` and `lodash` it has been written by [@bevacqua][4] from scratch.
 
 # License
 
