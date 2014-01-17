@@ -4,7 +4,7 @@
   // core
   function a (o) { return o instanceof Array; }
   function atoa (a) { return Array.prototype.slice.call(a); }
-  function cb (fn, args) { if (!fn) { return; } tick(function run () { fn.apply(null, args || []); }); }
+  function cb (fn, args, ctx) { if (!fn) { return; } tick(function run () { fn.apply(ctx || null, args || []); }); }
   function once (fn) {
     var disposed;
     function disposable () {
@@ -115,7 +115,7 @@
       var st = sub[type];
       if (type === 'error' && !st) { throw args.length === 1 ? args[0] : args; }
       if (!st) { return; }
-      st.forEach(function (s) { s.call(me, args); });
+      st.forEach(function (s) { cb(s, args, me); });
     };
   }
 
