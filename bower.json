@@ -1,8 +1,8 @@
 {
-  "name": "a",
+  "name": "contra",
   "description": "Asynchronous control flow with sane debugging capabilities",
-  "version": "1.0.22",
-  "homepage": "https://github.com/bevacqua/a",
+  "version": "1.0.0",
+  "homepage": "https://github.com/bevacqua/contra",
   "author": {
     "name": "Nicolas Bevacqua",
     "email": "ng@bevacqua.io",
@@ -11,11 +11,11 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git://github.com/bevacqua/a.git"
+    "url": "git://github.com/bevacqua/contra.git"
   },
   "keywords": [
     "async",
-    "a",
+    "contra",
     "asynchronous",
     "control",
     "flow",
@@ -25,5 +25,5 @@
   ],
   "dependencies": {},
   "ignore": [".editorconfig", "package.json", "node_modules"],
-  "main": "src/a.js"
+  "main": "src/contra.js"
 }

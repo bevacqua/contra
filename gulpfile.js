@@ -1,9 +1,6 @@
 var gulp = require('gulp');
 var bump = require('gulp-bump');
 var git = require('gulp-git');
-var jshint = require('gulp-jshint');
-var stylish = require('jshint-stylish');
-var a = require('./src/a.js');
 
 gulp.task('bump', function () {
   return gulp.src(['./package.json', './bower.json'])

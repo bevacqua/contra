@@ -1,1 +1,1 @@
-module.exports = require('./src/a.js');
+module.exports = require('./src/contra.js');

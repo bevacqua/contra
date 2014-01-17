@@ -1,7 +1,7 @@
 'use strict';
 
 var should = require('should');
-var a = require('../');
+var contra = require('../');
 
 describe('waterfall()', function () {
   it('should run tasks in a waterfall', function (done) {
@@ -24,7 +24,7 @@ describe('waterfall()', function () {
       result.should.equal('b');
       done();
     }
-    a.waterfall([b,c],d);
+    contra.waterfall([b,c],d);
   });
 });
 
@@ -51,7 +51,7 @@ describe('series()', function () {
       results[1].should.equal('b');
       done();
     }
-    a.series([b,c],d);
+    contra.series([b,c],d);
   });
 
   it('should run tasks in a series as object', function (done) {
@@ -76,7 +76,7 @@ describe('series()', function () {
       results.f.should.equal('b');
       done();
     }
-    a.series({ e: b, f: c }, d);
+    contra.series({ e: b, f: c }, d);
   });
 
   it('should short-circuit on error', function (done) {
@@ -100,12 +100,12 @@ describe('series()', function () {
       should(results).be.not.ok;
       done();
     }
-    a.series([b,c],d);
+    contra.series([b,c],d);
   });
 });
 
-describe('parallel()', function () {
-  it('should run tasks in a parallel as array', function (done) {
+describe('concurrent()', function () {
+  it('should run tasks concurrently as array', function (done) {
     var cb = false, cc = false, cd = false;
     function b (next) {
       cb = true;
@@ -127,10 +127,10 @@ describe('parallel()', function () {
       should(results[1]).equal('b');
       done();
     }
-    a.parallel([b,c],d);
+    contra.concurrent([b,c],d);
   });
 
-  it('should run tasks in a parallel as object', function (done) {
+  it('should run tasks concurrently as object', function (done) {
     var cb = false, cc = false;
     function b (next) {
       cb = true;
@@ -151,7 +151,7 @@ describe('parallel()', function () {
       should(results.d).equal('b');
       done();
     }
-    a.parallel({ a: b, d: c }, d);
+    contra.concurrent({ a: b, d: c }, d);
   });
 
   it('should short-circuit on error', function (done) {
@@ -167,12 +167,12 @@ describe('parallel()', function () {
       should(results).be.not.ok;
       done();
     }
-    a.parallel([b,c],d);
+    contra.concurrent([b,c],d);
   });
 });
 
 describe('map()', function () {
-  it('should map array in parallel', function (done) {
+  it('should map array concurrently', function (done) {
     var n = 4;
     function t (i, done) {
       done(null, n++);
@@ -183,10 +183,10 @@ describe('map()', function () {
       results.should.eql([4, 5]);
       done();
     }
-    a.mapSeries(['b','c'],t,d);
+    contra.map.series(['b','c'],t,d);
   });
 
-  it('should map object in parallel', function (done) {
+  it('should map object concurrently', function (done) {
     var n = 4;
     function t (i, done) {
       done(null, n++);
@@ -197,7 +197,7 @@ describe('map()', function () {
       results.should.eql({ a: 4, b: 5 });
       done();
     }
-    a.mapSeries({ a: 'b', b: 'c' }, t, d);
+    contra.map.series({ a: 'b', b: 'c' }, t, d);
   });
 
   it('should short-circuit on error', function (done) {
@@ -209,11 +209,11 @@ describe('map()', function () {
       should(results).be.not.ok;
       done();
     }
-    a.map(['b','c','e'],t,d);
+    contra.map(['b','c','e'],t,d);
   });
 });
 
-describe('mapSeries()', function () {
+describe('map.series()', function () {
   it('should map array in a series', function (done) {
     var n = 4;
     function t (i, done) {
@@ -225,7 +225,7 @@ describe('mapSeries()', function () {
       results.should.eql([4, 5]);
       done();
     }
-    a.mapSeries(['b','c'],t,d);
+    contra.map.series(['b','c'],t,d);
   });
 
   it('should map object in a series', function (done) {
@@ -239,7 +239,7 @@ describe('mapSeries()', function () {
       results.should.eql({ a: 4, b: 5 });
       done();
     }
-    a.mapSeries({ a: 'b', b: 'c' }, t, d);
+    contra.map.series({ a: 'b', b: 'c' }, t, d);
   });
 
   it('should short-circuit on error', function (done) {
@@ -251,6 +251,40 @@ describe('mapSeries()', function () {
       should(results).be.not.ok;
       done();
     }
-    a.mapSeries(['b','c'],t,d);
+    contra.map.series(['b','c'],t,d);
+  });
+
+  describe('queue()', function () {
+    it('should queue things', function (done) {
+      var ww;
+      function w (job, done) {
+        ww = true;
+        job.should.equal('a');
+        done();
+      }
+      function d (err) {
+        should(err).be.not.ok;
+        should(ww).be.ok;
+        done();
+      }
+      var q = contra.queue(w);
+      q.push('a', d);
+    });
+
+    it('should report errors', function (done) {
+      var ww;
+      function w (job, done) {
+        ww = true;
+        job.should.equal('a');
+        done('e');
+      }
+      function d (err) {
+        err.should.equal('e');
+        should(ww).be.ok;
+        done();
+      }
+      var q = contra.queue(w);
+      q.push('a', d);
+    });
   });
 });

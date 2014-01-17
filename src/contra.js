@@ -4,7 +4,7 @@
   // core
   function a (o) { return o instanceof Array; }
   function atoa (a) { return Array.prototype.slice.call(a); }
-  function cb (fn, args) { if (!fn) { return; } tick(function run () { fn.apply(null, args); }); }
+  function cb (fn, args) { if (!fn) { return; } tick(function run () { fn.apply(null, args || []); }); }
   function once (fn) {
     var disposed;
     function disposable () {
@@ -66,7 +66,7 @@
     next()();
   }
 
-  function _parallel (tasks, done) {
+  function _concurrent (tasks, done) {
     var d = once(done);
     var keys = Object.keys(tasks);
     var results = a(tasks) ? [] : {};
@@ -98,14 +98,46 @@
     };
   }
 
+  function emitter () {
+
+  }
+
+  var _queue = function (worker, concurrency) {
+    var q = [], load = 0, max = concurrency || 1;
+    function _add (task, top, done) {
+      var m = top ? 'unshift' : 'push';
+      var tasks = task instanceof Array ? task : [task];
+      tasks.forEach(function insert (t) {q[m]({ t: t, done: done }); });
+      cb(labor);
+    }
+    function labor () {
+      if (load >= max || !q.length) { return; }
+      load++;
+      var job = q.pop();
+      worker(job.t, once(complete.bind(null, job)));
+    }
+    function complete (job, err) {
+      load--;
+      cb(job.done, [err]);
+      cb(labor);
+    }
+    return {
+      push: function (task, done) { _add(task, false, done); },
+      unshift: function (task, done) { _add(task, true, done); },
+      get length () { return q.length; }
+    };
+  };
+
   // api
   var $ = {
     waterfall: _waterfall,
     series: _series,
-    parallel: _parallel,
-    map: _map(_parallel),
-    mapSeries: _map(_series)
+    concurrent: _concurrent,
+    map: _map(_concurrent),
+    queue: _queue
   };
+
+  $.map.series = _map(_series);
 
   // cross-platform ticks
   if (typeof process === 'undefined' || !process.nextTick) {
