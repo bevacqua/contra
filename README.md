@@ -33,21 +33,21 @@ You can also use it with AMD. Even if you shouldn't, because AMD kind of _really
 
 These are the methods provided by `contrλ`.
 
-## `waterfall(steps[, done])`
+## `λ.waterfall(steps[, done])`
 
 Executes steps in series. each step receives the arguments provided to the callback in the previous step. `done` gets all the results.
 
 - `steps` Array of functions with the `(...results, next)` signature.
 - `done` Optional function with the `(err, ...results)` signature.
 
-## `concurrent(steps[, done])`
+## `λ.concurrent(steps[, done])`
 
 Executes steps concurrently. `done` gets all the results. If you use an object for the steps, the results will be mapped into an object. Otherwise a result array, in the same order as the steps, will be returned.
 
 - `steps` Collection of functions with the `(done)` signature. Can be an array or an object.
 - `done` Optional function with the `(err, results)` signature.
 
-## `series(steps[, done])`
+## `λ.series(steps[, done])`
 
 Executes steps in series. `done` gets all the results. If you use an object for the steps, the results will be mapped into an object. Otherwise a result array, in the same order as the steps, will be returned.
 

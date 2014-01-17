@@ -1,7 +1,7 @@
 'use strict';
 
 var should = require('should');
-var contra = require('../');
+var λ = require('../');
 
 describe('waterfall()', function () {
   it('should run tasks in a waterfall', function (done) {
@@ -24,7 +24,7 @@ describe('waterfall()', function () {
       result.should.equal('b');
       done();
     }
-    contra.waterfall([b,c],d);
+    λ.waterfall([b,c],d);
   });
 });
 
@@ -51,7 +51,7 @@ describe('series()', function () {
       results[1].should.equal('b');
       done();
     }
-    contra.series([b,c],d);
+    λ.series([b,c],d);
   });
 
   it('should run tasks in a series as object', function (done) {
@@ -76,7 +76,7 @@ describe('series()', function () {
       results.f.should.equal('b');
       done();
     }
-    contra.series({ e: b, f: c }, d);
+    λ.series({ e: b, f: c }, d);
   });
 
   it('should short-circuit on error', function (done) {
@@ -100,7 +100,7 @@ describe('series()', function () {
       should(results).be.not.ok;
       done();
     }
-    contra.series([b,c],d);
+    λ.series([b,c],d);
   });
 });
 
@@ -127,7 +127,7 @@ describe('concurrent()', function () {
       should(results[1]).equal('b');
       done();
     }
-    contra.concurrent([b,c],d);
+    λ.concurrent([b,c],d);
   });
 
   it('should run tasks concurrently as object', function (done) {
@@ -151,7 +151,7 @@ describe('concurrent()', function () {
       should(results.d).equal('b');
       done();
     }
-    contra.concurrent({ a: b, d: c }, d);
+    λ.concurrent({ a: b, d: c }, d);
   });
 
   it('should short-circuit on error', function (done) {
@@ -167,7 +167,7 @@ describe('concurrent()', function () {
       should(results).be.not.ok;
       done();
     }
-    contra.concurrent([b,c],d);
+    λ.concurrent([b,c],d);
   });
 });
 
@@ -183,7 +183,7 @@ describe('map()', function () {
       results.should.eql([4, 5]);
       done();
     }
-    contra.map.series(['b','c'],t,d);
+    λ.map.series(['b','c'],t,d);
   });
 
   it('should map object concurrently', function (done) {
@@ -197,7 +197,7 @@ describe('map()', function () {
       results.should.eql({ a: 4, b: 5 });
       done();
     }
-    contra.map.series({ a: 'b', b: 'c' }, t, d);
+    λ.map.series({ a: 'b', b: 'c' }, t, d);
   });
 
   it('should short-circuit on error', function (done) {
@@ -209,7 +209,7 @@ describe('map()', function () {
       should(results).be.not.ok;
       done();
     }
-    contra.map(['b','c','e'],t,d);
+    λ.map(['b','c','e'],t,d);
   });
 });
 
@@ -225,7 +225,7 @@ describe('map.series()', function () {
       results.should.eql([4, 5]);
       done();
     }
-    contra.map.series(['b','c'],t,d);
+    λ.map.series(['b','c'],t,d);
   });
 
   it('should map object in a series', function (done) {
@@ -239,7 +239,7 @@ describe('map.series()', function () {
       results.should.eql({ a: 4, b: 5 });
       done();
     }
-    contra.map.series({ a: 'b', b: 'c' }, t, d);
+    λ.map.series({ a: 'b', b: 'c' }, t, d);
   });
 
   it('should short-circuit on error', function (done) {
@@ -251,7 +251,7 @@ describe('map.series()', function () {
       should(results).be.not.ok;
       done();
     }
-    contra.map.series(['b','c'],t,d);
+    λ.map.series(['b','c'],t,d);
   });
 
   describe('queue()', function () {
@@ -267,7 +267,7 @@ describe('map.series()', function () {
         should(ww).be.ok;
         done();
       }
-      var q = contra.queue(w);
+      var q = λ.queue(w);
       q.push('a', d);
     });
 
@@ -283,7 +283,7 @@ describe('map.series()', function () {
         should(ww).be.ok;
         done();
       }
-      var q = contra.queue(w);
+      var q = λ.queue(w);
       q.push('a', d);
     });
   });
