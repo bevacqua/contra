@@ -1,7 +1,7 @@
 (function () {
   'use strict';
 
-  // core
+  // { name: 'core', dependencies: ['none'] }
   function a (o) { return o instanceof Array; }
   function atoa (a) { return Array.prototype.slice.call(a); }
   function cb (fn, args, ctx) { if (!fn) { return; } tick(function run () { fn.apply(ctx || null, args || []); }); }
@@ -20,9 +20,19 @@
     if (err) { if (disposable) { disposable.discard(); } cb(done, [err]); return true; }
   }
 
+  // cross-platform ticker
   var tick;
+  if (typeof process === 'undefined' || !process.nextTick) {
+    if (typeof setImmediate === 'function') {
+      tick = function tick (fn) { setImmediate(fn); };
+    } else {
+      tick = function tick (fn) { setTimeout(fn, 0); };
+    }
+  } else {
+    tick = typeof setImmediate === 'function' ? setImmediate : process.nextTick;
+  }
 
-  // methods
+  // { name: 'waterfall', dependencies: ['core'] }
   function _waterfall (steps, done) {
     function next () {
       var d = once(done);
@@ -41,6 +51,7 @@
     next()();
   }
 
+  // { name: 'series', dependencies: ['core'] }
   function _series (tasks, done) {
     var d = once(done);
     var keys = Object.keys(tasks);
@@ -66,6 +77,7 @@
     next()();
   }
 
+  // { name: 'concurrent', dependencies: ['core'] }
   function _concurrent (tasks, done) {
     var d = once(done);
     var keys = Object.keys(tasks);
@@ -85,6 +97,7 @@
     }
   }
 
+  // { name: 'map', dependencies: ['series' or 'concurrent'] }
   function _map (flow, finish) {
     return function map (collection, iterator, done) {
       var keys = Object.keys(collection);
@@ -98,8 +111,9 @@
     };
   }
 
+  // dependencies: ['map']
   function _each (flow) {
-    _each(flow, finish);
+    _map(flow, finish);
     function finish (done) {
       return function (err) {
         done(err); // only return an optional error
@@ -107,6 +121,7 @@
     }
   }
 
+  // { name: 'emitter', dependencies: ['core'] }
   function _emitter (thing) {
     /* jshint validthis:true */
     var me = this;
@@ -128,12 +143,13 @@
     };
   }
 
+  // { name: 'queue', dependencies: ['core'] }
   var _queue = function (worker, concurrency) {
     var q = [], load = 0, max = concurrency || 1;
     function _add (task, top, done) {
       var m = top ? 'unshift' : 'push';
       var tasks = task instanceof Array ? task : [task];
-      tasks.forEach(function insert (t) {q[m]({ t: t, done: done }); });
+      tasks.forEach(function insert (t) { q[m]({ t: t, done: done }); });
       cb(labor);
     }
     function labor () {
@@ -154,7 +170,7 @@
     };
   };
 
-  // api
+  // { name: 'outro', dependencies: ['core'] }
   var $ = {
     waterfall: _waterfall,
     series: _series,
@@ -165,17 +181,6 @@
   };
 
   $.map.series = _map(_series);
-
-  // cross-platform ticks
-  if (typeof process === 'undefined' || !process.nextTick) {
-    if (typeof setImmediate === 'function') {
-      tick = function tick (fn) { setImmediate(fn); };
-    } else {
-      tick = function tick (fn) { setTimeout(fn, 0); };
-    }
-  } else {
-    tick = typeof setImmediate === 'function' ? setImmediate : process.nextTick;
-  }
 
   // cross-platform export
   if (typeof module !== 'undefined' && module.exports) {
