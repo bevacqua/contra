@@ -98,8 +98,24 @@
     };
   }
 
-  function emitter () {
-
+  function _emitter (thing) {
+    var me = this;
+    var sub = {};
+    thing.on = function (type, fn) {
+      if (!sub[type]) {
+        sub[type] = [fn];
+      } else {
+        sub[type].push(fn);
+      }
+    };
+    thing.emit = function () {
+      var args = atoa(arguments);
+      var type = args.shift();
+      var st = sub[type];
+      if (type === 'error' && !st) { throw args.length === 1 ? args[0] : args; }
+      if (!st) { return; }
+      st.forEach(function (s) { s.call(me, args); });
+    };
   }
 
   var _queue = function (worker, concurrency) {
@@ -134,7 +150,8 @@
     series: _series,
     concurrent: _concurrent,
     map: _map(_concurrent),
-    queue: _queue
+    queue: _queue,
+    emitter: _emitter
   };
 
   $.map.series = _map(_series);
