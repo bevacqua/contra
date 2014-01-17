@@ -14,17 +14,17 @@ Inspired on [async][1], but `contr(a)` aims to stay small and simple, while powe
 Install using `npm` or `bower`.
 
 ```shell
-npm i a --save
+npm i contra --save
 ```
 
 ```shell
-bower i a --save
+bower i contra --save
 ```
 
 Or just download the [development source][3] and embed that in a `<script>` tag.
 
 ```html
-<script src='a.js'></script>
+<script src='contra.js'></script>
 ```
 
 You can also use it with AMD. Even if you shouldn't, because AMD kind of _really sucks_.
