@@ -45,37 +45,47 @@
     var results = a(tasks) ? [] : {};
     function next () {
       return once(function callback () {
-        var args = atoa(arguments);
-        var k = keys.shift();
+        var args = atoa(arguments);console.log('ARG',args)
+        var k = keys.shift();console.log('K',k)
         var step = tasks[k];
-        if (step) {
+        if (step) {console.log('STEP',step)
           if (handle(args, done)) { return; }
-          results[k] = args;
+          if (k) { results[k] = args[0]; console.log(args[0], 'r',k) }
           cb(step, [next()]);
-        } else {
+        } else {console.log(results, 'd')
           cb(done, [null, results]);
         }
       });
     }
+    keys.unshift(null);
     next()();
   }
 
   function _parallel (tasks, done) {
-    var keys = Object.keys(tasks);
-    var completed = 0, all = keys.length;
-    var results = a(tasks) ? [] : {};
-    keys.forEach(function iterator (key) { cb(tasks[key], [next(key)]); });
-    function next (key) {
-      var fn = once(function callback () {
-        var args = $.atoa(arguments);
-        if (handle(args, done, fn)) { return; }
-        results[key] = args.shift();
-        if (++completed === all) {
-          cb(done, [results]);
-        }
+      var a = tasks instanceof Array;
+      var keys = a ? tasks : Object.keys(tasks);
+      var complete;
+      var completed = 0, all = keys.length;
+      var results = a ? [] : {};
+      keys.forEach(function (key, i) {
+        var k = a ? i : key;
+        setTimeout(tasks[k](next(k)), 0);
       });
-      return fn;
-    }
+
+      function next (k) {
+        var used;
+        return function (err) {
+          if (complete || used) { return; }
+          used = true;
+          var args = atoa(arguments);
+          var err = args.shift();
+          if (err) { complete = true; done(err); return; }
+          results[k] = args.shift();
+          if (++completed === all) {
+            done(null, results);
+          }
+        }
+      }
   }
 
   function _map (flow) {
