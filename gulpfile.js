@@ -1,6 +1,36 @@
 var gulp = require('gulp');
 var bump = require('gulp-bump');
 var git = require('gulp-git');
+var jshint = require('gulp-jshint');
+var mocha = require('gulp-mocha');
+var concat = require('gulp-concat');
+var clean = require('gulp-clean');
+var rename = require('gulp-rename');
+var uglify = require('gulp-uglify');
+
+gulp.task('lint', function() {
+  gulp.src('./src/*.js')
+    .pipe(jshint())
+    .pipe(jshint.reporter('jshint-stylish'));
+
+  gulp
+    .src('./test/*.js')
+    .pipe(mocha({reporter: 'nyan'}));
+});
+
+gulp.task('clean', function () {
+    return gulp.src('./dist', {read: false})
+      .pipe(clean());
+});
+
+gulp.task('minify', ['lint', 'clean'], function(){
+  return gulp.src('./src/*.js')
+    .pipe(concat('contra.js'))
+    .pipe(gulp.dest('./dist'))
+    .pipe(rename('contra.min.js'))
+    .pipe(uglify())
+    .pipe(gulp.dest('./dist'));
+});
 
 gulp.task('bump', function () {
   return gulp.src(['./package.json', './bower.json'])
@@ -8,7 +38,7 @@ gulp.task('bump', function () {
     .pipe(gulp.dest('./'));
 });
 
-gulp.task('release', ['bump'], function () {
+gulp.task('release', ['minify', 'bump'], function () {
   var pkg = require('./package.json');
   var v = 'v' + pkg.version;
   var message = 'Release ' + v;
