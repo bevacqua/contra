@@ -16,7 +16,7 @@ gulp.task('test', function() {
     .pipe(jshint())
     .pipe(jshint.reporter('jshint-stylish'));
 
-  return gulp
+  gulp
     .src('./test/*.js')
     .pipe(mocha({ reporter: 'tap' }));
 });

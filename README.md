@@ -318,13 +318,31 @@ Arrays for [some][5], collections for [others][6]|Collections for **everyone**!
 `parallel`|`concurrent`
 `mapSeries`|`map.series`
 More _comprehensive_|More _focused_
-`29.6k (minified, uncompressed)`|`2.3k (minified, uncompressed)`
+`~29.6k (minified, uncompressed)`|`~2.3k (minified, uncompressed)`
 
 `λ` isn't meant to be a replacement for `async`. It aims to provide a more focused library, and a bit more consistency.
 
 # Browser Support
 
 [![Browser Support](https://ci.testling.com/bevacqua/contra.png)](https://ci.testling.com/bevacqua/contra)
+
+If you need support for legacy browsers, you'll need to include `contra.shim.js` as well.
+
+- IE < 10
+- Safari < 6
+- Opera < 16
+
+```js
+require('contra/shim');
+var λ = require('contra');
+```
+
+```html
+<script src='contra.shim.js'></script>
+<script src='contra.js'></script>
+```
+
+The shim is currently below `700B` when minified.
 
 # License
 
