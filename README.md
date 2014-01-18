@@ -2,7 +2,7 @@
 
 > Asynchronous flow control with a `_` taste to it
 
-Inspired on [async][1], `λ` aims to stay small and simple, while powerful, which is inspired by [lodash][2]. Methods are implemented individually and not as part of a whole. That design helps when considering to export functions individually. If you need all the methods in `async`, then stick with it.
+`λ` aims to stay small and simple, while powerful. Inspired by [async][1] and [lodash][2]. Methods are implemented individually and not as part of a whole. That design helps when considering to export functions individually. If you need all the methods in `async`, then stick with it. Otherwise, you might want to check `λ` out!
 
 #### Quick Links
 
@@ -13,27 +13,28 @@ Inspired on [async][1], `λ` aims to stay small and simple, while powerful, whic
 
 #### API
 
-[Flow Control](#flow-control-methods)
+Flow Control
 
-- `λ.waterfall`
-- `λ.series`
-- `λ.concurrent`
+- [`λ.waterfall`](#%CE%BBwaterfalltasks-done)
+- [`λ.series`](#%CE%BBseriestasks-done)
+- [`λ.concurrent`](#%CE%BBconcurrenttasks-done)
 
-[Functional](#functional-methods)
+Functional
 
-- `λ.map`
-- `λ.map.series`
-- `λ.each`
-- `λ.each.series`
+- [`λ.each`](#%CE%BBeachitems-iterator-done)
+- [`λ.each.series`](#%CE%BBeachseriesitems-iterator-done)
+- [`λ.map`](#%CE%BBmapitems-iterator-done)
+- [`λ.map.series`](#%CE%BBmapseriesitems-iterator-done)
 
-[Uncategorized](#uncategorized-methods)
+Uncategorized
 
-- `λ.emitter`
-- `λ.queue`
+- [`λ.queue`](#%CE%BBqueueworker-concurrency1)
+- [`λ.emitter`](#%CE%BBemitterthing)
+- [`λ.apply`](#%CE%BBapplyfn-arguments)
 
 # Install
 
-Install using `npm` or `bower`.
+Install using `npm` or `bower`. Or get the [source code][3] and embed that in a `<script>` tag.
 
 ```shell
 npm i contra --save
@@ -43,13 +44,15 @@ npm i contra --save
 bower i contra --save
 ```
 
-Or just download the [development source][3] and embed that in a `<script>` tag.
+You can use it as a Common.JS module, or embed it directly in your HTML.
+
+```js
+var λ = require('contra');
+```
 
 ```html
 <script src='contra.js'></script>
 ```
-
-You can also use it with AMD. Even if you shouldn't, because AMD kind of _really sucks_.
 
 # API
 
@@ -217,7 +220,34 @@ Same as `λ.map(items, iterator[, done])`, but in series instead of concurrently
   - `done` Needs to be called when processing for current job is done
 - `concurrency` Optional concurrency level, defaults to `1` (serial)
 
-Creates a queue you can `push` or `unshift` tasks to.
+Creates a queue you can `push` or `unshift` tasks to. You can pause and resume the queue by hand.
+
+- `push(job[, done])` Array of jobs or an individual job object. Enqueue those jobs, resume processing. Optional callback to run when each job is completed
+- `unshift(job)` Array of jobs or an individual job object. Add jobs to the top of the queue, resume processing. Optional callback to run when each job is completed
+- `length` Property. Jobs that haven't started processing yet
+- `pause` Stop processing jobs. Those already being processed will run to completion
+- `resume` Start processing jobs again
+
+```js
+var q = λ.queue(worker);
+
+function worker (job, done) {
+  console.log(job);
+  done(null);
+}
+
+q.push('job', function () {
+  console.log('this job is done!');
+});
+
+q.push(['some', 'more'], function () {
+  console.log('one of these jobs is done!');
+});
+
+// <- 'job'
+// <- 'some'
+// <- 'more'
+```
 
 ## `λ.emitter(thing)`
 
@@ -246,9 +276,7 @@ Returns a function bound with some arguments and a `next` callback.
 
 ```js
 λ.apply(fn, 1, 3, 5);
-// <- function (next) {
-  fn(1, 3, 5);
-}
+// <- function (next) { fn(1, 3, 5); }
 ```
 
 # Comparison with `async`
@@ -260,15 +288,13 @@ Arrays for [some][5], collections for [others][6]|Collections for **everyone**!
 `parallel`|`concurrent`
 `mapSeries`|`map.series`
 More _comprehensive_|More _focused_
-`29.6k`|`5.4k`
+`29.6k (minified, uncompressed)`|`2.3k (minified, uncompressed)`
 
-`λ` isn't meant to be a superset of `async`. Rather, it aims to provide a more focused library. Thus, it just includes bits and pieces of `async`'s API deemed reasonable.
-
-`λ` is inspired on `async` and `lodash`, but it has been authored by [@bevacqua][4] from scratch.
+`λ` isn't meant to be a replacement for `async`. It aims to provide a more focused library, and a bit more consistency.
 
 # Browser Support
 
-It's coming.
+Details are coming.
 
 # License
 

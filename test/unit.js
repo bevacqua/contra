@@ -30,7 +30,7 @@ describe('waterfall()', function () {
 
 describe('series()', function () {
   it('should run tasks in a series as array', function (done) {
-    var cb = false, cc = false, cd = false;
+    var cb = false, cc = false;
     function b (next) {
       cb = true;
       cc.should.not.be.ok;
@@ -42,7 +42,6 @@ describe('series()', function () {
       next(null, 'b');
     }
     function d (err, results) {
-      cd = true;
       should(err).be.not.ok;
       cb.should.be.ok;
       cc.should.be.ok;
@@ -55,7 +54,7 @@ describe('series()', function () {
   });
 
   it('should run tasks in a series as object', function (done) {
-    var cb = false, cc = false, cd = false;
+    var cb = false, cc = false;
     function b (next) {
       cb = true;
       cc.should.not.be.ok;
@@ -67,7 +66,6 @@ describe('series()', function () {
       next(null, 'b');
     }
     function d (err, results) {
-      cd = true;
       should(err).be.not.ok;
       cb.should.be.ok;
       cc.should.be.ok;
@@ -80,7 +78,7 @@ describe('series()', function () {
   });
 
   it('should short-circuit on error', function (done) {
-    var cb = false, cc = false, cd = false;
+    var cb = false, cc = false;
     function b (next) {
       cb = true;
       cc.should.not.be.ok;
@@ -92,7 +90,6 @@ describe('series()', function () {
       next(null, 'b');
     }
     function d (err, results) {
-      cd = true;
       err.should.be.ok;
       err.should.equal('d');
       cb.should.be.ok;
@@ -106,7 +103,7 @@ describe('series()', function () {
 
 describe('concurrent()', function () {
   it('should run tasks concurrently as array', function (done) {
-    var cb = false, cc = false, cd = false;
+    var cb = false, cc = false;
     function b (next) {
       cb = true;
       cc.should.not.be.ok;
@@ -118,7 +115,6 @@ describe('concurrent()', function () {
       next(null, 'b');
     }
     function d (err, results) {
-      cd = true;
       should(err).be.not.ok;
       cb.should.be.ok;
       cc.should.be.ok;
@@ -173,7 +169,7 @@ describe('concurrent()', function () {
 
 describe('apply()', function () {
   it('should just work', function (done) {
-    var cb = false, cc = false, cd = false;
+    var cb = false, cc = false;
     function b (n, next) {
       n.should.equal(1);
       cb = true;
@@ -187,13 +183,12 @@ describe('apply()', function () {
       next(null, 'b');
     }
     function d (err, results) {
-      cd = true;
       should(err).be.not.ok;
       cb.should.be.ok;
       cc.should.be.ok;
-      should(Object.keys(results).length).equal(2);
-      results.e.should.equal('a');
-      results.f.should.equal('b');
+      results.length.should.equal(2);
+      results[0].should.equal('a');
+      results[1].should.equal('b');
       done();
     }
     λ.series([

@@ -155,7 +155,7 @@
 
   // { name: 'queue', dependencies: ['core'] }
   var _queue = function (worker, concurrency) {
-    var q = [], load = 0, max = concurrency || 1;
+    var q = [], load = 0, max = concurrency || 1, paused;
     function _add (task, top, done) {
       var m = top ? 'unshift' : 'push';
       var tasks = task instanceof Array ? task : [task];
@@ -163,7 +163,7 @@
       cb(labor);
     }
     function labor () {
-      if (load >= max || !q.length) { return; }
+      if (paused || load >= max || !q.length) { return; }
       load++;
       var job = q.pop();
       worker(job.t, once(complete.bind(null, job)));
@@ -176,6 +176,8 @@
     return {
       push: function (task, done) { _add(task, false, done); },
       unshift: function (task, done) { _add(task, true, done); },
+      pause: function () { paused = true; },
+      resume: function () { paused = false; labor(); },
       get length () { return q.length; }
     };
   };
@@ -198,8 +200,6 @@
   // cross-platform export
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = $;
-  } else if (typeof define !== 'undefined' && define.amd) {
-    define([], function amd () { return $; });
   } else {
     window.contra = $;
   }
