@@ -1,3 +1,3 @@
-# 1.0.9 `contr(a)` journey begins
+# 1.0.10 **λ**
 
 - Initial Public Release

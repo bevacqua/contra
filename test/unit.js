@@ -298,6 +298,25 @@ describe('map.series()', function () {
       q.push('a', d);
     });
 
+    it('should pause and resume the queue', function (done) {
+      var ww;
+      function w (job, cb) {
+        ww = true;
+        job.should.equal('a');
+        cb();
+      }
+      function d (err) {
+        should(err).be.not.ok;
+        should(ww).be.ok;
+        done();
+      }
+      var q = λ.queue(w);
+      q.pause();
+      q.push('a', d);
+      q.length.should.equal(1);
+      q.resume();
+    });
+
     it('should report errors', function (done) {
       var ww;
       function w (job, done) {
@@ -312,6 +331,51 @@ describe('map.series()', function () {
       }
       var q = λ.queue(w);
       q.push('a', d);
+    });
+  });
+
+  describe('emitter()', function () {
+    it('should just work', function (done) {
+      var thing = { foo: 'bar' };
+
+      λ.emitter(thing);
+
+      should(thing.on).be.ok;
+      should(thing.emit).be.ok;
+
+      thing.on('something', function (a, b) {
+        a.should.equal('a');
+        b.should.equal(2);
+        done();
+      });
+
+      thing.emit('something', 'a', 2);
+    });
+
+    it('should blow up on error if no listeners', function (done) {
+      var thing = { foo: 'bar' };
+
+      λ.emitter(thing);
+
+      should(thing.on).be.ok;
+      should(thing.emit).be.ok;
+
+      thing.emit.bind(thing, 'error').should.throw();
+      done();
+    });
+
+    it('should work just fine with at least one error listener', function (done) {
+      var thing = { foo: 'bar' };
+
+      λ.emitter(thing);
+
+      should(thing.on).be.ok;
+      should(thing.emit).be.ok;
+
+      thing.on('error', function () {
+        done();
+      });
+      thing.emit.bind(thing, 'error').should.not.throw();
     });
   });
 });

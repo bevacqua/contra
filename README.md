@@ -220,7 +220,7 @@ Same as `λ.map(items, iterator[, done])`, but in series instead of concurrently
   - `done` Needs to be called when processing for current job is done
 - `concurrency` Optional concurrency level, defaults to `1` (serial)
 
-Creates a queue you can `push` or `unshift` tasks to. You can pause and resume the queue by hand.
+Returns a queue you can `push` or `unshift` tasks to. You can pause and resume the queue by hand.
 
 - `push(job[, done])` Array of jobs or an individual job object. Enqueue those jobs, resume processing. Optional callback to run when each job is completed
 - `unshift(job)` Array of jobs or an individual job object. Add jobs to the top of the queue, resume processing. Optional callback to run when each job is completed
@@ -268,6 +268,34 @@ thing.on('something', function (level) {
 
 thing.emit('something', 4);
 // <- 'something level 4'
+```
+
+Returns `thing`.
+
+Events of type `error` have a special behavior. `λ.emitter` will throw if there are no `error` listeners when an error event is emitted.
+
+```js
+var thing = { foo: 'bar' };
+
+λ.emitter(thing);
+
+thing.emit('error', 'foo');
+<- throws 'foo'
+```
+
+If an `'error'` listener is registered, then it'll work just like any other event type.
+
+```js
+var thing = { foo: 'bar' };
+
+λ.emitter(thing);
+
+thing.on('error', function (err) {
+  console.log(err);
+});
+
+thing.emit('error', 'foo');
+<- 'foo'
 ```
 
 ## `λ.apply(fn, ...arguments)`
