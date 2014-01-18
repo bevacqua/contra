@@ -175,13 +175,14 @@
       cb(job.done, [err]);
       cb(labor);
     }
-    return {
+    var qq = {
       push: function (task, done) { _add(task, false, done); },
       unshift: function (task, done) { _add(task, true, done); },
       pause: function () { paused = true; },
-      resume: function () { paused = false; labor(); },
-      get length () { return q.length; }
+      resume: function () { paused = false; labor(); }
     };
+    Object.defineProperty(qq, 'length', { get: function () { return q.length; } });
+    return qq;
   };
 
   // { name: 'outro', dependencies: ['core'] }
