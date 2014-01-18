@@ -1,7 +1,7 @@
 {
   "name": "contra",
   "description": "Asynchronous flow control with a `_` taste to it",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "homepage": "https://github.com/bevacqua/contra",
   "author": {
     "name": "Nicolas Bevacqua",
