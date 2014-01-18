@@ -3,7 +3,6 @@
 
   // { name: 'core', dependencies: ['none'] }
   function a (o) { return Object.prototype.toString.call(o) === '[object Array]'; }
-  function f (o) { return typeof o === 'function'; }
   function atoa (a) { return Array.prototype.slice.call(a); }
   function cb (fn, args, ctx) { if (!fn) { return; } tick(function run () { fn.apply(ctx || null, args || []); }); }
   function once (fn) {
@@ -22,7 +21,7 @@
   }
 
   // cross-platform ticker
-  var tick, si = f(setImmediate);
+  var tick, si = typeof setImmediate === 'function';
   if (typeof process === 'undefined' || !process.nextTick) {
     if (si) {
       tick = function tick (fn) { setImmediate(fn); };
