@@ -30,11 +30,14 @@
     "harness" : "mocha",
     "files": "test/*.js",
     "browsers": {
-      "ie": [8, 9],
-      "firefox": [13],
-      "chrome": [20],
-      "safari": [5.1],
-      "opera": [12]
+      "chrome": [15, 20, 25, 30, "canary"],
+      "firefox": [10, 15, 20, 25, "nightly"],
+      "opera": [10, 14, 17, "next"],
+      "safari": [4, 5.1, 6],
+      "ie": [6, 7, 8, 9, 10],
+      "iphone": [6],
+      "ipad": [6],
+      "android-browser": [4.2]
     }
   },
   "dependencies": {},
