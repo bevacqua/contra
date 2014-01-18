@@ -32,10 +32,11 @@
     tick = typeof setImmediate === 'function' ? setImmediate : process.nextTick;
   }
 
+  // { name: 'apply', dependencies: ['core'] }
   function _apply () {
     var args = atoa(arguments);
     var method = args.shift();
-    return function (next) {
+    return function curried (next) {
       var copy = atoa(args);
       copy.push(next);
       method.apply(method, copy);
@@ -125,8 +126,8 @@
   function _each (flow) {
     return _map(flow, finish);
     function finish (done) {
-      return function (err) {
-        done(err); // only return an optional error
+      return function mask (err) {
+        done(err); // only return the error, no more arguments
       };
     }
   }
@@ -149,7 +150,7 @@
       var st = sub[type];
       if (type === 'error' && !st) { throw args.length === 1 ? args[0] : args; }
       if (!st) { return; }
-      st.forEach(function (s) { cb(s, args, me); });
+      st.forEach(function emitter (s) { cb(s, args, me); });
     };
   }
 
