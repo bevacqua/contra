@@ -1,3 +1,5 @@
+'use strict';
+
 var gulp = require('gulp');
 var bump = require('gulp-bump');
 var git = require('gulp-git');
@@ -20,8 +22,8 @@ gulp.task('test', function() {
 });
 
 gulp.task('clean', function () {
-    return gulp.src('./dist', { read: false })
-      .pipe(clean());
+  return gulp.src('./dist', { read: false })
+    .pipe(clean());
 });
 
 gulp.task('build', ['test', 'clean'], function () {
