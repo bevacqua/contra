@@ -1,8 +1,8 @@
 ![contra.png][logo]
 
-> Asynchronous flow control with a `_` taste to it
-
 [<img src="https://travis-ci.org/bevacqua/contra.png?branch=master" align="right" />](https://travis-ci.org/bevacqua/contra)
+
+> Asynchronous flow control with a `_` taste to it
 
 `λ` aims to stay small and simple, while powerful. Inspired by [async][1] and [lodash][2]. Methods are implemented individually and not as part of a whole. That design helps when considering to export functions individually. If you need all the methods in `async`, then stick with it. Otherwise, you might want to check `λ` out!
 
