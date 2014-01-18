@@ -276,7 +276,7 @@ Returns a function bound with some arguments and a `next` callback.
 
 ```js
 λ.apply(fn, 1, 3, 5);
-// <- function (next) { fn(1, 3, 5); }
+// <- function (next) { fn(1, 3, 5, next); }
 ```
 
 # Comparison with `async`
