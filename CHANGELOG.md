@@ -1,3 +1,3 @@
-# 1.0.0 `contr(a)` journey begins
+# 1.0.8 `contr(a)` journey begins
 
 - Initial Public Release
