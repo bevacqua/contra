@@ -24,7 +24,17 @@
     "generator"
   ],
   "scripts": {
-    "test": "mocha && jshint test && jshint src"
+    "test": "mocha --reporter tap && jshint --reporter node_modules/jshint-tap/jshint-tap.js src"
+  },
+  "testling": {
+    "files": "test/*.js",
+    "browsers": {
+      "ie": [8, 9],
+      "firefox": [13],
+      "chrome": [20],
+      "safari": [5.1],
+      "opera": [12]
+    }
   },
   "dependencies": {},
   "devDependencies": {
@@ -41,6 +51,7 @@
     "gulp-rename": "~0.2.2",
     "gulp-mocha": "~0.3.0",
     "gulp-clean": "~0.2.3",
-    "gulp-size": "~0.1.1"
+    "gulp-size": "~0.1.1",
+    "jshint-tap": "0.0.1"
   }
 }

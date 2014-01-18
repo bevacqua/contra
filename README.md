@@ -2,6 +2,8 @@
 
 > Asynchronous flow control with a `_` taste to it
 
+[![Build Status](https://travis-ci.org/bevacqua/contra.png?branch=master)](https://travis-ci.org/bevacqua/contra)
+
 `λ` aims to stay small and simple, while powerful. Inspired by [async][1] and [lodash][2]. Methods are implemented individually and not as part of a whole. That design helps when considering to export functions individually. If you need all the methods in `async`, then stick with it. Otherwise, you might want to check `λ` out!
 
 #### Quick Links
@@ -322,7 +324,7 @@ More _comprehensive_|More _focused_
 
 # Browser Support
 
-Details are coming.
+[![Browser Support](https://ci.testling.com/bevacqua/contra.png)](https://ci.testling.com/bevacqua/contra)
 
 # License
 
