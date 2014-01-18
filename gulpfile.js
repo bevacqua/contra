@@ -58,4 +58,4 @@ gulp.task('npm', ['tag'], function (done) {
     .on('close', done);
 });
 
-gulp.task('ci', 'build');
+gulp.task('ci', ['build']);
