@@ -1,8 +1,9 @@
-(function () {
+(function (Object) {
   'use strict';
 
   // { name: 'core', dependencies: ['none'] }
-  function a (o) { return o instanceof Array; }
+  function a (o) { return Object.prototype.toString.call(o) === '[object Array]'; }
+  function f (o) { return typeof o === 'function'; }
   function atoa (a) { return Array.prototype.slice.call(a); }
   function cb (fn, args, ctx) { if (!fn) { return; } tick(function run () { fn.apply(ctx || null, args || []); }); }
   function once (fn) {
@@ -21,15 +22,15 @@
   }
 
   // cross-platform ticker
-  var tick;
+  var tick, si = f(setImmediate);
   if (typeof process === 'undefined' || !process.nextTick) {
-    if (typeof setImmediate === 'function') {
+    if (si) {
       tick = function tick (fn) { setImmediate(fn); };
     } else {
       tick = function tick (fn) { setTimeout(fn, 0); };
     }
   } else {
-    tick = typeof setImmediate === 'function' ? setImmediate : process.nextTick;
+    tick = si ? setImmediate : process.nextTick;
   }
 
   // { name: 'apply', dependencies: ['core'] }
@@ -160,7 +161,7 @@
     var q = [], load = 0, max = concurrency || 1, paused;
     function _add (task, top, done) {
       var m = top ? 'unshift' : 'push';
-      var tasks = task instanceof Array ? task : [task];
+      var tasks = a(task) ? task : [task];
       tasks.forEach(function insert (t) { q[m]({ t: t, done: done }); });
       cb(labor);
     }
@@ -206,4 +207,4 @@
   } else {
     window.contra = $;
   }
-})();
+})(Object);

@@ -28,7 +28,7 @@
   },
   "testling": {
     "harness" : "mocha",
-    "files": "test/*.js",
+    "files": ["src/contra.shim.js", "test/*.js"],
     "browsers": {
       "chrome": [15, 20, 25, 30, "canary"],
       "firefox": [10, 15, 20, 25, "nightly"],

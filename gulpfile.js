@@ -16,7 +16,7 @@ gulp.task('test', function() {
     .pipe(jshint())
     .pipe(jshint.reporter('jshint-stylish'));
 
-  gulp
+  return gulp
     .src('./test/*.js')
     .pipe(mocha({ reporter: 'tap' }));
 });
@@ -27,7 +27,7 @@ gulp.task('clean', function () {
 });
 
 gulp.task('build', ['test', 'clean'], function () {
-  return gulp.src('./src/*.js')
+  return gulp.src('./src/contra.js')
     .pipe(concat('contra.js'))
     .pipe(size())
     .pipe(gulp.dest('./dist'))
@@ -37,7 +37,18 @@ gulp.task('build', ['test', 'clean'], function () {
     .pipe(gulp.dest('./dist'));
 });
 
-gulp.task('bump', ['build'], function () {
+gulp.task('build-shim', ['build'], function () {
+  return gulp.src('./src/contra.shim.js')
+    .pipe(concat('contra.shim.js'))
+    .pipe(size())
+    .pipe(gulp.dest('./dist'))
+    .pipe(rename('contra.shim.min.js'))
+    .pipe(uglify())
+    .pipe(size())
+    .pipe(gulp.dest('./dist'));
+});
+
+gulp.task('bump', ['build-shim'], function () {
   return gulp.src(['./package.json', './bower.json'])
     .pipe(bump())
     .pipe(gulp.dest('./'));
