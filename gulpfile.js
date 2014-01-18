@@ -72,3 +72,4 @@ gulp.task('npm', ['tag'], function (done) {
 });
 
 gulp.task('ci', ['build']);
+gulp.task('release', ['npm']);
