@@ -152,6 +152,7 @@
       if (!st) { return; }
       st.forEach(function emitter (s) { cb(s, args, me); });
     };
+    return thing;
   }
 
   // { name: 'queue', dependencies: ['core'] }
