@@ -1,3 +1,3 @@
-# 1.0.11 **λ**
+# 1.0.12 **λ**
 
 - Initial Public Release
