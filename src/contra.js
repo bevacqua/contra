@@ -37,9 +37,8 @@
     var args = atoa(arguments);
     var method = args.shift();
     return function curried () {
-      var copy = atoa(args);
       var more = atoa(arguments);
-      method.apply(method, copy.concat(more));
+      method.apply(method, args.concat(more));
     };
   }
 
