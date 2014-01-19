@@ -30,3 +30,14 @@ if (!Function.prototype.bind) {
     return bound;
   };
 }
+if (!Object.keys) {
+  Object.keys = function (o) {
+    var keys = [];
+    for (var k in o) {
+        if (o.hasOwnProperty(k)) {
+            keys.push(k);
+        }
+    }
+    return keys;
+  };
+}
