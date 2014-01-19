@@ -45,7 +45,7 @@ describe('series()', function () {
       should(err).be.not.ok;
       cb.should.be.ok;
       cc.should.be.ok;
-      results.length.should.equal(2);
+      should(Object.keys(results).length).equal(2);
       results[0].should.equal('a');
       results[1].should.equal('b');
       done();
@@ -118,7 +118,7 @@ describe('concurrent()', function () {
       should(err).be.not.ok;
       cb.should.be.ok;
       cc.should.be.ok;
-      results.length.should.equal(2);
+      should(Object.keys(results).length).equal(2);
       should(results[0]).equal('a');
       should(results[1]).equal('b');
       done();
@@ -210,7 +210,7 @@ describe('apply()', function () {
       should(err).be.not.ok;
       cb.should.be.ok;
       cc.should.be.ok;
-      results.length.should.equal(2);
+      should(Object.keys(results).length).equal(2);
       results[0].should.equal('a');
       results[1].should.equal('b');
       done();
@@ -321,7 +321,7 @@ describe('map()', function () {
     }
     function d (err, results) {
       should(err).be.not.ok;
-      results.length.should.equal(2);
+      should(Object.keys(results).length).equal(2);
       results.should.eql([4, 5]);
       done();
     }
@@ -363,7 +363,7 @@ describe('map.series()', function () {
     }
     function d (err, results) {
       should(err).be.not.ok;
-      results.length.should.equal(2);
+      should(Object.keys(results).length).equal(2);
       results.should.eql([4, 5]);
       done();
     }
@@ -408,7 +408,7 @@ describe('filter()', function () {
     }
     function d (err, results) {
       should(err).be.not.ok;
-      results.length.should.equal(2);
+      should(Object.keys(results).length).equal(2);
       results.should.eql(['b', 'c']);
       done();
     }
@@ -448,7 +448,7 @@ describe('filter.series()', function () {
     }
     function d (err, results) {
       should(err).be.not.ok;
-      results.length.should.equal(2);
+      should(Object.keys(results).length).equal(2);
       results.should.eql(['b', 'c']);
       done();
     }

@@ -32,11 +32,12 @@ if (!Function.prototype.bind) {
 }
 if (!Object.keys) {
   Object.keys = function (o) {
+    'use strict';
     var keys = [];
     for (var k in o) {
-        if (o.hasOwnProperty(k)) {
-            keys.push(k);
-        }
+      if (o.hasOwnProperty(k)) {
+        keys.push(k);
+      }
     }
     return keys;
   };
