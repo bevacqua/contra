@@ -382,6 +382,18 @@ describe('map.series()', function () {
     λ.map.series({ a: 'b', b: 'c' }, t, d);
   });
 
+  it('should fail on error', function (done) {
+    function t (i, done) {
+      done(i);
+    }
+    function d (err, results) {
+      should(err).be.ok;
+      should(results).be.not.ok;
+      done();
+    }
+    λ.map.series(['b','c'],t,d);
+  });
+
   it('should short-circuit on error', function (done) {
     var n = 0;
     function t (i, done) {
