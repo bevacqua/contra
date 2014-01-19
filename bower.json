@@ -23,7 +23,17 @@
     "q",
     "generator"
   ],
-  "dependencies": {},
-  "ignore": [".editorconfig", "package.json", "node_modules", "src", "test", "resources"],
-  "main": "dist/contra.js"
+  "main": "dist/contra.js",
+  "ignore": [
+    ".editorconfig",
+    "package.json",
+    "node_modules",
+    "src",
+    "test",
+    "resources",
+    "index.js",
+    "shim.js",
+    "gulpfile.js"
+  ],
+  "dependencies": {}
 }
