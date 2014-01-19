@@ -18,7 +18,7 @@ gulp.task('test', function() {
 
   gulp
     .src('./test/*.js')
-    .pipe(mocha({ reporter: 'tap' }));
+    .pipe(mocha({ reporter: 'list' }));
 });
 
 gulp.task('clean', function () {
