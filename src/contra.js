@@ -136,21 +136,21 @@
   function _emitter (thing) {
     /* jshint validthis:true */
     var me = this;
-    var sub = {};
+    var evt = {};
     thing.on = function (type, fn) {
-      if (!sub[type]) {
-        sub[type] = [fn];
+      if (!evt[type]) {
+        evt[type] = [fn];
       } else {
-        sub[type].push(fn);
+        evt[type].push(fn);
       }
     };
     thing.emit = function () {
       var args = atoa(arguments);
       var type = args.shift();
-      var st = sub[type];
-      if (type === 'error' && !st) { throw args.length === 1 ? args[0] : args; }
-      if (!st) { return; }
-      st.forEach(function emitter (s) { cb(s, args, me); });
+      var et = evt[type];
+      if (type === 'error' && !et) { throw args.length === 1 ? args[0] : args; }
+      if (!et) { return; }
+      et.forEach(function emitter (s) { cb(s, args, me); });
     };
     return thing;
   }
