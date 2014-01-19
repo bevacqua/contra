@@ -1,6 +1,6 @@
 ![contra.png][logo]
 
-[<img src="https://travis-ci.org/bevacqua/contra.png?branch=master" align="right" />](https://travis-ci.org/bevacqua/contra)
+[<img src="https://travis-ci.org/bevacqua/contra.png?branch=master" align="right" />](https://travis-ci.org/bevacqua/contra) [<img src="https://badge.fury.io/js/contra.png" align="right" />](http://badge.fury.io/js/contra)
 
 > Asynchronous flow control with a `_` taste to it
 
