@@ -1,27 +1,31 @@
 'use strict';
 
-var should = require('should');
+var assert = require('assert');
 var λ = require('../');
+
+assert.falsy = function (value, message) {
+  assert.equal(false, !!value, message);
+};
 
 describe('waterfall()', function () {
   it('should run tasks in a waterfall', function (done) {
     var cb = false, cc = false;
     function b (next) {
       cb = true;
-      cc.should.not.be.ok;
+      assert.falsy(cc);
       next(null, 'a');
     }
     function c (d, next) {
       cc = true;
-      cb.should.be.ok;
-      d.should.equal('a');
+      assert.ok(cb);
+      assert.equal(d, 'a');
       next(null, 'b');
     }
     function d (err, result) {
-      should(err).be.not.ok;
-      cb.should.be.ok;
-      cc.should.be.ok;
-      result.should.equal('b');
+      assert.falsy(err);
+      assert.ok(cb);
+      assert.ok(cc);
+      assert.equal(result, 'b');
       done();
     }
     λ.waterfall([b,c],d);
@@ -33,21 +37,21 @@ describe('series()', function () {
     var cb = false, cc = false;
     function b (next) {
       cb = true;
-      cc.should.not.be.ok;
+      assert.falsy(cc);
       next(null, 'a');
     }
     function c (next) {
       cc = true;
-      cb.should.be.ok;
+      assert.ok(cb);
       next(null, 'b');
     }
     function d (err, results) {
-      should(err).be.not.ok;
-      cb.should.be.ok;
-      cc.should.be.ok;
-      should(Object.keys(results).length).equal(2);
-      results[0].should.equal('a');
-      results[1].should.equal('b');
+      assert.falsy(err);
+      assert.ok(cb);
+      assert.ok(cc);
+      assert.equal(Object.keys(results).length, 2);
+      assert.equal(results[0], 'a');
+      assert.equal(results[1], 'b');
       done();
     }
     λ.series([b,c],d);
@@ -57,21 +61,21 @@ describe('series()', function () {
     var cb = false, cc = false;
     function b (next) {
       cb = true;
-      cc.should.not.be.ok;
+      assert.falsy(cc);
       next(null, 'a');
     }
     function c (next) {
       cc = true;
-      cb.should.be.ok;
+      assert.ok(cb);
       next(null, 'b');
     }
     function d (err, results) {
-      should(err).be.not.ok;
-      cb.should.be.ok;
-      cc.should.be.ok;
-      should(Object.keys(results).length).equal(2);
-      results.e.should.equal('a');
-      results.f.should.equal('b');
+      assert.falsy(err);
+      assert.ok(cb);
+      assert.ok(cc);
+      assert.equal(Object.keys(results).length, 2);
+      assert.equal(results.e, 'a');
+      assert.equal(results.f, 'b');
       done();
     }
     λ.series({ e: b, f: c }, d);
@@ -81,20 +85,20 @@ describe('series()', function () {
     var cb = false, cc = false;
     function b (next) {
       cb = true;
-      cc.should.not.be.ok;
+      assert.falsy(cc);
       next('d', 'a');
     }
     function c (next) {
       cc = true;
-      cb.should.be.ok;
+      assert.ok(cb);
       next(null, 'b');
     }
     function d (err, results) {
-      err.should.be.ok;
-      err.should.equal('d');
-      cb.should.be.ok;
-      cc.should.not.be.ok;
-      should(results).be.not.ok;
+      assert.ok(err);
+      assert.equal(err, 'd');
+      assert.ok(cb);
+      assert.falsy(cc);
+      assert.falsy(results);
       done();
     }
     λ.series([b,c],d);
@@ -106,21 +110,21 @@ describe('concurrent()', function () {
     var cb = false, cc = false;
     function b (next) {
       cb = true;
-      cc.should.not.be.ok;
+      assert.falsy(cc);
       next(null, 'a');
     }
     function c (next) {
       cc = true;
-      cb.should.be.ok;
+      assert.ok(cb);
       next(null, 'b');
     }
     function d (err, results) {
-      should(err).be.not.ok;
-      cb.should.be.ok;
-      cc.should.be.ok;
-      should(Object.keys(results).length).equal(2);
-      should(results[0]).equal('a');
-      should(results[1]).equal('b');
+      assert.falsy(err);
+      assert.ok(cb);
+      assert.ok(cc);
+      assert.equal(Object.keys(results).length, 2);
+      assert.equal(results[0], 'a');
+      assert.equal(results[1], 'b');
       done();
     }
     λ.concurrent([b,c],d);
@@ -130,21 +134,21 @@ describe('concurrent()', function () {
     var cb = false, cc = false;
     function b (next) {
       cb = true;
-      cc.should.not.be.ok;
+      assert.falsy(cc);
       next(null, 'a');
     }
     function c (next) {
       cc = true;
-      cb.should.be.ok;
+      assert.ok(cb);
       next(null, 'b');
     }
     function d (err, results) {
-      should(err).be.not.ok;
-      cb.should.be.ok;
-      cc.should.be.ok;
-      should(Object.keys(results).length).equal(2);
-      should(results.a).equal('a');
-      should(results.d).equal('b');
+      assert.falsy(err);
+      assert.ok(cb);
+      assert.ok(cc);
+      assert.equal(Object.keys(results).length, 2);
+      assert.equal(results.a, 'a');
+      assert.equal(results.d, 'b');
       done();
     }
     λ.concurrent({ a: b, d: c }, d);
@@ -158,9 +162,9 @@ describe('concurrent()', function () {
       next(null, 'b');
     }
     function d (err, results) {
-      should(err).be.ok;
-      should(err).equal('b');
-      should(results).be.not.ok;
+      assert.ok(err);
+      assert.equal(err, 'b');
+      assert.falsy(results);
       done();
     }
     λ.concurrent([b,c],d);
@@ -170,9 +174,9 @@ describe('concurrent()', function () {
 describe('apply()', function () {
   it('should work with no extra arguments', function () {
     var fn = function (a,b,c) {
-      a.should.equal(1);
-      b.should.equal(3);
-      c.should.equal('c');
+      assert.equal(a, 1);
+      assert.equal(b, 3);
+      assert.equal(c, 'c');
     };
     var applied = λ.apply(fn, 1, 3, 'c');
     applied();
@@ -180,11 +184,11 @@ describe('apply()', function () {
 
   it('should include extra arguments as well', function () {
     var fn = function (a,b,c,d,e) {
-      a.should.equal(1);
-      b.should.equal(3);
-      c.should.equal('c');
-      d.should.equal('d');
-      e.should.equal('e');
+      assert.equal(a, 1);
+      assert.equal(b, 3);
+      assert.equal(c, 'c');
+      assert.equal(d, 'd');
+      assert.equal(e, 'e');
     };
     var applied = λ.apply(fn, 1, 3, 'c');
     applied('d', 'e');
@@ -193,24 +197,24 @@ describe('apply()', function () {
   it('should play well with λ.series', function (done) {
     var cb = false, cc = false;
     function b (n, next) {
-      n.should.equal(1);
+      assert.equal(n, 1);
       cb = true;
-      cc.should.not.be.ok;
+      assert.falsy(cc);
       next(null, 'd');
     }
     function c (p, next) {
-      p.should.eql(['a']);
+      assert.deepEqual(p, ['a']);
       cc = true;
-      cb.should.be.ok;
+      assert.ok(cb);
       next(null, 'b');
     }
     function d (err, results) {
-      should(err).be.not.ok;
-      cb.should.be.ok;
-      cc.should.be.ok;
-      should(Object.keys(results).length).equal(2);
-      results[0].should.equal('d');
-      results[1].should.equal('b');
+      assert.falsy(err);
+      assert.ok(cb);
+      assert.ok(cc);
+      assert.equal(Object.keys(results).length, 2);
+      assert.equal(results[0], 'd');
+      assert.equal(results[1], 'b');
       done();
     }
     λ.series([
@@ -228,9 +232,9 @@ describe('each()', function () {
       done();
     }
     function d (err, results) {
-      n.should.equal(2);
-      should(err).be.not.ok;
-      should(results).be.not.ok;
+      assert.equal(n, 2);
+      assert.falsy(err);
+      assert.falsy(results);
       done();
     }
     λ.each(['b','c'],t,d);
@@ -243,9 +247,9 @@ describe('each()', function () {
       done();
     }
     function d (err, results) {
-      n.should.equal(2);
-      should(err).be.not.ok;
-      should(results).be.not.ok;
+      assert.equal(n, 2);
+      assert.falsy(err);
+      assert.falsy(results);
       done();
     }
     λ.each({ a: 'b', b: 'c' }, t, d);
@@ -256,8 +260,8 @@ describe('each()', function () {
       done(i);
     }
     function d (err, results) {
-      should(err).be.ok;
-      should(results).be.not.ok;
+      assert.ok(err);
+      assert.falsy(results);
       done();
     }
     λ.each(['b','c','e'],t,d);
@@ -272,9 +276,9 @@ describe('each.series()', function () {
       done();
     }
     function d (err, results) {
-      n.should.equal(2);
-      should(err).be.not.ok;
-      should(results).be.not.ok;
+      assert.equal(n, 2);
+      assert.falsy(err);
+      assert.falsy(results);
       done();
     }
     λ.each.series(['b','c'],t,d);
@@ -287,9 +291,9 @@ describe('each.series()', function () {
       done();
     }
     function d (err, results) {
-      n.should.equal(2);
-      should(err).be.not.ok;
-      should(results).be.not.ok;
+      assert.equal(n, 2);
+      assert.falsy(err);
+      assert.falsy(results);
       done();
     }
     λ.each.series({ a: 'b', b: 'c' }, t, d);
@@ -302,9 +306,9 @@ describe('each.series()', function () {
       done(i);
     }
     function d (err, results) {
-      n.should.equal(1);
-      should(err).be.ok;
-      should(results).be.not.ok;
+      assert.equal(n, 1);
+      assert.ok(err);
+      assert.falsy(results);
       done();
     }
     λ.each.series(['b','c'],t,d);
@@ -318,9 +322,9 @@ describe('map()', function () {
       done(null, n++);
     }
     function d (err, results) {
-      should(err).be.not.ok;
-      should(Object.keys(results).length).equal(2);
-      results.should.eql([4, 5]);
+      assert.falsy(err);
+      assert.equal(Object.keys(results).length, 2);
+      assert.deepEqual(results, [4, 5]);
       done();
     }
     λ.map(['b','c'],t,d);
@@ -332,9 +336,9 @@ describe('map()', function () {
       done(null, n++);
     }
     function d (err, results) {
-      should(err).be.not.ok;
-      should(Object.keys(results).length).equal(2);
-      results.should.eql({ a: 4, b: 5 });
+      assert.falsy(err);
+      assert.equal(Object.keys(results).length, 2);
+      assert.deepEqual(results, { a: 4, b: 5 });
       done();
     }
     λ.map({ a: 'b', b: 'c' }, t, d);
@@ -345,8 +349,8 @@ describe('map()', function () {
       done(i);
     }
     function d (err, results) {
-      should(err).be.ok;
-      should(results).be.not.ok;
+      assert.ok(err);
+      assert.falsy(results);
       done();
     }
     λ.map(['b','c','e'],t,d);
@@ -360,9 +364,9 @@ describe('map.series()', function () {
       done(null, n++);
     }
     function d (err, results) {
-      should(err).be.not.ok;
-      should(Object.keys(results).length).equal(2);
-      results.should.eql([4, 5]);
+      assert.falsy(err);
+      assert.equal(Object.keys(results).length, 2);
+      assert.deepEqual(results, [4, 5]);
       done();
     }
     λ.map.series(['b','c'],t,d);
@@ -374,9 +378,9 @@ describe('map.series()', function () {
       done(null, n++);
     }
     function d (err, results) {
-      should(err).be.not.ok;
-      should(Object.keys(results).length).equal(2);
-      results.should.eql({ a: 4, b: 5 });
+      assert.falsy(err);
+      assert.equal(Object.keys(results).length, 2);
+      assert.deepEqual(results, { a: 4, b: 5 });
       done();
     }
     λ.map.series({ a: 'b', b: 'c' }, t, d);
@@ -387,8 +391,8 @@ describe('map.series()', function () {
       done(i);
     }
     function d (err, results) {
-      should(err).be.ok;
-      should(results).be.not.ok;
+      assert.ok(err);
+      assert.falsy(results);
       done();
     }
     λ.map.series(['b','c'],t,d);
@@ -401,9 +405,9 @@ describe('map.series()', function () {
       done(i);
     }
     function d (err, results) {
-      n.should.equal(1);
-      should(err).be.ok;
-      should(results).be.not.ok;
+      assert.equal(n, 1);
+      assert.ok(err);
+      assert.falsy(results);
       done();
     }
     λ.map.series(['b','c'],t,d);
@@ -417,9 +421,9 @@ describe('filter()', function () {
       done(null, typeof i === 'string');
     }
     function d (err, results) {
-      should(err).be.not.ok;
-      should(Object.keys(results).length).equal(2);
-      results.should.eql(['b', 'c']);
+      assert.falsy(err);
+      assert.equal(Object.keys(results).length, 2);
+      assert.deepEqual(results, ['b', 'c']);
       done();
     }
     λ.filter([1,2,'b',3,'c',5],t,d);
@@ -430,9 +434,9 @@ describe('filter()', function () {
       done(null, typeof i === 'string');
     }
     function d (err, results) {
-      should(err).be.not.ok;
-      should(Object.keys(results).length).equal(2);
-      results.should.eql({ a: 'b', b: 'c' });
+      assert.falsy(err);
+      assert.equal(Object.keys(results).length, 2);
+      assert.deepEqual(results, { a: 'b', b: 'c' });
       done();
     }
     λ.filter({ n: 3, a: 'b', b: 'c', c: 4, d: 5, e: 6 }, t, d);
@@ -443,8 +447,8 @@ describe('filter()', function () {
       done(i);
     }
     function d (err, results) {
-      should(err).be.ok;
-      should(results).be.not.ok;
+      assert.ok(err);
+      assert.falsy(results);
       done();
     }
     λ.filter(['b','c','e'],t,d);
@@ -457,9 +461,9 @@ describe('filter.series()', function () {
       done(null, typeof i === 'string');
     }
     function d (err, results) {
-      should(err).be.not.ok;
-      should(Object.keys(results).length).equal(2);
-      results.should.eql(['b', 'c']);
+      assert.falsy(err);
+      assert.equal(Object.keys(results).length, 2);
+      assert.deepEqual(results, ['b', 'c']);
       done();
     }
     λ.filter.series([1,2,'b',3,'c',5],t,d);
@@ -470,9 +474,9 @@ describe('filter.series()', function () {
       done(null, typeof i === 'string');
     }
     function d (err, results) {
-      should(err).be.not.ok;
-      should(Object.keys(results).length).equal(2);
-      results.should.eql({ a: 'b', b: 'c' });
+      assert.falsy(err);
+      assert.equal(Object.keys(results).length, 2);
+      assert.deepEqual(results, { a: 'b', b: 'c' });
       done();
     }
     λ.filter.series({ n: 3, a: 'b', b: 'c', c: 4, d: 5, e: 6 }, t, d);
@@ -484,12 +488,12 @@ describe('queue()', function () {
     var ww;
     function w (job, done) {
       ww = true;
-      job.should.equal('a');
+      assert.equal(job, 'a');
       done();
     }
     function d (err) {
-      should(err).be.not.ok;
-      should(ww).be.ok;
+      assert.falsy(err);
+      assert.ok(ww);
       done();
     }
     var q = λ.queue(w);
@@ -500,18 +504,18 @@ describe('queue()', function () {
     var ww;
     function w (job, cb) {
       ww = true;
-      job.should.equal('a');
+      assert.equal(job, 'a');
       cb();
     }
     function d (err) {
-      should(err).be.not.ok;
-      should(ww).be.ok;
+      assert.falsy(err);
+      assert.ok(ww);
       done();
     }
     var q = λ.queue(w);
     q.pause();
     q.push('a', d);
-    q.length.should.equal(1);
+    assert.equal(q.length, 1);
     q.resume();
   });
 
@@ -519,12 +523,12 @@ describe('queue()', function () {
     var ww;
     function w (job, done) {
       ww = true;
-      job.should.equal('a');
+      assert.equal(job, 'a');
       done('e');
     }
     function d (err) {
-      err.should.equal('e');
-      should(ww).be.ok;
+      assert.equal(err, 'e');
+      assert.ok(ww);
       done();
     }
     var q = λ.queue(w);
@@ -538,12 +542,12 @@ describe('emitter()', function () {
 
     λ.emitter(thing);
 
-    should(thing.on).be.ok;
-    should(thing.emit).be.ok;
+    assert.ok(thing.on);
+    assert.ok(thing.emit);
 
     thing.on('something', function (a, b) {
-      a.should.equal('a');
-      b.should.equal(2);
+      assert.equal(a, 'a');
+      assert.equal(b, 2);
       done();
     });
 
@@ -555,10 +559,10 @@ describe('emitter()', function () {
 
     λ.emitter(thing);
 
-    should(thing.on).be.ok;
-    should(thing.emit).be.ok;
+    assert.ok(thing.on);
+    assert.ok(thing.emit);
 
-    thing.emit.bind(thing, 'error').should.throw();
+    assert.throws(thing.emit.bind(thing, 'error'));
     done();
   });
 
@@ -567,12 +571,12 @@ describe('emitter()', function () {
 
     λ.emitter(thing);
 
-    should(thing.on).be.ok;
-    should(thing.emit).be.ok;
+    assert.ok(thing.on);
+    assert.ok(thing.emit);
 
     thing.on('error', function () {
       done();
     });
-    thing.emit.bind(thing, 'error').should.not.throw();
+    assert.doesNotThrow(thing.emit.bind(thing, 'error'));
   });
 });

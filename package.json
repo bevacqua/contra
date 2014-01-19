@@ -27,35 +27,70 @@
     "test": "mocha --reporter tap && jshint --reporter node_modules/jshint-tap/jshint-tap.js src"
   },
   "testling": {
-    "harness" : "mocha",
-    "files": ["src/contra.shim.js", "test/*.js"],
+    "harness": "mocha",
+    "files": [
+      "src/contra.shim.js",
+      "test/*.js"
+    ],
     "browsers": {
-      "chrome": [15, 20, 25, 30, "canary"],
-      "firefox": [10, 15, 20, 25, "nightly"],
-      "opera": [15, 16, 17, "next"],
-      "safari": [5.1, 6],
-      "ie": [6, 7, 8, 9, 10],
-      "iphone": [6],
-      "ipad": [6],
-      "android-browser": [4.2]
+      "chrome": [
+        15,
+        20,
+        25,
+        30,
+        "canary"
+      ],
+      "firefox": [
+        10,
+        15,
+        20,
+        25,
+        "nightly"
+      ],
+      "opera": [
+        15,
+        16,
+        17,
+        "next"
+      ],
+      "safari": [
+        5.1,
+        6
+      ],
+      "ie": [
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "iphone": [
+        6
+      ],
+      "ipad": [
+        6
+      ],
+      "android-browser": [
+        4.2
+      ]
     }
   },
   "dependencies": {},
   "devDependencies": {
+    "assert": "~1.1.0",
     "gulp": "~3.4.0",
     "gulp-bump": "~0.1.0",
+    "gulp-clean": "~0.2.3",
+    "gulp-concat": "~2.1.7",
     "gulp-git": "~0.2.0",
+    "gulp-jshint": "~1.3.4",
+    "gulp-mocha": "~0.3.0",
+    "gulp-rename": "~0.2.2",
+    "gulp-size": "~0.1.1",
+    "gulp-uglify": "~0.1.0",
     "jshint": "~2.4.1",
     "jshint-stylish": "~0.1.5",
-    "mocha": "~1.17.0",
-    "should": "~2.1.1",
-    "gulp-concat": "~2.1.7",
-    "gulp-uglify": "~0.1.0",
-    "gulp-jshint": "~1.3.4",
-    "gulp-rename": "~0.2.2",
-    "gulp-mocha": "~0.3.0",
-    "gulp-clean": "~0.2.3",
-    "gulp-size": "~0.1.1",
-    "jshint-tap": "0.0.1"
+    "jshint-tap": "0.0.1",
+    "mocha": "~1.17.0"
   }
 }
