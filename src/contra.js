@@ -1,6 +1,5 @@
 (function (Object) {
-  'use strict';
-
+  /* jshint strict:false */
   // { name: 'core', dependencies: ['none'] }
   function a (o) { return Object.prototype.toString.call(o) === '[object Array]'; }
   function atoa (a) { return Array.prototype.slice.call(a); }
