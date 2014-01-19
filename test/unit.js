@@ -170,7 +170,6 @@ describe('concurrent()', function () {
 describe('apply()', function () {
   it('should work with no extra arguments', function () {
     var fn = function (a,b,c) {
-      arguments.length.should.equal(3);
       a.should.equal(1);
       b.should.equal(3);
       c.should.equal('c');
@@ -181,7 +180,6 @@ describe('apply()', function () {
 
   it('should include extra arguments as well', function () {
     var fn = function (a,b,c,d,e) {
-      arguments.length.should.equal(5);
       a.should.equal(1);
       b.should.equal(3);
       c.should.equal('c');
@@ -198,7 +196,7 @@ describe('apply()', function () {
       n.should.equal(1);
       cb = true;
       cc.should.not.be.ok;
-      next(null, 'a');
+      next(null, 'd');
     }
     function c (p, next) {
       p.should.eql(['a']);
@@ -211,7 +209,7 @@ describe('apply()', function () {
       cb.should.be.ok;
       cc.should.be.ok;
       should(Object.keys(results).length).equal(2);
-      results[0].should.equal('a');
+      results[0].should.equal('d');
       results[1].should.equal('b');
       done();
     }
