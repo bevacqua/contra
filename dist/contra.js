@@ -118,16 +118,37 @@
           iterator(collection[key], cb);
         };
       });
-      flow(tasks, finish ? finish(done) : done);
+      flow(tasks, finish ? finish(collection, done) : done);
     };
   }
 
   // dependencies: ['map']
   function _each (flow) {
     return _map(flow, finish);
-    function finish (done) {
+    function finish (collection, done) {
       return function mask (err) {
         done(err); // only return the error, no more arguments
+      };
+    }
+  }
+
+  // dependencies: ['map']
+  function _filter (flow) {
+    return _map(flow, finish);
+    function finish (collection, done) {
+      return function filter (err, results) {
+        function exists (item, key) {
+          return !!results[key];
+        }
+        function ofilter () {
+          var filtered = {};
+          Object.keys(collection).forEach(function omapper (key) {
+            if (exists(null, key)) { filtered[key] = collection[key]; }
+          });
+          return filtered;
+        }
+        if (err) { done(err); return; }
+        done(null, a(results) ? collection.filter(exists) : ofilter());
       };
     }
   }
@@ -193,12 +214,14 @@
     waterfall: _waterfall,
     each: _each(_concurrent),
     map: _map(_concurrent),
+    filter: _filter(_concurrent),
     queue: _queue,
     emitter: _emitter
   };
 
   $.each.series = _each(_series);
   $.map.series = _map(_series);
+  $.filter.series = _filter(_series);
 
   // cross-platform export
   if (typeof module !== 'undefined' && module.exports) {

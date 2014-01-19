@@ -349,7 +349,7 @@ Arrays for [some][5], collections for [others][6]|Collections for **everyone**!
 `parallel`|`concurrent`
 `mapSeries`|`map.series`
 More _comprehensive_|More _focused_
-`~29.6k (minified, uncompressed)`|`~2.3k (minified, uncompressed)`
+`~29.6k (minified, uncompressed)`|`~2.6k (minified, uncompressed)`
 
 `λ` isn't meant to be a replacement for `async`. It aims to provide a more focused library, and a bit more consistency.
 
