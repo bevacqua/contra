@@ -400,6 +400,75 @@ describe('map.series()', function () {
   });
 });
 
+
+describe('filter()', function () {
+  it('should filter array concurrently', function (done) {
+    function t (i, done) {
+      done(null, typeof i === 'string');
+    }
+    function d (err, results) {
+      should(err).be.not.ok;
+      results.length.should.equal(2);
+      results.should.eql(['b', 'c']);
+      done();
+    }
+    λ.filter([1,2,'b',3,'c',5],t,d);
+  });
+
+  it('should filter object concurrently', function (done) {
+    function t (i, done) {
+      done(null, typeof i === 'string');
+    }
+    function d (err, results) {
+      should(err).be.not.ok;
+      should(Object.keys(results).length).equal(2);
+      results.should.eql({ a: 'b', b: 'c' });
+      done();
+    }
+    λ.filter({ n: 3, a: 'b', b: 'c', c: 4, d: 5, e: 6 }, t, d);
+  });
+
+  it('should short-circuit on error', function (done) {
+    function t (i, done) {
+      done(i);
+    }
+    function d (err, results) {
+      should(err).be.ok;
+      should(results).be.not.ok;
+      done();
+    }
+    λ.filter(['b','c','e'],t,d);
+  });
+});
+
+describe('filter.series()', function () {
+  it('should filter array in a series', function (done) {
+    function t (i, done) {
+      done(null, typeof i === 'string');
+    }
+    function d (err, results) {
+      should(err).be.not.ok;
+      results.length.should.equal(2);
+      results.should.eql(['b', 'c']);
+      done();
+    }
+    λ.filter.series([1,2,'b',3,'c',5],t,d);
+  });
+
+  it('should filter object in a series', function (done) {
+    function t (i, done) {
+      done(null, typeof i === 'string');
+    }
+    function d (err, results) {
+      should(err).be.not.ok;
+      should(Object.keys(results).length).equal(2);
+      results.should.eql({ a: 'b', b: 'c' });
+      done();
+    }
+    λ.filter.series({ n: 3, a: 'b', b: 'c', c: 4, d: 5, e: 6 }, t, d);
+  });
+});
+
 describe('queue()', function () {
   it('should queue things', function (done) {
     var ww;

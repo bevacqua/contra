@@ -27,6 +27,8 @@ Functional
 - [`λ.each.series`](#%CE%BBeachseriesitems-iterator-done)
 - [`λ.map`](#%CE%BBmapitems-iterator-done)
 - [`λ.map.series`](#%CE%BBmapseriesitems-iterator-done)
+- [`λ.filter`](#%CE%BBfilteritems-iterator-done)
+- [`λ.filter.series`](#%CE%BBfilterseriesitems-iterator-done)
 
 Uncategorized
 
@@ -192,21 +194,21 @@ Same as `λ.each(items, iterator[, done])`, but in series instead of concurrentl
 
 ## `λ.map(items, iterator[, done])`
 
-Applies an iterator to each element in the collection concurrently. Produces an object with the transformation results. Task order is preserved in results.
+Applies an iterator to each element in the collection concurrently. Produces an object with the transformation results. Task order is preserved in the results.
 
 - `items` Collection of items. Can be an array or an object
 - `iterator(item, cb)` Function to execute on each item
   - `item` The current item
   - `cb` Needs to be called when processing for current item is done
-- `done` Optional function with the `(err)` signature
+- `done` Optional function with the `(err, results)` signature
 
 ```js
-λ.each({ thing: 900, another: 23 }, function (item, cb) {
+λ.map({ thing: 900, another: 23 }, function (item, cb) {
   setTimeout(function () {
     cb(null, item * 2);
   }, item);
-}, function (err, result) {
-  console.log(result);
+}, function (err, results) {
+  console.log(results);
   <- { thing: 1800, another: 46 }
 });
 ```
@@ -215,14 +217,43 @@ Applies an iterator to each element in the collection concurrently. Produces an 
 
 Same as `λ.map(items, iterator[, done])`, but in series instead of concurrently.
 
+## `λ.filter(items, iterator[, done])`
+
+Applies an iterator to each element in the collection concurrently. Produces an object with the filtered results. Task order is preserved in results.
+
+- `items` Collection of items. Can be an array or an object
+- `iterator(item, cb)` Function to execute on each item
+  - `item` The current item
+  - `cb` Needs to be called when processing for current item is done
+    - `err` An optional error which will short-circuit the filtering process, calling `done`
+    - `keep` Truthy will keep the item. Falsy will remove it in the results
+- `done` Optional function with the `(err, results)` signature
+
+```js
+λ.filter({ thing: 900, another: 23, foo: 69 }, function (item, cb) {
+  setTimeout(function () {
+    cb(null, item % 23 === 0);
+  }, item);
+}, function (err, results) {
+  console.log(results);
+  <- { another: 23, foo: 69 }
+});
+```
+
+## `λ.filter.series(items, iterator[, done])`
+
+Same as `λ.filter(items, iterator[, done])`, but in series instead of concurrently.
+
 ## `λ.queue(worker[, concurrency=1])`
+
+Used to create a job queue.
 
 - `worker(job, done)` Function to process jobs in the queue
   - `job` The current job
   - `done` Needs to be called when processing for current job is done
 - `concurrency` Optional concurrency level, defaults to `1` (serial)
 
-Returns a queue you can `push` or `unshift` tasks to. You can pause and resume the queue by hand.
+Returns a queue you can `push` or `unshift` jobs to. You can pause and resume the queue by hand.
 
 - `push(job[, done])` Array of jobs or an individual job object. Enqueue those jobs, resume processing. Optional callback to run when each job is completed
 - `unshift(job)` Array of jobs or an individual job object. Add jobs to the top of the queue, resume processing. Optional callback to run when each job is completed
@@ -313,7 +344,7 @@ Returns a function bound with some arguments and a `next` callback.
 
 [`async`][1]|`λ`
 ---|---
-Aimed at Noders|All ages may use!
+Aimed at Noders|Tailored for browsers
 Arrays for [some][5], collections for [others][6]|Collections for **everyone**!
 `parallel`|`concurrent`
 `mapSeries`|`map.series`
