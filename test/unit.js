@@ -3,9 +3,7 @@
 var assert = require('assert');
 var λ = require('../');
 
-assert.falsy = function (value, message) {
-  assert.equal(false, !!value, message);
-};
+assert.falsy = function (value, message) { assert.equal(false, !!value, message); };
 
 describe('waterfall()', function () {
   it('should run tasks in a waterfall', function (done) {
