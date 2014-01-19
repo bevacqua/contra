@@ -36,10 +36,10 @@
   function _apply () {
     var args = atoa(arguments);
     var method = args.shift();
-    return function curried (next) {
+    return function curried () {
       var copy = atoa(args);
-      copy.push(next);
-      method.apply(method, copy);
+      var more = atoa(arguments);
+      method.apply(method, copy.concat(more));
     };
   }
 

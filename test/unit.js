@@ -168,7 +168,31 @@ describe('concurrent()', function () {
 });
 
 describe('apply()', function () {
-  it('should just work', function (done) {
+  it('should work with no extra arguments', function () {
+    var fn = function (a,b,c) {
+      arguments.length.should.equal(3);
+      a.should.equal(1);
+      b.should.equal(3);
+      c.should.equal('c');
+    };
+    var applied = λ.apply(fn, 1, 3, 'c');
+    applied();
+  });
+
+  it('should include extra arguments as well', function () {
+    var fn = function (a,b,c,d,e) {
+      arguments.length.should.equal(5);
+      a.should.equal(1);
+      b.should.equal(3);
+      c.should.equal('c');
+      d.should.equal('d');
+      e.should.equal('e');
+    };
+    var applied = λ.apply(fn, 1, 3, 'c');
+    applied('d', 'e');
+  });
+
+  it('should play well with λ.series', function (done) {
     var cb = false, cc = false;
     function b (n, next) {
       n.should.equal(1);
