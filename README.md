@@ -373,7 +373,7 @@ var λ = require('contra');
 <script src='contra.js'></script>
 ```
 
-The shim is currently below `700B` when minified.
+The shim currently clocks around `~700B` minified.
 
 # License
 
