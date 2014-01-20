@@ -420,7 +420,7 @@ describe('filter()', function () {
     }
     function d (err, results) {
       assert.falsy(err);
-      assert.equal(Object.keys(results).length, 2);
+      assert.equal(results.length, 2);
       assert.deepEqual(results, ['b', 'c']);
       done();
     }
@@ -460,7 +460,7 @@ describe('filter.series()', function () {
     }
     function d (err, results) {
       assert.falsy(err);
-      assert.equal(Object.keys(results).length, 2);
+      assert.equal(results.length, 2);
       assert.deepEqual(results, ['b', 'c']);
       done();
     }
