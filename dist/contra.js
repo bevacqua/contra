@@ -199,9 +199,12 @@
       push: function (task, done) { _add(task, false, done); },
       unshift: function (task, done) { _add(task, true, done); },
       pause: function () { paused = true; },
-      resume: function () { paused = false; labor(); }
+      resume: function () { paused = false; labor(); },
+      pending: q
     };
-    Object.defineProperty(qq, 'length', { get: function () { return q.length; } });
+    if (Object.defineProperty) {
+      Object.defineProperty(qq, 'length', { get: function () { return q.length; } });
+    }
     return qq;
   };
 
