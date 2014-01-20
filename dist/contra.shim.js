@@ -11,6 +11,24 @@ if (!Array.prototype.forEach) {
     }
   };
 }
+if (!Array.prototype.filter) {
+  Array.prototype.filter = function (fn, ctx) {
+    'use strict';
+    if (this === void 0 || this === null || typeof fn !== 'function') {
+      throw new TypeError();
+    }
+    var t = this;
+    var len = t.length;
+    var f = [];
+    for (var i = 0; i < len; i++) {
+      if (i in t) {
+        var val = t[i];
+        if (fn.call(ctx, val, i, t)) { f.push(val); }
+      }
+    }
+    return f;
+  };
+}
 if (!Function.prototype.bind) {
   Function.prototype.bind = function (context) {
     'use strict';
