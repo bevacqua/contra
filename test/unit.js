@@ -513,7 +513,7 @@ describe('queue()', function () {
     var q = λ.queue(w);
     q.pause();
     q.push('a', d);
-    assert.equal(q.length, 1);
+    assert.equal(q.pending.length, 1);
     q.resume();
   });
 
