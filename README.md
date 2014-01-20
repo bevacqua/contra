@@ -6,6 +6,8 @@
 
 `λ` aims to stay small and simple, while powerful. Inspired by [async][1] and [lodash][2]. Methods are implemented individually and not as part of a whole. That design helps when considering to export functions individually. If you need all the methods in `async`, then stick with it. Otherwise, you might want to check `λ` out!
 
+Feature requests will be considered on a case-by-case basis.
+
 #### Quick Links
 
 - [CHANGELOG](CHANGELOG.md)
