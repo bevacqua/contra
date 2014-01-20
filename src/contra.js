@@ -1,7 +1,7 @@
 (function (Object) {
   'use strict';
 
-  // { name: 'core', dependencies: ['none'] }
+  // { name: 'core', dependencies: [] }
   function a (o) { return Object.prototype.toString.call(o) === '[object Array]'; }
   function atoa (a) { return Array.prototype.slice.call(a); }
   function cb (fn, args, ctx) { if (!fn) { return; } tick(function run () { fn.apply(ctx || null, args || []); }); }
@@ -107,7 +107,7 @@
     }
   }
 
-  // { name: 'map', dependencies: ['series' or 'concurrent'] }
+  // { name: 'map', dependencies: ['series', 'concurrent'] }
   function _map (flow, finish) {
     return function map (collection, iterator, done) {
       var keys = Object.keys(collection);
@@ -121,7 +121,7 @@
     };
   }
 
-  // dependencies: ['map']
+  // { name: 'each', dependencies: ['map'] }
   function _each (flow) {
     return _map(flow, finish);
     function finish (collection, done) {
@@ -131,7 +131,7 @@
     }
   }
 
-  // dependencies: ['map']
+  // { name: 'filter', dependencies: ['map'] }
   function _filter (flow) {
     return _map(flow, finish);
     function finish (collection, done) {
