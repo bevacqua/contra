@@ -360,7 +360,7 @@ More _comprehensive_|More _focused_
 
 [![Browser Support](https://ci.testling.com/bevacqua/contra.png)](https://ci.testling.com/bevacqua/contra)
 
-If you need support for legacy browsers, you'll need to include `contra.shim.js` as well.
+If you need support for one of the legacy browsers listed below, you'll need `contra.shim.js`.
 
 - IE < 10
 - Safari < 6
@@ -376,7 +376,7 @@ var λ = require('contra');
 <script src='contra.js'></script>
 ```
 
-The shim currently clocks around `~700B` minified.
+The shim currently clocks around `~1k` minified, uncompressed.
 
 # License
 
