@@ -58,7 +58,12 @@ var λ = require('contra');
 
 ```html
 <script src='contra.js'></script>
+<script>
+var λ = contra;
+</script>
 ```
+
+<sub>the only reason `contra` isn't published as `λ` directly is to make it easier for you to type.</sub>
 
 # API
 
@@ -374,6 +379,9 @@ var λ = require('contra');
 ```html
 <script src='contra.shim.js'></script>
 <script src='contra.js'></script>
+<script>
+var λ = contra;
+</script>
 ```
 
 The shim currently clocks around `~1k` minified, uncompressed.
