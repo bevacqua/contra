@@ -257,9 +257,10 @@ Returns a queue you can `push` or `unshift` jobs to. You can pause and resume th
 
 - `push(job[, done])` Array of jobs or an individual job object. Enqueue those jobs, resume processing. Optional callback to run when each job is completed
 - `unshift(job)` Array of jobs or an individual job object. Add jobs to the top of the queue, resume processing. Optional callback to run when each job is completed
-- `length` Property. Jobs that haven't started processing yet
-- `pause` Stop processing jobs. Those already being processed will run to completion
-- `resume` Start processing jobs again
+- `pending` Property. Jobs that haven't started processing yet
+- `length` Short-hand for `pending.length`, only works if getters can be defined
+- `pause()` Stop processing jobs. Those already being processed will run to completion
+- `resume()` Start processing jobs again
 
 ```js
 var q = λ.queue(worker);
