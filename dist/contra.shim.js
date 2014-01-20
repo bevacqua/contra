@@ -60,3 +60,6 @@ if (!Object.keys) {
     return keys;
   };
 }
+if (Object.defineProperty) { // test for IE8 partial implementation
+  try { Object.defineProperty({},'x', {}); } catch (e) { Object.definePropertyPartial = true; }
+}

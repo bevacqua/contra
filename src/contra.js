@@ -202,7 +202,7 @@
       resume: function () { paused = false; labor(); },
       pending: q
     };
-    if (Object.defineProperty) {
+    if (Object.defineProperty && !Object.definePropertyPartial) {
       Object.defineProperty(qq, 'length', { get: function () { return q.length; } });
     }
     return qq;
