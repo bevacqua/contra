@@ -63,7 +63,7 @@ var λ = contra;
 </script>
 ```
 
-<sub>the only reason `contra` isn't published as `λ` directly is to make it easier for you to type.</sub>
+<sub>The only reason `contra` isn't published as `λ` directly is to make it easier for you to type.</sub>
 
 # API
 
