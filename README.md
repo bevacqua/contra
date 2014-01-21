@@ -2,7 +2,7 @@
 
 [![badge](https://travis-ci.org/bevacqua/contra.png?branch=master)](https://travis-ci.org/bevacqua/contra) [![badge](https://badge.fury.io/js/contra.png)](http://badge.fury.io/js/contra) [![badge](https://badge.fury.io/bo/contra.png)](http://badge.fury.io/bo/contra)
 
-> Asynchronous flow control with a `_` taste to it
+> Asynchronous flow control with a functional taste to it
 
 `λ` aims to stay small and simple, while powerful. Inspired by [async][1] and [lodash][2]. Methods are implemented individually and not as part of a whole. That design helps when considering to export functions individually. If you need all the methods in `async`, then stick with it. Otherwise, you might want to check `λ` out!
 
