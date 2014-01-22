@@ -1,6 +1,6 @@
 ![contra.png][logo]
 
-[![badge](https://travis-ci.org/bevacqua/contra.png?branch=master)](https://travis-ci.org/bevacqua/contra) [![badge](https://badge.fury.io/js/contra.png)](http://badge.fury.io/js/contra) [![badge](https://badge.fury.io/bo/contra.png)](http://badge.fury.io/bo/contra)
+[![badge](https://travis-ci.org/bevacqua/contra.png?branch=master)](https://travis-ci.org/bevacqua/contra) [![badge](https://badge.fury.io/js/contra.png)](http://badge.fury.io/js/contra) [![badge](https://badge.fury.io/bo/contra.png)](http://badge.fury.io/bo/contra) [![help me on gittip](http://gbindex.ssokolow.com/img/gittip-43x20.png)](https://www.gittip.com/bevacqua/) [![flattr.png][6]](https://flattr.com/submit/auto?user_id=nzgb&url=https%3A%2F%2Fgithub.com%2Fbevacqua%2Fcontra)
 
 > Asynchronous flow control with a functional taste to it
 
