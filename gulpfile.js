@@ -5,19 +5,19 @@ var bump = require('gulp-bump');
 var git = require('gulp-git');
 var jshint = require('gulp-jshint');
 var mocha = require('gulp-mocha');
-var concat = require('gulp-concat');
 var clean = require('gulp-clean');
 var rename = require('gulp-rename');
 var uglify = require('gulp-uglify');
 var size = require('gulp-size');
 
-gulp.task('test', function() {
-  gulp.src('./src/*.js')
-    .pipe(jshint())
+gulp.task('lint', function () {
+  return gulp.src('./src/*.js')
+    .pipe(jshint('.jshintrc'))
     .pipe(jshint.reporter('jshint-stylish'));
+});
 
-  gulp
-    .src('./test/*.js')
+gulp.task('mocha', function () {
+  gulp.src('./test/*.js')
     .pipe(mocha({ reporter: 'list' }));
 });
 
@@ -28,8 +28,6 @@ gulp.task('clean', function () {
 
 gulp.task('build', ['test', 'clean'], function () {
   return gulp.src('./src/contra.js')
-    .pipe(concat('contra.js'))
-    .pipe(size())
     .pipe(gulp.dest('./dist'))
     .pipe(rename('contra.min.js'))
     .pipe(uglify())
@@ -39,8 +37,6 @@ gulp.task('build', ['test', 'clean'], function () {
 
 gulp.task('build-shim', ['build'], function () {
   return gulp.src('./src/contra.shim.js')
-    .pipe(concat('contra.shim.js'))
-    .pipe(size())
     .pipe(gulp.dest('./dist'))
     .pipe(rename('contra.shim.min.js'))
     .pipe(uglify())
@@ -71,5 +67,6 @@ gulp.task('npm', ['tag'], function (done) {
     .on('close', done);
 });
 
+gulp.task('test', ['lint', 'mocha']);
 gulp.task('ci', ['build']);
 gulp.task('release', ['npm']);
