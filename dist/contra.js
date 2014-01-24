@@ -32,8 +32,8 @@
     tick = si ? setImmediate : process.nextTick;
   }
 
-  // { name: 'apply', dependencies: ['core'] }
-  function _apply () {
+  // { name: 'curry', dependencies: ['core'] }
+  function _curry () {
     var args = atoa(arguments);
     var method = args.shift();
     return function curried () {
@@ -210,7 +210,7 @@
 
   // { name: 'outro', dependencies: ['core'] }
   var $ = {
-    apply: _apply,
+    curry: _curry,
     concurrent: _concurrent,
     series: _series,
     waterfall: _waterfall,
