@@ -36,7 +36,7 @@ Uncategorized
 
 - [`λ.queue`](#%CE%BBqueueworker-concurrency1)
 - [`λ.emitter`](#%CE%BBemitterthing)
-- [`λ.apply`](#%CE%BBapplyfn-arguments)
+- [`λ.curry`](#%CE%BBcurryfn-arguments)
 
 # Install
 
@@ -339,12 +339,12 @@ thing.emit('error', 'foo');
 <- 'foo'
 ```
 
-## `λ.apply(fn, ...arguments)`
+## `λ.curry(fn, ...arguments)`
 
 Returns a function bound with some arguments and a `next` callback.
 
 ```js
-λ.apply(fn, 1, 3, 5);
+λ.curry(fn, 1, 3, 5);
 // <- function (next) { fn(1, 3, 5, next); }
 ```
 

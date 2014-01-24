@@ -169,14 +169,14 @@ describe('concurrent()', function () {
   });
 });
 
-describe('apply()', function () {
+describe('curry()', function () {
   it('should work with no extra arguments', function () {
     var fn = function (a,b,c) {
       assert.equal(a, 1);
       assert.equal(b, 3);
       assert.equal(c, 'c');
     };
-    var applied = λ.apply(fn, 1, 3, 'c');
+    var applied = λ.curry(fn, 1, 3, 'c');
     applied();
   });
 
@@ -188,7 +188,7 @@ describe('apply()', function () {
       assert.equal(d, 'd');
       assert.equal(e, 'e');
     };
-    var applied = λ.apply(fn, 1, 3, 'c');
+    var applied = λ.curry(fn, 1, 3, 'c');
     applied('d', 'e');
   });
 
@@ -216,8 +216,8 @@ describe('apply()', function () {
       done();
     }
     λ.series([
-      λ.apply(b, 1),
-      λ.apply(c, ['a']),
+      λ.curry(b, 1),
+      λ.curry(c, ['a']),
     ], d);
   });
 });
