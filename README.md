@@ -354,6 +354,7 @@ Returns a function bound with some arguments and a `next` callback.
 ---|---
 Aimed at Noders|Tailored for browsers
 Arrays for [some][5], collections for [others][6]|Collections for **everyone**!
+`apply`|`curry`
 `parallel`|`concurrent`
 `mapSeries`|`map.series`
 More _comprehensive_|More _focused_
