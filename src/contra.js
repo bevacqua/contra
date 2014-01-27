@@ -175,7 +175,7 @@
     return thing;
   }
 
-  // { name: 'queue', dependencies: ['core'] }
+  // { name: 'queue', dependencies: ['core', 'emitter'] }
   function _queue (worker, concurrency) {
     var q = [], load = 0, max = concurrency || 1, paused;
     var qq = _emitter({
