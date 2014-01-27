@@ -532,6 +532,23 @@ describe('queue()', function () {
     var q = λ.queue(w);
     q.push('a', d);
   });
+
+  it('should emit drain', function (done) {
+    var ww;
+    function w (job, done) {
+      assert.fail(null, null, 'invoked worker');
+    }
+    function d (err) {
+      assert.fail(null, null, 'invoked job completion');
+    }
+    function drained () {
+      assert.falsy(ww);
+      done();
+    }
+    var q = λ.queue(w);
+    q.on('drain', drained);
+    q.push([], d);
+  });
 });
 
 describe('emitter()', function () {
