@@ -209,7 +209,7 @@
   };
 
   // { name: 'outro', dependencies: ['core'] }
-  var $ = {
+  var λ = {
     curry: _curry,
     concurrent: _concurrent,
     series: _series,
@@ -221,14 +221,14 @@
     emitter: _emitter
   };
 
-  $.each.series = _each(_series);
-  $.map.series = _map(_series);
-  $.filter.series = _filter(_series);
+  λ.each.series = _each(_series);
+  λ.map.series = _map(_series);
+  λ.filter.series = _filter(_series);
 
   // cross-platform export
   if (typeof module !== 'undefined' && module.exports) {
-    module.exports = $;
+    module.exports = λ;
   } else {
-    window.contra = $;
+    window.contra = λ;
   }
 })(Object);
