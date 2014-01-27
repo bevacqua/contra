@@ -286,9 +286,16 @@ q.push(['some', 'more'], function () {
   console.log('one of these jobs is done!');
 });
 
+q.on('drain', function () {
+  console.log('all done!');
+  // if you enqueue more tasks now, then drain
+  // will fire again when pending.length reaches 0
+});
+
 // <- 'job'
 // <- 'some'
 // <- 'more'
+// <- 'all done!'
 ```
 
 ## `λ.emitter(thing)`
