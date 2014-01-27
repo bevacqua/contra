@@ -176,16 +176,29 @@
   }
 
   // { name: 'queue', dependencies: ['core'] }
-  var _queue = function (worker, concurrency) {
+  function _queue (worker, concurrency) {
     var q = [], load = 0, max = concurrency || 1, paused;
-    function _add (task, top, done) {
+    var qq = _emitter({
+      push: _add(false),
+      unshift: _add(true),
+      pause: function () { paused = true; },
+      resume: function () { paused = false; cb(labor); },
+      pending: q
+    });
+    if (Object.defineProperty && !Object.definePropertyPartial) {
+      Object.defineProperty(qq, 'length', { get: function () { return q.length; } });
+    }
+    function _add (top) {
       var m = top ? 'unshift' : 'push';
-      var tasks = a(task) ? task : [task];
-      tasks.forEach(function insert (t) { q[m]({ t: t, done: done }); });
-      cb(labor);
+      return function manipulate (task, done) {
+        var tasks = a(task) ? task : [task];
+        tasks.forEach(function insert (t) { q[m]({ t: t, done: done }); });
+        cb(labor);
+      };
     }
     function labor () {
-      if (paused || load >= max || !q.length) { return; }
+      if (paused || load >= max) { return; }
+      if (!q.length) { qq.emit('drain'); return; }
       load++;
       var job = q.pop();
       worker(job.t, once(complete.bind(null, job)));
@@ -195,21 +208,11 @@
       cb(job.done, [err]);
       cb(labor);
     }
-    var qq = {
-      push: function (task, done) { _add(task, false, done); },
-      unshift: function (task, done) { _add(task, true, done); },
-      pause: function () { paused = true; },
-      resume: function () { paused = false; labor(); },
-      pending: q
-    };
-    if (Object.defineProperty && !Object.definePropertyPartial) {
-      Object.defineProperty(qq, 'length', { get: function () { return q.length; } });
-    }
     return qq;
-  };
+  }
 
   // { name: 'outro', dependencies: ['core'] }
-  var $ = {
+  var λ = {
     curry: _curry,
     concurrent: _concurrent,
     series: _series,
@@ -221,14 +224,14 @@
     emitter: _emitter
   };
 
-  $.each.series = _each(_series);
-  $.map.series = _map(_series);
-  $.filter.series = _filter(_series);
+  λ.each.series = _each(_series);
+  λ.map.series = _map(_series);
+  λ.filter.series = _filter(_series);
 
   // cross-platform export
   if (typeof module !== 'undefined' && module.exports) {
-    module.exports = $;
+    module.exports = λ;
   } else {
-    window.contra = $;
+    window.contra = λ;
   }
 })(Object);
