@@ -1,3 +1,7 @@
+# 1.1.2 Clown Car
+
+- Removed unnecessary context from event listeners
+
 # 1.1.1 Down the Drain
 
 - Queue is an emitter

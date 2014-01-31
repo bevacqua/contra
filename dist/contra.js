@@ -154,8 +154,6 @@
 
   // { name: 'emitter', dependencies: ['core'] }
   function _emitter (thing) {
-    /* jshint validthis:true */
-    var me = this;
     var evt = {};
     thing.on = function (type, fn) {
       if (!evt[type]) {
@@ -170,12 +168,12 @@
       var et = evt[type];
       if (type === 'error' && !et) { throw args.length === 1 ? args[0] : args; }
       if (!et) { return; }
-      et.forEach(function emitter (s) { cb(s, args, me); });
+      et.forEach(function emitter (s) { cb(s, args); });
     };
     return thing;
   }
 
-  // { name: 'queue', dependencies: ['core'] }
+  // { name: 'queue', dependencies: ['core', 'emitter'] }
   function _queue (worker, concurrency) {
     var q = [], load = 0, max = concurrency || 1, paused;
     var qq = _emitter({
