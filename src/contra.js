@@ -162,13 +162,27 @@
         evt[type].push(fn);
       }
     };
+    thing.once = function (type, fn) {
+      fn._once = true; // thing.off(fn) still works!
+      thing.on(type, fn);
+    };
+    thing.off = function (type, fn) {
+      var et = evt[type];
+      if (!et) { return; }
+      et.splice(et.indexOf(fn), 1);
+    };
     thing.emit = function () {
       var args = atoa(arguments);
       var type = args.shift();
       var et = evt[type];
+      var remains = [];
       if (type === 'error' && !et) { throw args.length === 1 ? args[0] : args; }
       if (!et) { return; }
-      et.forEach(function emitter (s) { cb(s, args); });
+      et.forEach(function emitter (listen) {
+        cb(listen, args);
+        if (!listen._once) { remains.push(listen); }
+      });
+      evt[type] = remains;
     };
     return thing;
   }

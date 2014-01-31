@@ -558,6 +558,8 @@ describe('emitter()', function () {
     λ.emitter(thing);
 
     assert.ok(thing.on);
+    assert.ok(thing.once);
+    assert.ok(thing.off);
     assert.ok(thing.emit);
 
     thing.on('something', function (a, b) {
@@ -569,13 +571,61 @@ describe('emitter()', function () {
     thing.emit('something', 'a', 2);
   });
 
-  it('should blow up on error if no listeners', function (done) {
+  it('should run once() listeners once', function (done) {
+    var thing = { foo: 'bar' };
+    var c = 0;
+
+    λ.emitter(thing);
+
+    function me () {
+      c++;
+      assert.ok(c < 2);
+      done();
+    }
+
+    thing.once('something', me);
+    thing.on('something', function () {
+      assert.equal(c, 1);
+    })
+
+    thing.emit('something');
+    thing.emit('something');
+  });
+
+  it('should turn off on() listeners', function (done) {
     var thing = { foo: 'bar' };
 
     λ.emitter(thing);
 
-    assert.ok(thing.on);
-    assert.ok(thing.emit);
+    function me () {
+      assert.fail(null, null, 'invoked on() listener');
+    }
+
+    thing.on('something', me);
+    thing.off('something', me);
+    thing.on('something', done);
+    thing.emit('something');
+  });
+
+  it('should turn off once() listeners', function (done) {
+    var thing = { foo: 'bar' };
+
+    λ.emitter(thing);
+
+    function me () {
+      assert.fail(null, null, 'invoked once() listener');
+    }
+
+    thing.once('something', me);
+    thing.off('something', me);
+    thing.on('something', done);
+    thing.emit('something');
+  });
+
+  it('should blow up on error if no listeners', function (done) {
+    var thing = { foo: 'bar' };
+
+    λ.emitter(thing);
 
     assert.throws(thing.emit.bind(thing, 'error'));
     done();
@@ -585,9 +635,6 @@ describe('emitter()', function () {
     var thing = { foo: 'bar' };
 
     λ.emitter(thing);
-
-    assert.ok(thing.on);
-    assert.ok(thing.emit);
 
     thing.on('error', function () {
       done();

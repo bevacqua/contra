@@ -304,19 +304,28 @@ Augments `thing` with `on` and `emit` methods.
 
 - `thing` Writable JavaScript object
 - `emit(type, ...arguments)` Emits an event of type `type`, passing arguments
-- `on(type, fn)` Registers an event listener `fn`, of type `type`
+- `on(type, fn)` Registers an event listener `fn` for `type` events
+- `once(type, fn)` Same as `on`, but the listener is discarded after one callback
+- `off(type, fn)` Unregisters an event listener `fn` from `type` events
 
 ```js
 var thing = { foo: 'bar' };
 
 λ.emitter(thing);
 
+thing.once('something', function (level) {
+  console.log('something FIRST TROLL');
+});
+
 thing.on('something', function (level) {
   console.log('something level ' + level);
 });
 
 thing.emit('something', 4);
+thing.emit('something', 5);
+// <- 'something FIRST TROLL'
 // <- 'something level 4'
+// <- 'something level 5'
 ```
 
 Returns `thing`.
