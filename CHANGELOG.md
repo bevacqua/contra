@@ -1,3 +1,7 @@
+# 1.2.1 This, That
+
+- Switched `window` for `root`
+
 # 1.2.0 Event Organizer
 
 - Added `.off` and `.once` support to event emitter API

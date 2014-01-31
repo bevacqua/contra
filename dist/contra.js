@@ -1,4 +1,4 @@
-(function (Object) {
+(function (Object, root) {
   'use strict';
 
   // { name: 'core', dependencies: [] }
@@ -244,6 +244,6 @@
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = λ;
   } else {
-    window.contra = λ;
+    root.contra = λ;
   }
-})(Object);
+})(Object, this);
