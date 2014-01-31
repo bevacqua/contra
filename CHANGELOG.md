@@ -1,3 +1,7 @@
+# 1.2.2
+
+- Polyfill for `Array.prototype.indexOf` added to `contra.shim.js`
+
 # 1.2.1 This, That
 
 - Switched `window` for `root`

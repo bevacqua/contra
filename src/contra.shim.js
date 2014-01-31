@@ -15,7 +15,7 @@
   if (!Array.prototype.indexOf) {
     Array.prototype.indexOf = function (what, start) {
       if (this === undefined || this === null) {
-        throw new TypeError( '"this" is null or not defined' );
+        throw new TypeError();
       }
       var length = this.length;
       start = +start || 0;
