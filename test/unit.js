@@ -592,6 +592,15 @@ describe('emitter()', function () {
     thing.emit('something');
   });
 
+  it('shouldn\'t blow up on careless off() calls', function () {
+    var thing = { foo: 'bar' };
+
+    λ.emitter(thing);
+
+    // the thing event type doesn't even exist.
+    thing.off('something', function () {});
+  });
+
   it('should turn off on() listeners', function (done) {
     var thing = { foo: 'bar' };
 
