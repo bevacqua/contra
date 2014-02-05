@@ -21,20 +21,20 @@ Flow Control
 
 - [`λ.waterfall`](#%CE%BBwaterfalltasks-done)
 - [`λ.series`](#%CE%BBseriestasks-done)
-- [`λ.concurrent`](#%CE%BBconcurrenttasks-concurrency-done)
+- [`λ.concurrent`](#%CE%BBconcurrenttasks-cap-done)
 
 Functional
 
-- [`λ.each`](#%CE%BBeachitems-iterator-done)
+- [`λ.each`](#%CE%BBeachitems-cap-iterator-done)
 - [`λ.each.series`](#%CE%BBeachseriesitems-iterator-done)
-- [`λ.map`](#%CE%BBmapitems-iterator-done)
+- [`λ.map`](#%CE%BBmapitems-cap-iterator-done)
 - [`λ.map.series`](#%CE%BBmapseriesitems-iterator-done)
-- [`λ.filter`](#%CE%BBfilteritems-iterator-done)
+- [`λ.filter`](#%CE%BBfilteritems-cap-iterator-done)
 - [`λ.filter.series`](#%CE%BBfilterseriesitems-iterator-done)
 
 Uncategorized
 
-- [`λ.queue`](#%CE%BBqueueworker-concurrency1)
+- [`λ.queue`](#%CE%BBqueueworker-cap1)
 - [`λ.emitter`](#%CE%BBemitterthing)
 - [`λ.curry`](#%CE%BBcurryfn-arguments)
 
@@ -135,12 +135,12 @@ Using objects
 });
 ```
 
-## `λ.concurrent(tasks, concurrency?, done?)`
+## `λ.concurrent(tasks, cap?, done?)`
 
 Executes tasks concurrently. Results get passed as an array or hash to an optional `done` callback. Task order is preserved in results. You can set a concurrency cap, and it's uncapped by default.
 
 - `tasks` Collection of functions with the `(cb)` signature. Can be an array or an object
-- `concurrency` Optional concurrency level, used by the internal [queue](#%CE%BBqueueworker-concurrency1)
+- `cap` Optional concurrency level, used by the internal [queue](#%CE%BBqueueworker-cap1)
 - `done` Optional function with the `(err, results)` signature
 
 ```js
@@ -177,12 +177,12 @@ Using objects
 });
 ```
 
-## `λ.each(items, concurrency?, iterator, done?)`
+## `λ.each(items, cap?, iterator, done?)`
 
 Applies an iterator to each element in the collection concurrently.
 
 - `items` Collection of items. Can be an array or an object
-- `concurrency` Optional concurrency level, used by the internal [queue](#%CE%BBqueueworker-concurrency1)
+- `cap` Optional concurrency level, used by the internal [queue](#%CE%BBqueueworker-cap1)
 - `iterator(item, cb)` Function to execute on each item
   - `item` The current item
   - `cb` Needs to be called when processing for current item is done
@@ -203,12 +203,12 @@ Applies an iterator to each element in the collection concurrently.
 
 Same as `λ.each(items, iterator, done?)`, but in series instead of concurrently.
 
-## `λ.map(items, concurrency?, iterator, done?)`
+## `λ.map(items, cap?, iterator, done?)`
 
 Applies an iterator to each element in the collection concurrently. Produces an object with the transformation results. Task order is preserved in the results.
 
 - `items` Collection of items. Can be an array or an object
-- `concurrency` Optional concurrency level, used by the internal [queue](#%CE%BBqueueworker-concurrency1)
+- `cap` Optional concurrency level, used by the internal [queue](#%CE%BBqueueworker-cap1)
 - `iterator(item, cb)` Function to execute on each item
   - `item` The current item
   - `cb` Needs to be called when processing for current item is done
@@ -229,12 +229,12 @@ Applies an iterator to each element in the collection concurrently. Produces an 
 
 Same as `λ.map(items, iterator, done?)`, but in series instead of concurrently.
 
-## `λ.filter(items, concurrency?, iterator, done?)`
+## `λ.filter(items, cap?, iterator, done?)`
 
 Applies an iterator to each element in the collection concurrently. Produces an object with the filtered results. Task order is preserved in results.
 
 - `items` Collection of items. Can be an array or an object
-- `concurrency` Optional concurrency level, used by the internal [queue](#%CE%BBqueueworker-concurrency1)
+- `cap` Optional concurrency level, used by the internal [queue](#%CE%BBqueueworker-cap1)
 - `iterator(item, cb)` Function to execute on each item
   - `item` The current item
   - `cb` Needs to be called when processing for current item is done
@@ -257,14 +257,14 @@ Applies an iterator to each element in the collection concurrently. Produces an 
 
 Same as `λ.filter(items, iterator, done?)`, but in series instead of concurrently.
 
-## `λ.queue(worker, concurrency=1)`
+## `λ.queue(worker, cap=1)`
 
 Used to create a job queue.
 
 - `worker(job, done)` Function to process jobs in the queue
   - `job` The current job
   - `done` Needs to be called when processing for current job is done
-- `concurrency` Optional concurrency level, defaults to `1` (serial)
+- `cap` Optional concurrency level, defaults to `1` (serial)
 
 Returns a queue you can `push` or `unshift` jobs to. You can pause and resume the queue by hand.
 
