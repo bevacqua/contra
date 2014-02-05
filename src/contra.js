@@ -93,9 +93,7 @@
   function _map (cap, then) {
     return function map (collection, concurrency, iterator, done) {
       if (arguments.length === 2) { iterator = concurrency; concurrency = CONCURRENT; }
-      if (arguments.length === 3 && typeof concurrency !== 'number') {
-        done = iterator; iterator = concurrency; concurrency = CONCURRENT;
-      }
+      if (arguments.length === 3 && typeof concurrency !== 'number') { done = iterator; iterator = concurrency; concurrency = CONCURRENT; }
       var keys = Object.keys(collection);
       var tasks = a(collection) ? [] : {};
       keys.forEach(function insert (key) {

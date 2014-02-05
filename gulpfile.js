@@ -26,16 +26,7 @@ gulp.task('clean', function () {
     .pipe(clean());
 });
 
-gulp.task('build', ['test', 'clean'], function () {
-  return gulp.src('./src/contra.js')
-    .pipe(gulp.dest('./dist'))
-    .pipe(rename('contra.min.js'))
-    .pipe(uglify())
-    .pipe(size())
-    .pipe(gulp.dest('./dist'));
-});
-
-gulp.task('build-shim', ['build'], function () {
+gulp.task('build-shim', ['test', 'clean'], function () {
   return gulp.src('./src/contra.shim.js')
     .pipe(gulp.dest('./dist'))
     .pipe(rename('contra.shim.min.js'))
@@ -44,7 +35,16 @@ gulp.task('build-shim', ['build'], function () {
     .pipe(gulp.dest('./dist'));
 });
 
-gulp.task('bump', ['build-shim'], function () {
+gulp.task('build', ['build-shim'], function () {
+  return gulp.src('./src/contra.js')
+    .pipe(gulp.dest('./dist'))
+    .pipe(rename('contra.min.js'))
+    .pipe(uglify())
+    .pipe(size())
+    .pipe(gulp.dest('./dist'));
+});
+
+gulp.task('bump', ['build'], function () {
   var bumpType = process.env.BUMP || 'patch'; // major.minor.patch
 
   return gulp.src(['./package.json', './bower.json'])
