@@ -156,14 +156,12 @@
       var args = atoa(arguments);
       var type = args.shift();
       var et = evt[type];
-      var remains = [];
       if (type === 'error' && !et) { throw args.length === 1 ? args[0] : args; }
       if (!et) { return; }
-      et.forEach(function emitter (listen) {
+      evt[type] = et.filter(function emitter (listen) {
         cb(listen, args);
-        if (!listen._once) { remains.push(listen); }
+        return !listen._once;
       });
-      evt[type] = remains;
     };
     return thing;
   }
