@@ -142,12 +142,12 @@ Using objects
 
 ## `λ.series(tasks, done?)`
 
-**Effectively an alias for `λ.concurrent(tasks, 1, done)`.**
+**Effectively an alias for `λ.concurrent(tasks, 1, done?)`.**
 
 Executes tasks in series. `done` gets all the results. Results get passed as an array or hash to an optional `done` callback. Task order is preserved in results.
 
 - `tasks` Collection of functions with the `(next)` signature. Can be an array or an object
-- `done` Optional function with the `(err, results)` signature
+- `done` <Opti></Opti>onal function with the `(err, results)` signature
 
 ```js
 λ.series([
@@ -241,7 +241,7 @@ Applies an iterator to each element in the collection concurrently. Produces an 
 
 ## `λ.map.series(items, iterator, done?)`
 
-Effectively an alias for `λ.map(items, 1, iterator, done)`.
+Effectively an alias for `λ.map(items, 1, iterator, done?)`.
 
 <sub>[_Back to top_](#quick-links)</sub>
 
@@ -273,7 +273,7 @@ Applies an iterator to each element in the collection concurrently. Produces an 
 
 ## `λ.filter.series(items, iterator, done?)`
 
-Effectively an alias for `λ.filter(items, 1, iterator, done)`.
+Effectively an alias for `λ.filter(items, 1, iterator, done?)`.
 
 <sub>[_Back to top_](#quick-links)</sub>
 
