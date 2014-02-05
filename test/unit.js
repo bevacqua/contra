@@ -517,7 +517,7 @@ describe('queue()', function () {
     q.resume();
   });
 
-  it('should report errors', function (done) {
+  it('should forward errors', function (done) {
     var ww;
     function w (job, done) {
       ww = true;

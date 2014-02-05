@@ -21,7 +21,7 @@ Flow Control
 
 - [`λ.waterfall`](#%CE%BBwaterfalltasks-done)
 - [`λ.series`](#%CE%BBseriestasks-done)
-- [`λ.concurrent`](#%CE%BBconcurrenttasks-done)
+- [`λ.concurrent`](#%CE%BBconcurrenttasks-concurrency-done)
 
 Functional
 
