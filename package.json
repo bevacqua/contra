@@ -24,7 +24,7 @@
     "generator"
   ],
   "scripts": {
-    "test": "mocha --reporter tap && jshint --reporter node_modules/jshint-tap/jshint-tap.js"
+    "test": "mocha --reporter tap && jshint --reporter node_modules/jshint-tap/jshint-tap.js test/*"
   },
   "testling": {
     "harness": "mocha",

@@ -1,7 +1,11 @@
+# 1.4.0
+
+- Added optional _concurrency cap_ argument to remaining concurrent methods: `filter`, `map`, `each`
+
 # 1.3.0
 
 - Concurrent methods now use a queue internally
-- `λ.concurrent` has an optional concurrency cap argument
+- `λ.concurrent` has an optional _concurrency cap_ argument
 - Series now use a concurrent queue internally, with `concurrency = 1`
 
 Fixes

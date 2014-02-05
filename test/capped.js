@@ -1,7 +1,7 @@
 'use strict';
 
 var assert = require('assert');
-var λ = require('../');
+var λ = require('..');
 
 assert.falsy = function (value, message) { assert.equal(false, !!value, message); };
 
@@ -34,5 +34,32 @@ describe('concurrent()', function () {
     }
 
     λ.concurrent(tasks, 2, d);
+  });
+});
+
+describe('map()', function () {
+  it('should return the results as expected', function (done) {
+    var items = {
+      a: 'a',
+      b: { m: 2 },
+      c: 'c',
+      d: 'foo',
+      e: [2],
+      z: [3, 6, 7]
+    };
+
+    function mapper (item, done) {
+      setTimeout(function () {
+        done(null, item);
+      }, Math.random() * 100);
+    }
+
+    function d (err, results) {
+      assert.falsy(err);
+      assert.deepEqual(results, items);
+      done();
+    }
+
+    λ.map(items, 2, mapper, d);
   });
 });

@@ -177,11 +177,12 @@ Using objects
 });
 ```
 
-## `λ.each(items, iterator, done?)`
+## `λ.each(items, concurrency?, iterator, done?)`
 
 Applies an iterator to each element in the collection concurrently.
 
 - `items` Collection of items. Can be an array or an object
+- `concurrency` Optional concurrency level, used by the internal [queue](#%CE%BBqueueworker-concurrency1)
 - `iterator(item, cb)` Function to execute on each item
   - `item` The current item
   - `cb` Needs to be called when processing for current item is done
@@ -202,11 +203,12 @@ Applies an iterator to each element in the collection concurrently.
 
 Same as `λ.each(items, iterator, done?)`, but in series instead of concurrently.
 
-## `λ.map(items, iterator, done?)`
+## `λ.map(items, concurrency?, iterator, done?)`
 
 Applies an iterator to each element in the collection concurrently. Produces an object with the transformation results. Task order is preserved in the results.
 
 - `items` Collection of items. Can be an array or an object
+- `concurrency` Optional concurrency level, used by the internal [queue](#%CE%BBqueueworker-concurrency1)
 - `iterator(item, cb)` Function to execute on each item
   - `item` The current item
   - `cb` Needs to be called when processing for current item is done
@@ -227,11 +229,12 @@ Applies an iterator to each element in the collection concurrently. Produces an 
 
 Same as `λ.map(items, iterator, done?)`, but in series instead of concurrently.
 
-## `λ.filter(items, iterator, done?)`
+## `λ.filter(items, concurrency?, iterator, done?)`
 
 Applies an iterator to each element in the collection concurrently. Produces an object with the filtered results. Task order is preserved in results.
 
 - `items` Collection of items. Can be an array or an object
+- `concurrency` Optional concurrency level, used by the internal [queue](#%CE%BBqueueworker-concurrency1)
 - `iterator(item, cb)` Function to execute on each item
   - `item` The current item
   - `cb` Needs to be called when processing for current item is done

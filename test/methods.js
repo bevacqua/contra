@@ -1,7 +1,7 @@
 'use strict';
 
 var assert = require('assert');
-var λ = require('../');
+var λ = require('..');
 
 assert.falsy = function (value, message) { assert.equal(false, !!value, message); };
 
@@ -535,10 +535,10 @@ describe('queue()', function () {
 
   it('should emit drain', function (done) {
     var ww;
-    function w (job, done) {
+    function w () {
       assert.fail(null, null, 'invoked worker');
     }
-    function d (err) {
+    function d () {
       assert.fail(null, null, 'invoked job completion');
     }
     function drained () {
@@ -586,7 +586,7 @@ describe('emitter()', function () {
     thing.once('something', me);
     thing.on('something', function () {
       assert.equal(c, 1);
-    })
+    });
 
     thing.emit('something');
     thing.emit('something');

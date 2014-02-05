@@ -3,7 +3,8 @@
 
   // { name: 'core', dependencies: [] }
   var undef = 'undefined';
-  var CONCURRENT = -1;
+  var SERIAL = 1;
+  var CONCURRENT = Infinity;
   function a (o) { return Object.prototype.toString.call(o) === '[object Array]'; }
   function atoa (a) { return Array.prototype.slice.call(a); }
   function cb (fn, args, ctx) { if (!fn) { return; } tick(function run () { fn.apply(ctx || null, args || []); }); }
@@ -63,11 +64,6 @@
     next()();
   }
 
-  // { name: 'series', dependencies: ['core'] }
-  function _series (tasks, done) {
-    _concurrent(tasks, 1, done);
-  }
-
   // { name: 'concurrent', dependencies: ['core'] }
   function _concurrent (tasks, concurrency, done) {
     if (!done) { done = concurrency; concurrency = CONCURRENT; }
@@ -88,9 +84,18 @@
     }
   }
 
-  // { name: 'map', dependencies: ['series', 'concurrent'] }
-  function _map (flow, finish) {
-    return function map (collection, iterator, done) {
+  // { name: 'series', dependencies: ['concurrent'] }
+  function _series (tasks, done) {
+    _concurrent(tasks, SERIAL, done);
+  }
+
+  // { name: 'map', dependencies: ['concurrent'] }
+  function _map (cap, then) {
+    return function map (collection, concurrency, iterator, done) {
+      if (arguments.length === 2) { iterator = concurrency; concurrency = CONCURRENT; }
+      if (arguments.length === 3 && typeof concurrency !== 'number') {
+        done = iterator; iterator = concurrency; concurrency = CONCURRENT;
+      }
       var keys = Object.keys(collection);
       var tasks = a(collection) ? [] : {};
       keys.forEach(function insert (key) {
@@ -98,14 +103,14 @@
           iterator(collection[key], cb);
         };
       });
-      flow(tasks, finish ? finish(collection, done) : done);
+      _concurrent(tasks, cap || concurrency, then ? then(collection, done) : done);
     };
   }
 
   // { name: 'each', dependencies: ['map'] }
-  function _each (flow) {
-    return _map(flow, finish);
-    function finish (collection, done) {
+  function _each (concurrency) {
+    return _map(concurrency, then);
+    function then (collection, done) {
       return function mask (err) {
         done(err); // only return the error, no more arguments
       };
@@ -113,9 +118,9 @@
   }
 
   // { name: 'filter', dependencies: ['map'] }
-  function _filter (flow) {
-    return _map(flow, finish);
-    function finish (collection, done) {
+  function _filter (concurrency) {
+    return _map(concurrency, then);
+    function then (collection, done) {
       return function filter (err, results) {
         function exists (item, key) {
           return !!results[key];
@@ -166,7 +171,7 @@
     return thing;
   }
 
-  // { name: 'queue', dependencies: ['core', 'emitter'] }
+  // { name: 'queue', dependencies: ['emitter'] }
   function _queue (worker, concurrency) {
     var q = [], load = 0, max = concurrency || 1, paused;
     var qq = _emitter({
@@ -209,16 +214,16 @@
     concurrent: _concurrent,
     series: _series,
     waterfall: _waterfall,
-    each: _each(_concurrent),
-    map: _map(_concurrent),
-    filter: _filter(_concurrent),
+    each: _each(),
+    map: _map(),
+    filter: _filter(),
     queue: _queue,
     emitter: _emitter
   };
 
-  λ.each.series = _each(_series);
-  λ.map.series = _map(_series);
-  λ.filter.series = _filter(_series);
+  λ.each.series = _each(SERIAL);
+  λ.map.series = _map(SERIAL);
+  λ.filter.series = _filter(SERIAL);
 
   // cross-platform export
   if (typeof module !== undef && module.exports) {
