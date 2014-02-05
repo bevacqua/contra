@@ -71,7 +71,7 @@ These are the asynchronous flow control methods provided by `λ`.
 
 ## `λ.waterfall(tasks, done?)`
 
-<a align="right" href="#quick-links">_Back to top_</a>
+<a style="float:right;" href="#quick-links">_Back to top_</a>
 
 Executes tasks in series. Each step receives the arguments from the previous step.
 
