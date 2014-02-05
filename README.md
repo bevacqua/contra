@@ -65,13 +65,13 @@ var λ = contra;
 
 <sub>The only reason `contra` isn't published as `λ` directly is to make it easier for you to type.</sub>
 
+<sub>[_Back to top_](#quick-links)</sub>
+
 # API
 
 These are the asynchronous flow control methods provided by `λ`.
 
 ## `λ.waterfall(tasks, done?)`
-
-<sub>[_Back to top_](#quick-links)</sub>
 
 Executes tasks in series. Each step receives the arguments from the previous step.
 
@@ -94,10 +94,53 @@ Executes tasks in series. Each step receives the arguments from the previous ste
 });
 ```
 
-## `λ.series(tasks, done?)`
+<sub>[_Back to top_](#quick-links)</sub>
+
+## `λ.concurrent(tasks, cap?, done?)`
+
+Executes tasks concurrently. Results get passed as an array or hash to an optional `done` callback. Task order is preserved in results. You can set a concurrency cap, and it's uncapped by default.
+
+- `tasks` Collection of functions with the `(cb)` signature. Can be an array or an object
+- `cap` Optional concurrency level, used by the internal [queue](#%CE%BBqueueworker-cap1)
+- `done` Optional function with the `(err, results)` signature
+
+```js
+λ.concurrent([
+  function (cb) {
+    setTimeout(function () {
+      cb(null, 'boom');
+    }, 1000);
+  },
+  function (cb) {
+    cb(null, 'foo');
+  }
+], function (err, results) {
+  console.log(results);
+  // <- ['boom', 'foo']
+});
+```
+
+Using objects
+
+```js
+λ.concurrent({
+  first: function (cb) {
+    setTimeout(function () {
+      cb(null, 'boom');
+    }, 1000);
+  },
+  second: function (cb) {
+    cb(null, 'foo');
+  }
+}, function (err, results) {
+  console.log(results);
+  // <- { first: 'boom', second: 'foo' }
+});
+```
 
 <sub>[_Back to top_](#quick-links)</sub>
 
+## `λ.series(tasks, done?)`
 
 **Effectively an alias for `λ.concurrent(tasks, 1, done)`.**
 
@@ -140,53 +183,9 @@ Using objects
 });
 ```
 
-## `λ.concurrent(tasks, cap?, done?)`
-
 <sub>[_Back to top_](#quick-links)</sub>
-
-Executes tasks concurrently. Results get passed as an array or hash to an optional `done` callback. Task order is preserved in results. You can set a concurrency cap, and it's uncapped by default.
-
-- `tasks` Collection of functions with the `(cb)` signature. Can be an array or an object
-- `cap` Optional concurrency level, used by the internal [queue](#%CE%BBqueueworker-cap1)
-- `done` Optional function with the `(err, results)` signature
-
-```js
-λ.concurrent([
-  function (cb) {
-    setTimeout(function () {
-      cb(null, 'boom');
-    }, 1000);
-  },
-  function (cb) {
-    cb(null, 'foo');
-  }
-], function (err, results) {
-  console.log(results);
-  // <- ['boom', 'foo']
-});
-```
-
-Using objects
-
-```js
-λ.concurrent({
-  first: function (cb) {
-    setTimeout(function () {
-      cb(null, 'boom');
-    }, 1000);
-  },
-  second: function (cb) {
-    cb(null, 'foo');
-  }
-}, function (err, results) {
-  console.log(results);
-  // <- { first: 'boom', second: 'foo' }
-});
-```
 
 ## `λ.each(items, cap?, iterator, done?)`
-
-<sub>[_Back to top_](#quick-links)</sub>
 
 Applies an iterator to each element in the collection concurrently.
 
@@ -208,15 +207,15 @@ Applies an iterator to each element in the collection concurrently.
 // <- 900
 ```
 
+<sub>[_Back to top_](#quick-links)</sub>
+
 ## `λ.each.series(items, iterator, done?)`
 
-<sub>[_Back to top_](#quick-links)</sub>
+Effectively an alias for `λ.each(items, 1, iterator, done?)`.
 
-Same as `λ.each(items, iterator, done?)`, but in series instead of concurrently.
+<sub>[_Back to top_](#quick-links)</sub>
 
 ## `λ.map(items, cap?, iterator, done?)`
-
-<sub>[_Back to top_](#quick-links)</sub>
 
 Applies an iterator to each element in the collection concurrently. Produces an object with the transformation results. Task order is preserved in the results.
 
@@ -238,15 +237,15 @@ Applies an iterator to each element in the collection concurrently. Produces an 
 });
 ```
 
+<sub>[_Back to top_](#quick-links)</sub>
+
 ## `λ.map.series(items, iterator, done?)`
 
-<sub>[_Back to top_](#quick-links)</sub>
+Effectively an alias for `λ.map(items, 1, iterator, done)`.
 
-Same as `λ.map(items, iterator, done?)`, but in series instead of concurrently.
+<sub>[_Back to top_](#quick-links)</sub>
 
 ## `λ.filter(items, cap?, iterator, done?)`
-
-<sub>[_Back to top_](#quick-links)</sub>
 
 Applies an iterator to each element in the collection concurrently. Produces an object with the filtered results. Task order is preserved in results.
 
@@ -270,15 +269,15 @@ Applies an iterator to each element in the collection concurrently. Produces an 
 });
 ```
 
+<sub>[_Back to top_](#quick-links)</sub>
+
 ## `λ.filter.series(items, iterator, done?)`
 
-<sub>[_Back to top_](#quick-links)</sub>
+Effectively an alias for `λ.filter(items, 1, iterator, done)`.
 
-Same as `λ.filter(items, iterator, done?)`, but in series instead of concurrently.
+<sub>[_Back to top_](#quick-links)</sub>
 
 ## `λ.queue(worker, cap=1)`
-
-<sub>[_Back to top_](#quick-links)</sub>
 
 Used to create a job queue.
 
@@ -325,9 +324,9 @@ q.on('drain', function () {
 // <- 'all done!'
 ```
 
-## `λ.emitter(thing)`
-
 <sub>[_Back to top_](#quick-links)</sub>
+
+## `λ.emitter(thing)`
 
 Augments `thing` with `on` and `emit` methods.
 
@@ -385,9 +384,9 @@ thing.emit('error', 'foo');
 <- 'foo'
 ```
 
-## `λ.curry(fn, ...arguments)`
-
 <sub>[_Back to top_](#quick-links)</sub>
+
+## `λ.curry(fn, ...arguments)`
 
 Returns a function bound with some arguments and a `next` callback.
 
@@ -396,9 +395,9 @@ Returns a function bound with some arguments and a `next` callback.
 // <- function (next) { fn(1, 3, 5, next); }
 ```
 
-# Comparison with `async`
-
 <sub>[_Back to top_](#quick-links)</sub>
+
+# Comparison with `async`
 
 [`async`][1]|`λ`
 ---|---
@@ -412,6 +411,8 @@ More _comprehensive_|More _focused_
 `~29.6k (minified, uncompressed)`|`~2.7k (minified, uncompressed)`
 
 `λ` isn't meant to be a replacement for `async`. It aims to provide a more focused library, and a bit more consistency.
+
+<sub>[_Back to top_](#quick-links)</sub>
 
 # Browser Support
 
@@ -438,11 +439,13 @@ var λ = contra;
 
 The shim currently clocks around `~1k` minified, uncompressed.
 
-# License
-
 <sub>[_Back to top_](#quick-links)</sub>
 
+# License
+
 MIT
+
+<sub>[_Back to top_](#quick-links)</sub>
 
   [logo]: https://raw.github.com/bevacqua/contra/master/resources/contra.png
   [1]: https://github.com/caolan/async
