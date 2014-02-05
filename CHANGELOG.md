@@ -1,3 +1,8 @@
+# 1.3.0
+
+- Concurrent methods now use a queue internally
+- Series now use a concurrent queue internally, with `concurrency = 1`
+
 # 1.2.2
 
 - Polyfill for `Array.prototype.indexOf` added to `contra.shim.js`

@@ -2,6 +2,8 @@
   'use strict';
 
   // { name: 'core', dependencies: [] }
+  var undef = 'undefined';
+  var CONCURRENT = -1;
   function a (o) { return Object.prototype.toString.call(o) === '[object Array]'; }
   function atoa (a) { return Array.prototype.slice.call(a); }
   function cb (fn, args, ctx) { if (!fn) { return; } tick(function run () { fn.apply(ctx || null, args || []); }); }
@@ -22,7 +24,7 @@
 
   // cross-platform ticker
   var tick, si = typeof setImmediate === 'function';
-  if (typeof process === 'undefined' || !process.nextTick) {
+  if (typeof process === undef || !process.nextTick) {
     if (si) {
       tick = function tick (fn) { setImmediate(fn); };
     } else {
@@ -63,47 +65,26 @@
 
   // { name: 'series', dependencies: ['core'] }
   function _series (tasks, done) {
-    var d = once(done);
-    var keys = Object.keys(tasks);
-    var results = a(tasks) ? [] : {};
-    var pk;
-    function next () {
-      return once(function callback () {
-        var k = keys.shift();
-        var args = atoa(arguments);
-        var step = tasks[k];
-        if (pk) {
-          if (handle(args, d)) { return; }
-          results[pk] = args.shift();
-        }
-        pk = k;
-        if (step) {
-          cb(step, [next()]);
-        } else {
-          cb(d, [null, results]);
-        }
-      });
-    }
-    next()();
+    _concurrent(tasks, 1, done);
   }
 
   // { name: 'concurrent', dependencies: ['core'] }
-  function _concurrent (tasks, done) {
+  function _concurrent (tasks, concurrency, done) {
+    if (!done) { done = concurrency; concurrency = CONCURRENT; }
     var d = once(done);
+    var q = _queue(worker, concurrency);
     var keys = Object.keys(tasks);
     var results = a(tasks) ? [] : {};
-    var completed = 0, all = keys.length;
-    keys.forEach(function iterator (key) { cb(tasks[key], [next(key)]); });
-    function next (k) {
-      var fn = once(function callback () {
+    q.unshift(keys);
+    q.on('drain', function completed () { d(null, results); });
+    function worker (key, next) {
+      cb(tasks[key], [proceed]);
+      function proceed () {
         var args = atoa(arguments);
-        if (handle(args, d, fn)) { return; }
-        results[k] = args.shift();
-        if (++completed === all) {
-          cb(d, [null, results]);
-        }
-      });
-      return fn;
+        if (handle(args, d)) { return; }
+        results[key] = args.shift();
+        next();
+      }
     }
   }
 
@@ -209,15 +190,16 @@
       };
     }
     function labor () {
-      if (paused || load >= max) { return; }
-      if (!q.length) { qq.emit('drain'); return; }
+      if (paused || (max !== CONCURRENT && load >= max)) { return; }
+      if (!q.length) { if (load === 0) { qq.emit('drain'); } return; }
       load++;
       var job = q.pop();
       worker(job.t, once(complete.bind(null, job)));
+      cb(labor);
     }
-    function complete (job, err) {
+    function complete (job) {
       load--;
-      cb(job.done, [err]);
+      cb(job.done, atoa(arguments).splice(1));
       cb(labor);
     }
     return qq;
@@ -241,7 +223,7 @@
   λ.filter.series = _filter(_series);
 
   // cross-platform export
-  if (typeof module !== 'undefined' && module.exports) {
+  if (typeof module !== undef && module.exports) {
     module.exports = λ;
   } else {
     root.contra = λ;
