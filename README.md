@@ -71,7 +71,7 @@ These are the asynchronous flow control methods provided by `λ`.
 
 ## `λ.waterfall(tasks, done?)`
 
-<a style="float:right;" href="#quick-links">_Back to top_</a>
+<sub>[_Back to top_](#quick-links)</sub>
 
 Executes tasks in series. Each step receives the arguments from the previous step.
 
@@ -95,6 +95,9 @@ Executes tasks in series. Each step receives the arguments from the previous ste
 ```
 
 ## `λ.series(tasks, done?)`
+
+<sub>[_Back to top_](#quick-links)</sub>
+
 
 **Effectively an alias for `λ.concurrent(tasks, 1, done)`.**
 
@@ -139,6 +142,8 @@ Using objects
 
 ## `λ.concurrent(tasks, cap?, done?)`
 
+<sub>[_Back to top_](#quick-links)</sub>
+
 Executes tasks concurrently. Results get passed as an array or hash to an optional `done` callback. Task order is preserved in results. You can set a concurrency cap, and it's uncapped by default.
 
 - `tasks` Collection of functions with the `(cb)` signature. Can be an array or an object
@@ -181,6 +186,8 @@ Using objects
 
 ## `λ.each(items, cap?, iterator, done?)`
 
+<sub>[_Back to top_](#quick-links)</sub>
+
 Applies an iterator to each element in the collection concurrently.
 
 - `items` Collection of items. Can be an array or an object
@@ -203,9 +210,13 @@ Applies an iterator to each element in the collection concurrently.
 
 ## `λ.each.series(items, iterator, done?)`
 
+<sub>[_Back to top_](#quick-links)</sub>
+
 Same as `λ.each(items, iterator, done?)`, but in series instead of concurrently.
 
 ## `λ.map(items, cap?, iterator, done?)`
+
+<sub>[_Back to top_](#quick-links)</sub>
 
 Applies an iterator to each element in the collection concurrently. Produces an object with the transformation results. Task order is preserved in the results.
 
@@ -229,9 +240,13 @@ Applies an iterator to each element in the collection concurrently. Produces an 
 
 ## `λ.map.series(items, iterator, done?)`
 
+<sub>[_Back to top_](#quick-links)</sub>
+
 Same as `λ.map(items, iterator, done?)`, but in series instead of concurrently.
 
 ## `λ.filter(items, cap?, iterator, done?)`
+
+<sub>[_Back to top_](#quick-links)</sub>
 
 Applies an iterator to each element in the collection concurrently. Produces an object with the filtered results. Task order is preserved in results.
 
@@ -257,9 +272,13 @@ Applies an iterator to each element in the collection concurrently. Produces an 
 
 ## `λ.filter.series(items, iterator, done?)`
 
+<sub>[_Back to top_](#quick-links)</sub>
+
 Same as `λ.filter(items, iterator, done?)`, but in series instead of concurrently.
 
 ## `λ.queue(worker, cap=1)`
+
+<sub>[_Back to top_](#quick-links)</sub>
 
 Used to create a job queue.
 
@@ -307,6 +326,8 @@ q.on('drain', function () {
 ```
 
 ## `λ.emitter(thing)`
+
+<sub>[_Back to top_](#quick-links)</sub>
 
 Augments `thing` with `on` and `emit` methods.
 
@@ -366,6 +387,8 @@ thing.emit('error', 'foo');
 
 ## `λ.curry(fn, ...arguments)`
 
+<sub>[_Back to top_](#quick-links)</sub>
+
 Returns a function bound with some arguments and a `next` callback.
 
 ```js
@@ -374,6 +397,8 @@ Returns a function bound with some arguments and a `next` callback.
 ```
 
 # Comparison with `async`
+
+<sub>[_Back to top_](#quick-links)</sub>
 
 [`async`][1]|`λ`
 ---|---
@@ -414,6 +439,8 @@ var λ = contra;
 The shim currently clocks around `~1k` minified, uncompressed.
 
 # License
+
+<sub>[_Back to top_](#quick-links)</sub>
 
 MIT
 
