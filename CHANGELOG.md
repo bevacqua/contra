@@ -1,7 +1,13 @@
 # 1.3.0
 
 - Concurrent methods now use a queue internally
+- `λ.concurrent` has an optional concurrency cap argument
 - Series now use a concurrent queue internally, with `concurrency = 1`
+
+Fixes
+
+- Fixed a bug where queues weren't working concurrently
+- Fixed an issue where queues would emit `drain` while processing jobs
 
 # 1.2.2
 

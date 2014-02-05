@@ -94,6 +94,8 @@ Executes tasks in series. Each step receives the arguments from the previous ste
 
 ## `λ.series(tasks[, done])`
 
+**Effectively an alias for `λ.concurrent(tasks, 1, done)`.**
+
 Executes tasks in series. `done` gets all the results. Results get passed as an array or hash to an optional `done` callback. Task order is preserved in results.
 
 - `tasks` Collection of functions with the `(next)` signature. Can be an array or an object
@@ -133,11 +135,12 @@ Using objects
 });
 ```
 
-## `λ.concurrent(tasks[, done])`
+## `λ.concurrent(tasks[, concurrency [, done]])`
 
-Executes tasks concurrently. Results get passed as an array or hash to an optional `done` callback. Task order is preserved in results.
+Executes tasks concurrently. Results get passed as an array or hash to an optional `done` callback. Task order is preserved in results. You can set a concurrency cap, and it's uncapped by default.
 
 - `tasks` Collection of functions with the `(cb)` signature. Can be an array or an object
+- `concurrency` Optional concurrency level, used by the internal [queue](#%CE%BBqueueworker-concurrency1)
 - `done` Optional function with the `(err, results)` signature
 
 ```js
@@ -268,7 +271,7 @@ Returns a queue you can `push` or `unshift` jobs to. You can pause and resume th
 - `length` Short-hand for `pending.length`, only works if getters can be defined
 - `pause()` Stop processing jobs. Those already being processed will run to completion
 - `resume()` Start processing jobs again, after a `pause()`
-- `on('drain', fn)` Execute `fn` whenever there's no more pending jobs and processing is requested. Processing can be requested using `resume`, `push`, or `unshift`
+- `on('drain', fn)` Execute `fn` whenever there's no more pending _(or running)_ jobs and processing is requested. Processing can be requested using `resume`, `push`, or `unshift`
 
 ```js
 var q = λ.queue(worker);
@@ -292,9 +295,9 @@ q.on('drain', function () {
   // will fire again when pending.length reaches 0
 });
 
-// <- 'job'
-// <- 'some'
-// <- 'more'
+// <- 'this job is done!'
+// <- 'one of these jobs is done!'
+// <- 'one of these jobs is done!'
 // <- 'all done!'
 ```
 
@@ -373,9 +376,10 @@ Aimed at Noders|Tailored for browsers
 Arrays for [some][5], collections for [others][6]|Collections for **everyone**!
 `apply`|`curry`
 `parallel`|`concurrent`
+`parallelLimit`|`concurrent`
 `mapSeries`|`map.series`
 More _comprehensive_|More _focused_
-`~29.6k (minified, uncompressed)`|`~2.8k (minified, uncompressed)`
+`~29.6k (minified, uncompressed)`|`~2.7k (minified, uncompressed)`
 
 `λ` isn't meant to be a replacement for `async`. It aims to provide a more focused library, and a bit more consistency.
 
