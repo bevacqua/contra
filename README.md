@@ -69,7 +69,7 @@ var λ = contra;
 
 These are the asynchronous flow control methods provided by `λ`.
 
-## `λ.waterfall(tasks[, done])`
+## `λ.waterfall(tasks, done?)`
 
 Executes tasks in series. Each step receives the arguments from the previous step.
 
@@ -92,7 +92,7 @@ Executes tasks in series. Each step receives the arguments from the previous ste
 });
 ```
 
-## `λ.series(tasks[, done])`
+## `λ.series(tasks, done?)`
 
 **Effectively an alias for `λ.concurrent(tasks, 1, done)`.**
 
@@ -135,7 +135,7 @@ Using objects
 });
 ```
 
-## `λ.concurrent(tasks[, concurrency [, done]])`
+## `λ.concurrent(tasks, concurrency?, done?)`
 
 Executes tasks concurrently. Results get passed as an array or hash to an optional `done` callback. Task order is preserved in results. You can set a concurrency cap, and it's uncapped by default.
 
@@ -177,7 +177,7 @@ Using objects
 });
 ```
 
-## `λ.each(items, iterator[, done])`
+## `λ.each(items, iterator, done?)`
 
 Applies an iterator to each element in the collection concurrently.
 
@@ -198,11 +198,11 @@ Applies an iterator to each element in the collection concurrently.
 // <- 900
 ```
 
-## `λ.each.series(items, iterator[, done])`
+## `λ.each.series(items, iterator, done?)`
 
-Same as `λ.each(items, iterator[, done])`, but in series instead of concurrently.
+Same as `λ.each(items, iterator, done?)`, but in series instead of concurrently.
 
-## `λ.map(items, iterator[, done])`
+## `λ.map(items, iterator, done?)`
 
 Applies an iterator to each element in the collection concurrently. Produces an object with the transformation results. Task order is preserved in the results.
 
@@ -223,11 +223,11 @@ Applies an iterator to each element in the collection concurrently. Produces an 
 });
 ```
 
-## `λ.map.series(items, iterator[, done])`
+## `λ.map.series(items, iterator, done?)`
 
-Same as `λ.map(items, iterator[, done])`, but in series instead of concurrently.
+Same as `λ.map(items, iterator, done?)`, but in series instead of concurrently.
 
-## `λ.filter(items, iterator[, done])`
+## `λ.filter(items, iterator, done?)`
 
 Applies an iterator to each element in the collection concurrently. Produces an object with the filtered results. Task order is preserved in results.
 
@@ -250,11 +250,11 @@ Applies an iterator to each element in the collection concurrently. Produces an 
 });
 ```
 
-## `λ.filter.series(items, iterator[, done])`
+## `λ.filter.series(items, iterator, done?)`
 
-Same as `λ.filter(items, iterator[, done])`, but in series instead of concurrently.
+Same as `λ.filter(items, iterator, done?)`, but in series instead of concurrently.
 
-## `λ.queue(worker[, concurrency=1])`
+## `λ.queue(worker, concurrency=1)`
 
 Used to create a job queue.
 
@@ -265,8 +265,8 @@ Used to create a job queue.
 
 Returns a queue you can `push` or `unshift` jobs to. You can pause and resume the queue by hand.
 
-- `push(job[, done])` Array of jobs or an individual job object. Enqueue those jobs, continue processing **(unless paused)**. Optional callback to run when each job is completed
-- `unshift(job[, done])` Array of jobs or an individual job object. Add jobs to the top of the queue, continue processing **(unless paused)**. Optional callback to run when each job is completed
+- `push(job, done?)` Array of jobs or an individual job object. Enqueue those jobs, continue processing **(unless paused)**. Optional callback to run when each job is completed
+- `unshift(job, done?)` Array of jobs or an individual job object. Add jobs to the top of the queue, continue processing **(unless paused)**. Optional callback to run when each job is completed
 - `pending` Property. Jobs that haven't started processing yet
 - `length` Short-hand for `pending.length`, only works if getters can be defined
 - `pause()` Stop processing jobs. Those already being processed will run to completion
