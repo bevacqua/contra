@@ -6,7 +6,7 @@
   var SERIAL = 1;
   var CONCURRENT = Infinity;
   function a (o) { return Object.prototype.toString.call(o) === '[object Array]'; }
-  function atoa (a) { return Array.prototype.slice.call(a); }
+  function atoa (a, n) { return Array.prototype.slice.call(a, n); }
   function cb (fn, args, ctx) { if (!fn) { return; } tick(function run () { fn.apply(ctx || null, args || []); }); }
   function once (fn) {
     var disposed;
@@ -200,7 +200,7 @@
     }
     function complete (job) {
       load--;
-      cb(job.done, atoa(arguments).splice(1));
+      cb(job.done, atoa(arguments, 1));
       cb(labor);
     }
     return qq;
