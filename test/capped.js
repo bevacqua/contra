@@ -1,9 +1,9 @@
 'use strict';
 
-var assert = require('assert');
-var λ = require('..');
+var λ = typeof contra !== 'undefined' ? contra : require('..');
+var a = typeof assert !== 'undefined' ? assert : require('assert');
 
-assert.falsy = function (value, message) { assert.equal(false, !!value, message); };
+a.falsy = function (value, message) { a.equal(false, !!value, message); };
 
 describe('concurrent()', function () {
   it('should return the results as expected', function (done) {
@@ -24,16 +24,16 @@ describe('concurrent()', function () {
       return function (d) {
         setTimeout(function () {
           d(null, result);
-        }, Math.random() * 100);
+        }, Math.random());
       };
     }
 
     function d (err, results) {
-      assert.deepEqual(results, items);
+      a.deepEqual(results, items);
       done();
     }
 
-    λ.concurrent(tasks, 2, d);
+    λ.concurrent(tasks, 4, d);
   });
 });
 
@@ -51,15 +51,15 @@ describe('map()', function () {
     function mapper (item, done) {
       setTimeout(function () {
         done(null, item);
-      }, Math.random() * 100);
+      }, Math.random());
     }
 
     function d (err, results) {
-      assert.falsy(err);
-      assert.deepEqual(results, items);
+      a.falsy(err);
+      a.deepEqual(results, items);
       done();
     }
 
-    λ.map(items, 2, mapper, d);
+    λ.map(items, 4, mapper, d);
   });
 });

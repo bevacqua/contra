@@ -35,5 +35,9 @@
     "shim.js",
     "gulpfile.js"
   ],
-  "dependencies": {}
+  "dependencies": {},
+  "devDependencies": {
+    "assert": "~0.0.2",
+    "mocha": "~1.17.1"
+  }
 }

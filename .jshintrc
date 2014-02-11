@@ -19,9 +19,9 @@
   "indent": 2,
   "node": true,
   "globals": {
-    "window": true,
-    "define": true,
     "describe": true,
-    "it": true
+    "it": true,
+    "contra": true,
+    "assert": true
   }
 }
