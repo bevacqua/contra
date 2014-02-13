@@ -1,3 +1,7 @@
+# 1.4.1
+
+- Source code readability
+
 # 1.4.0
 
 - Added optional _concurrency cap_ argument to remaining concurrent methods: `filter`, `map`, `each`
