@@ -7,7 +7,7 @@
   var CONCURRENT = Infinity;
   function a (o) { return Object.prototype.toString.call(o) === '[object Array]'; }
   function atoa (a, n) { return Array.prototype.slice.call(a, n); }
-  function cb (fn, args, ctx) { if (!fn) { return; } tick(function run () { fn.apply(ctx || null, args || []); }); }
+  function debounce (fn, args, ctx) { if (!fn) { return; } tick(function run () { fn.apply(ctx || null, args || []); }); }
   function once (fn) {
     var disposed;
     function disposable () {
@@ -20,7 +20,7 @@
   }
   function handle (args, done, disposable) {
     var err = args.shift();
-    if (err) { if (disposable) { disposable.discard(); } cb(done, [err]); return true; }
+    if (err) { if (disposable) { disposable.discard(); } debounce(done, [err]); return true; }
   }
 
   // cross-platform ticker
@@ -55,9 +55,9 @@
         if (step) {
           if (handle(args, d)) { return; }
           args.push(next());
-          cb(step, args);
+          debounce(step, args);
         } else {
-          cb(d, arguments);
+          debounce(d, arguments);
         }
       });
     }
@@ -74,7 +74,7 @@
     q.unshift(keys);
     q.on('drain', function completed () { d(null, results); });
     function worker (key, next) {
-      cb(tasks[key], [proceed]);
+      debounce(tasks[key], [proceed]);
       function proceed () {
         var args = atoa(arguments);
         if (handle(args, d)) { return; }
@@ -162,7 +162,7 @@
       if (type === 'error' && !et) { throw args.length === 1 ? args[0] : args; }
       if (!et) { return; }
       evt[type] = et.filter(function emitter (listen) {
-        cb(listen, args);
+        debounce(listen, args);
         return !listen._once;
       });
     };
@@ -176,7 +176,7 @@
       push: _add(false),
       unshift: _add(true),
       pause: function () { paused = true; },
-      resume: function () { paused = false; cb(labor); },
+      resume: function () { paused = false; debounce(labor); },
       pending: q
     });
     if (Object.defineProperty && !Object.definePropertyPartial) {
@@ -187,7 +187,7 @@
       return function manipulate (task, done) {
         var tasks = a(task) ? task : [task];
         tasks.forEach(function insert (t) { q[m]({ t: t, done: done }); });
-        cb(labor);
+        debounce(labor);
       };
     }
     function labor () {
@@ -196,12 +196,12 @@
       load++;
       var job = q.pop();
       worker(job.t, once(complete.bind(null, job)));
-      cb(labor);
+      debounce(labor);
     }
     function complete (job) {
       load--;
-      cb(job.done, atoa(arguments, 1));
-      cb(labor);
+      debounce(job.done, atoa(arguments, 1));
+      debounce(labor);
     }
     return qq;
   }
