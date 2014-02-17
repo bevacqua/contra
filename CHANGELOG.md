@@ -1,12 +1,12 @@
-# 1.4.3
+# 1.4.3 Wonderboy
 
 - Source code readability
 
-# 1.4.0
+# 1.4.0 Baseball Cap
 
 - Added optional _concurrency cap_ argument to remaining concurrent methods: `filter`, `map`, `each`
 
-# 1.3.0
+# 1.3.0 Queue Up!
 
 - Concurrent methods now use a queue internally
 - `λ.concurrent` has an optional _concurrency cap_ argument
@@ -17,7 +17,7 @@ Fixes
 - Fixed a bug where queues weren't working concurrently
 - Fixed an issue where queues would emit `drain` while processing jobs
 
-# 1.2.2
+# 1.2.2 Polyglot
 
 - Polyfill for `Array.prototype.indexOf` added to `contra.shim.js`
 
