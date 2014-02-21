@@ -1,4 +1,4 @@
-# 1.4.4 `<head>`
+# 1.5.0 `<head>`
 
 - Distribution file headers
 
