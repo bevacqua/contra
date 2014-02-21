@@ -1,6 +1,5 @@
 'use strict';
 
-var pkg = require('./package.json');
 var gulp = require('gulp');
 var bump = require('gulp-bump');
 var git = require('gulp-git');
@@ -11,7 +10,6 @@ var rename = require('gulp-rename');
 var header = require('gulp-header');
 var uglify = require('gulp-uglify');
 var size = require('gulp-size');
-
 
 var extended = [
   '/**',
@@ -42,6 +40,8 @@ gulp.task('clean', function () {
 });
 
 gulp.task('build-shim', ['bump', 'test', 'clean'], function () {
+  var pkg = require('./package.json');
+
   return gulp.src('./src/contra.shim.js')
     .pipe(header(extended, { pkg : pkg } ))
     .pipe(gulp.dest('./dist'))
@@ -53,6 +53,8 @@ gulp.task('build-shim', ['bump', 'test', 'clean'], function () {
 });
 
 gulp.task('build', ['build-shim'], function () {
+  var pkg = require('./package.json');
+
   return gulp.src('./src/contra.js')
     .pipe(header(extended, { pkg : pkg } ))
     .pipe(gulp.dest('./dist'))
