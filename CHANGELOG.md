@@ -1,3 +1,7 @@
+# 1.4.4 `<head>`
+
+- Distribution file headers
+
 # 1.4.3 Wonderboy
 
 - Source code readability
