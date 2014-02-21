@@ -41,7 +41,7 @@ gulp.task('clean', function () {
     .pipe(clean());
 });
 
-gulp.task('build-shim', ['test', 'clean'], function () {
+gulp.task('build-shim', ['bump', 'test', 'clean'], function () {
   return gulp.src('./src/contra.shim.js')
     .pipe(header(extended, { pkg : pkg } ))
     .pipe(gulp.dest('./dist'))
@@ -63,7 +63,7 @@ gulp.task('build', ['build-shim'], function () {
     .pipe(gulp.dest('./dist'));
 });
 
-gulp.task('bump', ['build'], function () {
+gulp.task('bump', function () {
   var bumpType = process.env.BUMP || 'patch'; // major.minor.patch
 
   return gulp.src(['./package.json', './bower.json'])
@@ -71,7 +71,7 @@ gulp.task('bump', ['build'], function () {
     .pipe(gulp.dest('./'));
 });
 
-gulp.task('tag', ['bump'], function () {
+gulp.task('tag', ['build'], function () {
   var pkg = require('./package.json');
   var v = 'v' + pkg.version;
   var message = 'Release ' + v;
