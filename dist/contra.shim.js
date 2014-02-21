@@ -1,3 +1,9 @@
+/**
+ * contra - Asynchronous flow control with a functional taste to it
+ * @version v1.4.3
+ * @link https://github.com/bevacqua/contra
+ * @license MIT
+ */
 (function (Object, Array) {
   'use strict';
   if (!Array.prototype.forEach) {

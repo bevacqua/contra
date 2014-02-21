@@ -1,7 +1,7 @@
 {
   "name": "contra",
   "description": "Asynchronous flow control with a functional taste to it",
-  "version": "1.4.3",
+  "version": "1.4.4",
   "homepage": "https://github.com/bevacqua/contra",
   "author": {
     "name": "Nicolas Bevacqua",
@@ -79,7 +79,9 @@
       ]
     }
   },
-  "dependencies": {},
+  "dependencies": {
+    "gulp-header": "^1.0.2"
+  },
   "devDependencies": {
     "assert": "~1.1.0",
     "gulp": "~3.4.0",
