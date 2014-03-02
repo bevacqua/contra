@@ -1,10 +1,10 @@
 /**
  * contra - Asynchronous flow control with a functional taste to it
- * @version v1.5.0
+ * @version v1.5.1
  * @link https://github.com/bevacqua/contra
  * @license MIT
  */
-(function (Object, root) {
+(function (Object, root, undefined) {
   'use strict';
 
   // { name: 'core', dependencies: [] }
@@ -145,6 +145,7 @@
   // { name: 'emitter', dependencies: ['core'] }
   function _emitter (thing) {
     var evt = {};
+    if (thing === undefined) { thing = {}; }
     thing.on = function (type, fn) {
       if (!evt[type]) {
         evt[type] = [fn];
