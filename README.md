@@ -328,18 +328,16 @@ q.on('drain', function () {
 
 ## `λ.emitter(thing)`
 
-Augments `thing` with `on` and `emit` methods.
+Augments `thing` with the event emitter methods listed below. If `thing` isn't provided, an event emitter is created for you.
 
-- `thing` Writable JavaScript object
+- `thing` Optional. Writable JavaScript object
 - `emit(type, ...arguments)` Emits an event of type `type`, passing arguments
 - `on(type, fn)` Registers an event listener `fn` for `type` events
 - `once(type, fn)` Same as `on`, but the listener is discarded after one callback
 - `off(type, fn)` Unregisters an event listener `fn` from `type` events
 
 ```js
-var thing = { foo: 'bar' };
-
-λ.emitter(thing);
+var thing = λ.emitter(); // also, λ.emitter({ foo: 'bar' })
 
 thing.once('something', function (level) {
   console.log('something FIRST TROLL');

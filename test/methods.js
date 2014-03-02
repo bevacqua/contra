@@ -557,10 +557,27 @@ describe('emitter()', function () {
 
     λ.emitter(thing);
 
+    a.ok(thing.emit);
     a.ok(thing.on);
     a.ok(thing.once);
     a.ok(thing.off);
+
+    thing.on('something', function (b, c) {
+      a.equal(b, 'a');
+      a.equal(c, 2);
+      done();
+    });
+
+    thing.emit('something', 'a', 2);
+  });
+
+  it('should just work without arguments', function (done) {
+    var thing = λ.emitter();
+
     a.ok(thing.emit);
+    a.ok(thing.on);
+    a.ok(thing.once);
+    a.ok(thing.off);
 
     thing.on('something', function (b, c) {
       a.equal(b, 'a');

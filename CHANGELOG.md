@@ -1,3 +1,7 @@
+# 1.5.1 Emitter of Things
+
+- `λ.emitter` can create emitters without passing it any object
+
 # 1.5.0 `<head>`
 
 - Distribution file headers

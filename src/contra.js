@@ -1,4 +1,4 @@
-(function (Object, root) {
+(function (Object, root, undefined) {
   'use strict';
 
   // { name: 'core', dependencies: [] }
@@ -139,6 +139,7 @@
   // { name: 'emitter', dependencies: ['core'] }
   function _emitter (thing) {
     var evt = {};
+    if (thing === undefined) { thing = {}; }
     thing.on = function (type, fn) {
       if (!evt[type]) {
         evt[type] = [fn];
