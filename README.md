@@ -326,7 +326,7 @@ q.on('drain', function () {
 
 <sub>[_Back to top_](#quick-links)</sub>
 
-## `λ.emitter(thing)`
+## `λ.emitter(thing={})`
 
 Augments `thing` with the event emitter methods listed below. If `thing` isn't provided, an event emitter is created for you.
 
