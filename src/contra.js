@@ -98,7 +98,7 @@
       var tasks = a(collection) ? [] : {};
       keys.forEach(function insert (key) {
         tasks[key] = function iterate (cb) {
-          if (typeof iterate.length === 'number' && iterator.length === 3) {
+          if (typeof iterator.length === 'number' && iterator.length === 3) {
             iterator(collection[key], key, cb);
           } else {
             iterator(collection[key], cb);
