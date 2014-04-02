@@ -264,6 +264,46 @@ describe('each()', function () {
     }
     λ.each(['b','c','e'],t,d);
   });
+
+  it('should pass array keys to iterator', function(done){
+    var items = ['a', 'c', 'e'];
+    var keys = [];
+
+    function iterator(item, key, done) {
+      setTimeout(function() {
+        keys.push(key);
+        done();
+      }, Math.random());
+    }
+
+    function d(err) {
+      a.falsy(err);
+      a.deepEqual(Object.keys(items), keys);
+      done();
+    }
+
+    λ.each(items, iterator, d);
+  });
+
+  it('should pass object keys to iterator', function(done){
+    var items = {a: 'b', c: 'd', e: 'f'};
+    var keys = [];
+
+    function iterator(item, key, done) {
+      setTimeout(function() {
+        keys.push(key);
+        done();
+      }, Math.random());
+    }
+
+    function d(err) {
+      a.falsy(err);
+      a.deepEqual(Object.keys(items), keys);
+      done();
+    }
+
+    λ.each(items, iterator, d);
+  });
 });
 
 describe('each.series()', function () {
@@ -352,6 +392,60 @@ describe('map()', function () {
       done();
     }
     λ.map(['b','c','e'],t,d);
+  });
+
+  it('should pass array keys to iterator', function(done){
+    var items = [
+      'a',
+      { m: 2 },
+      'c',
+      'foo',
+      [2],
+      [3, 6, 7]
+    ];
+    var keys = [];
+
+    function iterator(item, key, done) {
+      setTimeout(function() {
+        keys.push(key);
+        done();
+      }, Math.random());
+    }
+
+    function d(err) {
+      a.falsy(err);
+      a.deepEqual(Object.keys(items), keys);
+      done();
+    }
+
+    λ.map(items, iterator, d);
+  });
+
+  it('should pass object keys to iterator', function(done){
+    var items = {
+      a: 'a',
+      b: { m: 2 },
+      c: 'c',
+      d: 'foo',
+      e: [2],
+      z: [3, 6, 7]
+    };
+    var keys = [];
+
+    function iterator(item, key, done) {
+      setTimeout(function() {
+        keys.push(key);
+        done();
+      }, Math.random());
+    }
+
+    function d(err) {
+      a.falsy(err);
+      a.deepEqual(Object.keys(items), keys);
+      done();
+    }
+
+    λ.map(items, iterator, d);
   });
 });
 
@@ -450,6 +544,46 @@ describe('filter()', function () {
       done();
     }
     λ.filter(['b','c','e'],t,d);
+  });
+
+  it('should pass array keys to iterator', function(done){
+    var items = ['a', 'c', 'e'];
+    var keys = [];
+
+    function iterator(item, key, done) {
+      setTimeout(function() {
+        keys.push(key);
+        done();
+      }, Math.random());
+    }
+
+    function d(err) {
+      a.falsy(err);
+      a.deepEqual(Object.keys(items), keys);
+      done();
+    }
+
+    λ.filter(items, iterator, d);
+  });
+
+  it('should pass object keys to iterator', function(done){
+    var items = {a: 'b', c: 'd', e: 'f'};
+    var keys = [];
+
+    function iterator(item, key, done) {
+      setTimeout(function() {
+        keys.push(key);
+        done();
+      }, Math.random());
+    }
+
+    function d(err) {
+      a.falsy(err);
+      a.deepEqual(Object.keys(items), keys);
+      done();
+    }
+
+    λ.filter(items, iterator, d);
   });
 });
 
