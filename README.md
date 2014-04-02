@@ -191,8 +191,9 @@ Applies an iterator to each element in the collection concurrently.
 
 - `items` Collection of items. Can be an array or an object
 - `cap` Optional concurrency level, used by the internal [queue](#%CE%BBqueueworker-cap1)
-- `iterator(item, cb)` Function to execute on each item
+- `iterator(item, key?, cb)` Function to execute on each item
   - `item` The current item
+  - `key` Optional, array/object key of the current item
   - `cb` Needs to be called when processing for current item is done
 - `done` Optional function with the `(err)` signature
 
@@ -221,8 +222,9 @@ Applies an iterator to each element in the collection concurrently. Produces an 
 
 - `items` Collection of items. Can be an array or an object
 - `cap` Optional concurrency level, used by the internal [queue](#%CE%BBqueueworker-cap1)
-- `iterator(item, cb)` Function to execute on each item
+- `iterator(item, key?, cb)` Function to execute on each item
   - `item` The current item
+  - `key` Optional, array/object key of the current item
   - `cb` Needs to be called when processing for current item is done
 - `done` Optional function with the `(err, results)` signature
 
@@ -251,8 +253,9 @@ Applies an iterator to each element in the collection concurrently. Produces an 
 
 - `items` Collection of items. Can be an array or an object
 - `cap` Optional concurrency level, used by the internal [queue](#%CE%BBqueueworker-cap1)
-- `iterator(item, cb)` Function to execute on each item
+- `iterator(item, key?, cb)` Function to execute on each item
   - `item` The current item
+  - `key` Optional, array/object key of the current item
   - `cb` Needs to be called when processing for current item is done
     - `err` An optional error which will short-circuit the filtering process, calling `done`
     - `keep` Truthy will keep the item. Falsy will remove it in the results
