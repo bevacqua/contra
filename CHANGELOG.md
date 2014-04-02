@@ -1,4 +1,4 @@
-# 1.5.3 Keyhole Variation
+# 1.5.4 Keyhole Variation
 
 - `λ.each`, `λ.filter`, and `λ.map` support an optional `key` argument in the iterator function.
 
