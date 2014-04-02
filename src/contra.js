@@ -98,7 +98,11 @@
       var tasks = a(collection) ? [] : {};
       keys.forEach(function insert (key) {
         tasks[key] = function iterate (cb) {
-          iterator(collection[key], cb);
+          if (typeof iterate.length === 'number' && iterator.length === 3) {
+            iterator(collection[key], key, cb);
+          } else {
+            iterator(collection[key], cb);
+          }
         };
       });
       _concurrent(tasks, cap || concurrency, then ? then(collection, done) : done);
