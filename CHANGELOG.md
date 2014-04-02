@@ -1,3 +1,7 @@
+# 1.5.3 Keyhole Variation
+
+- `λ.each`, `λ.filter`, and `λ.map` support an optional `key` argument in the iterator function.
+
 # 1.5.1 Emitter of Things
 
 - `λ.emitter` can create emitters without passing it any object

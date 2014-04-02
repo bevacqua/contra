@@ -1,6 +1,6 @@
 /**
  * contra - Asynchronous flow control with a functional taste to it
- * @version v1.5.2
+ * @version v1.5.3
  * @link https://github.com/bevacqua/contra
  * @license MIT
  */
@@ -104,7 +104,11 @@
       var tasks = a(collection) ? [] : {};
       keys.forEach(function insert (key) {
         tasks[key] = function iterate (cb) {
-          iterator(collection[key], cb);
+          if (iterator.length === 3) {
+            iterator(collection[key], key, cb);
+          } else {
+            iterator(collection[key], cb);
+          }
         };
       });
       _concurrent(tasks, cap || concurrency, then ? then(collection, done) : done);
