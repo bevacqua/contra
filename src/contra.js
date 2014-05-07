@@ -4,6 +4,8 @@
   var undef = 'undefined';
   var SERIAL = 1;
   var CONCURRENT = Infinity;
+  var getKeys = Object.keys;
+  function noop () {}
   function a (o) { return Object.prototype.toString.call(o) === '[object Array]'; }
   function atoa (a, n) { return Array.prototype.slice.call(a, n); }
   function debounce (fn, args, ctx) { if (!fn) { return; } tick(function run () { fn.apply(ctx || null, args || []); }); }
@@ -12,7 +14,7 @@
     function disposable () {
       if (disposed) { return; }
       disposed = true;
-      fn.apply(null, arguments);
+      (fn || noop).apply(null, arguments);
     }
     disposable.discard = function () { disposed = true; };
     return disposable;
@@ -61,7 +63,7 @@
     if (!done) { done = concurrency; concurrency = CONCURRENT; }
     var d = once(done);
     var q = _queue(worker, concurrency);
-    var keys = Object.keys(tasks);
+    var keys = getKeys(tasks);
     var results = a(tasks) ? [] : {};
     q.unshift(keys);
     q.on('drain', function completed () { d(null, results); });
@@ -84,7 +86,7 @@
     return function map (collection, concurrency, iterator, done) {
       if (arguments.length === 2) { iterator = concurrency; concurrency = CONCURRENT; }
       if (arguments.length === 3 && typeof concurrency !== 'number') { done = iterator; iterator = concurrency; concurrency = CONCURRENT; }
-      var keys = Object.keys(collection);
+      var keys = getKeys(collection);
       var tasks = a(collection) ? [] : {};
       keys.forEach(function insert (key) {
         tasks[key] = function iterate (cb) {
@@ -117,7 +119,7 @@
         }
         function ofilter () {
           var filtered = {};
-          Object.keys(collection).forEach(function omapper (key) {
+          getKeys(collection).forEach(function omapper (key) {
             if (exists(null, key)) { filtered[key] = collection[key]; }
           });
           return filtered;
