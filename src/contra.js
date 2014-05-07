@@ -28,7 +28,7 @@
   var si = typeof setImmediate === 'function', tick;
   if (si) {
     tick = setImmediate;
-  else if (typeof process !== undef && process.nextTick) {
+  } else if (typeof process !== undef && process.nextTick) {
     tick = process.nextTick;
   } else {
     tick = setTimeout;
