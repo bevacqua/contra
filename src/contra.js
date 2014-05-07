@@ -82,8 +82,8 @@
     _concurrent(tasks, SERIAL, done);
   }
 
-  function _map (cap, then) {
-    return function map (collection, concurrency, iterator, done) {
+  function _map (cap, then, attached) {
+    var map = function (collection, concurrency, iterator, done) {
       if (arguments.length === 2) { iterator = concurrency; concurrency = CONCURRENT; }
       if (arguments.length === 3 && typeof concurrency !== 'number') { done = iterator; iterator = concurrency; concurrency = CONCURRENT; }
       var keys = getKeys(collection);
@@ -99,6 +99,8 @@
       });
       _concurrent(tasks, cap || concurrency, then ? then(collection, done) : done);
     };
+    if (!attached) { map.series = _map(SERIAL, then, true); }
+    return map;
   }
 
   function _each (concurrency) {
@@ -207,10 +209,6 @@
     queue: _queue,
     emitter: _emitter
   };
-
-  λ.each.series = _each(SERIAL);
-  λ.map.series = _map(SERIAL);
-  λ.filter.series = _filter(SERIAL);
 
   // cross-platform export
   if (typeof module !== undef && module.exports) {
