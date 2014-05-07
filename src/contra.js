@@ -1,7 +1,7 @@
 (function (Object, root, undefined) {
   'use strict';
 
-  var undef = 'undefined';
+  var undef = '' + undefined;
   var SERIAL = 1;
   var CONCURRENT = Infinity;
   var getKeys = Object.keys;

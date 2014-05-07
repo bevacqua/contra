@@ -1,3 +1,7 @@
+# 1.5.6 Such Very Golf
+
+- Some more code reduction
+
 # 1.5.5 Stroke Cure
 
 - Reduced source code footprint
