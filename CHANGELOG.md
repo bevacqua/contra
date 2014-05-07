@@ -1,3 +1,5 @@
+# 1.5.5 Stroke Cure
+
 # 1.5.4 Keyhole Variation
 
 - `λ.each`, `λ.filter`, and `λ.map` support an optional `key` argument in the iterator function.

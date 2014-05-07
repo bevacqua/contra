@@ -24,15 +24,13 @@
   }
 
   // cross-platform ticker
-  var tick, si = typeof setImmediate === 'function';
-  if (typeof process === undef || !process.nextTick) {
-    if (si) {
-      tick = function tick (fn) { setImmediate(fn); };
-    } else {
-      tick = function tick (fn) { setTimeout(fn, 0); };
-    }
+  var si = typeof setImmediate === 'function', tick;
+  if (si) {
+    tick = setImmediate;
+  else if (typeof process !== undef && process.nextTick) {
+    tick = process.nextTick;
   } else {
-    tick = si ? setImmediate : process.nextTick;
+    tick = setTimeout;
   }
 
   // { name: 'curry', dependencies: ['core'] }
@@ -47,21 +45,19 @@
 
   // { name: 'waterfall', dependencies: ['core'] }
   function _waterfall (steps, done) {
+    var d = once(done);
     function next () {
-      var d = once(done);
-      return once(function callback () {
-        var args = atoa(arguments);
-        var step = steps.shift();
-        if (step) {
-          if (handle(args, d)) { return; }
-          args.push(next());
-          debounce(step, args);
-        } else {
-          debounce(d, arguments);
-        }
-      });
+      var args = atoa(arguments);
+      var step = steps.shift();
+      if (step) {
+        if (handle(args, d)) { return; }
+        args.push(once(next));
+        debounce(step, args);
+      } else {
+        debounce(d, arguments);
+      }
     }
-    next()();
+    next();
   }
 
   // { name: 'concurrent', dependencies: ['core'] }
@@ -178,8 +174,8 @@
   function _queue (worker, concurrency) {
     var q = [], load = 0, max = concurrency || 1, paused;
     var qq = _emitter({
-      push: _add(false),
-      unshift: _add(true),
+      push: manipulate.bind(null, 'push'),
+      unshift: manipulate.bind(null, 'unshift'),
       pause: function () { paused = true; },
       resume: function () { paused = false; debounce(labor); },
       pending: q
@@ -187,16 +183,13 @@
     if (Object.defineProperty && !Object.definePropertyPartial) {
       Object.defineProperty(qq, 'length', { get: function () { return q.length; } });
     }
-    function _add (top) {
-      var m = top ? 'unshift' : 'push';
-      return function manipulate (task, done) {
-        var tasks = a(task) ? task : [task];
-        tasks.forEach(function insert (t) { q[m]({ t: t, done: done }); });
-        debounce(labor);
-      };
+    function manipulate (how, task, done) {
+      var tasks = a(task) ? task : [task];
+      tasks.forEach(function insert (t) { q[how]({ t: t, done: done }); });
+      debounce(labor);
     }
     function labor () {
-      if (paused || (max !== CONCURRENT && load >= max)) { return; }
+      if (paused || load >= max) { return; }
       if (!q.length) { if (load === 0) { qq.emit('drain'); } return; }
       load++;
       var job = q.pop();
