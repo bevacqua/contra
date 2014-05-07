@@ -1,16 +1,17 @@
 /**
  * contra - Asynchronous flow control with a functional taste to it
- * @version v1.5.4
+ * @version v1.5.5
  * @link https://github.com/bevacqua/contra
  * @license MIT
  */
 (function (Object, root, undefined) {
   'use strict';
 
-  // { name: 'core', dependencies: [] }
   var undef = 'undefined';
   var SERIAL = 1;
   var CONCURRENT = Infinity;
+  var getKeys = Object.keys;
+  function noop () {}
   function a (o) { return Object.prototype.toString.call(o) === '[object Array]'; }
   function atoa (a, n) { return Array.prototype.slice.call(a, n); }
   function debounce (fn, args, ctx) { if (!fn) { return; } tick(function run () { fn.apply(ctx || null, args || []); }); }
@@ -19,7 +20,7 @@
     function disposable () {
       if (disposed) { return; }
       disposed = true;
-      fn.apply(null, arguments);
+      (fn || noop).apply(null, arguments);
     }
     disposable.discard = function () { disposed = true; };
     return disposable;
@@ -30,18 +31,15 @@
   }
 
   // cross-platform ticker
-  var tick, si = typeof setImmediate === 'function';
-  if (typeof process === undef || !process.nextTick) {
-    if (si) {
-      tick = function tick (fn) { setImmediate(fn); };
-    } else {
-      tick = function tick (fn) { setTimeout(fn, 0); };
-    }
+  var si = typeof setImmediate === 'function', tick;
+  if (si) {
+    tick = setImmediate;
+  } else if (typeof process !== undef && process.nextTick) {
+    tick = process.nextTick;
   } else {
-    tick = si ? setImmediate : process.nextTick;
+    tick = setTimeout;
   }
 
-  // { name: 'curry', dependencies: ['core'] }
   function _curry () {
     var args = atoa(arguments);
     var method = args.shift();
@@ -51,31 +49,27 @@
     };
   }
 
-  // { name: 'waterfall', dependencies: ['core'] }
   function _waterfall (steps, done) {
+    var d = once(done);
     function next () {
-      var d = once(done);
-      return once(function callback () {
-        var args = atoa(arguments);
-        var step = steps.shift();
-        if (step) {
-          if (handle(args, d)) { return; }
-          args.push(next());
-          debounce(step, args);
-        } else {
-          debounce(d, arguments);
-        }
-      });
+      var args = atoa(arguments);
+      var step = steps.shift();
+      if (step) {
+        if (handle(args, d)) { return; }
+        args.push(once(next));
+        debounce(step, args);
+      } else {
+        debounce(d, arguments);
+      }
     }
-    next()();
+    next();
   }
 
-  // { name: 'concurrent', dependencies: ['core'] }
   function _concurrent (tasks, concurrency, done) {
     if (!done) { done = concurrency; concurrency = CONCURRENT; }
     var d = once(done);
     var q = _queue(worker, concurrency);
-    var keys = Object.keys(tasks);
+    var keys = getKeys(tasks);
     var results = a(tasks) ? [] : {};
     q.unshift(keys);
     q.on('drain', function completed () { d(null, results); });
@@ -90,17 +84,15 @@
     }
   }
 
-  // { name: 'series', dependencies: ['concurrent'] }
   function _series (tasks, done) {
     _concurrent(tasks, SERIAL, done);
   }
 
-  // { name: 'map', dependencies: ['concurrent'] }
-  function _map (cap, then) {
-    return function map (collection, concurrency, iterator, done) {
+  function _map (cap, then, attached) {
+    var map = function (collection, concurrency, iterator, done) {
       if (arguments.length === 2) { iterator = concurrency; concurrency = CONCURRENT; }
       if (arguments.length === 3 && typeof concurrency !== 'number') { done = iterator; iterator = concurrency; concurrency = CONCURRENT; }
-      var keys = Object.keys(collection);
+      var keys = getKeys(collection);
       var tasks = a(collection) ? [] : {};
       keys.forEach(function insert (key) {
         tasks[key] = function iterate (cb) {
@@ -113,9 +105,10 @@
       });
       _concurrent(tasks, cap || concurrency, then ? then(collection, done) : done);
     };
+    if (!attached) { map.series = _map(SERIAL, then, true); }
+    return map;
   }
 
-  // { name: 'each', dependencies: ['map'] }
   function _each (concurrency) {
     return _map(concurrency, then);
     function then (collection, done) {
@@ -125,7 +118,6 @@
     }
   }
 
-  // { name: 'filter', dependencies: ['map'] }
   function _filter (concurrency) {
     return _map(concurrency, then);
     function then (collection, done) {
@@ -135,7 +127,7 @@
         }
         function ofilter () {
           var filtered = {};
-          Object.keys(collection).forEach(function omapper (key) {
+          getKeys(collection).forEach(function omapper (key) {
             if (exists(null, key)) { filtered[key] = collection[key]; }
           });
           return filtered;
@@ -146,7 +138,6 @@
     }
   }
 
-  // { name: 'emitter', dependencies: ['core'] }
   function _emitter (thing) {
     var evt = {};
     if (thing === undefined) { thing = {}; }
@@ -180,12 +171,11 @@
     return thing;
   }
 
-  // { name: 'queue', dependencies: ['emitter'] }
   function _queue (worker, concurrency) {
     var q = [], load = 0, max = concurrency || 1, paused;
     var qq = _emitter({
-      push: _add(false),
-      unshift: _add(true),
+      push: manipulate.bind(null, 'push'),
+      unshift: manipulate.bind(null, 'unshift'),
       pause: function () { paused = true; },
       resume: function () { paused = false; debounce(labor); },
       pending: q
@@ -193,16 +183,13 @@
     if (Object.defineProperty && !Object.definePropertyPartial) {
       Object.defineProperty(qq, 'length', { get: function () { return q.length; } });
     }
-    function _add (top) {
-      var m = top ? 'unshift' : 'push';
-      return function manipulate (task, done) {
-        var tasks = a(task) ? task : [task];
-        tasks.forEach(function insert (t) { q[m]({ t: t, done: done }); });
-        debounce(labor);
-      };
+    function manipulate (how, task, done) {
+      var tasks = a(task) ? task : [task];
+      tasks.forEach(function insert (t) { q[how]({ t: t, done: done }); });
+      debounce(labor);
     }
     function labor () {
-      if (paused || (max !== CONCURRENT && load >= max)) { return; }
+      if (paused || load >= max) { return; }
       if (!q.length) { if (load === 0) { qq.emit('drain'); } return; }
       load++;
       var job = q.pop();
@@ -217,7 +204,6 @@
     return qq;
   }
 
-  // { name: 'outro', dependencies: ['core'] }
   var λ = {
     curry: _curry,
     concurrent: _concurrent,
@@ -229,10 +215,6 @@
     queue: _queue,
     emitter: _emitter
   };
-
-  λ.each.series = _each(SERIAL);
-  λ.map.series = _map(SERIAL);
-  λ.filter.series = _filter(SERIAL);
 
   // cross-platform export
   if (typeof module !== undef && module.exports) {
