@@ -1,7 +1,6 @@
 (function (Object, root, undefined) {
   'use strict';
 
-  // { name: 'core', dependencies: [] }
   var undef = 'undefined';
   var SERIAL = 1;
   var CONCURRENT = Infinity;
@@ -33,7 +32,6 @@
     tick = setTimeout;
   }
 
-  // { name: 'curry', dependencies: ['core'] }
   function _curry () {
     var args = atoa(arguments);
     var method = args.shift();
@@ -43,7 +41,6 @@
     };
   }
 
-  // { name: 'waterfall', dependencies: ['core'] }
   function _waterfall (steps, done) {
     var d = once(done);
     function next () {
@@ -60,7 +57,6 @@
     next();
   }
 
-  // { name: 'concurrent', dependencies: ['core'] }
   function _concurrent (tasks, concurrency, done) {
     if (!done) { done = concurrency; concurrency = CONCURRENT; }
     var d = once(done);
@@ -80,12 +76,10 @@
     }
   }
 
-  // { name: 'series', dependencies: ['concurrent'] }
   function _series (tasks, done) {
     _concurrent(tasks, SERIAL, done);
   }
 
-  // { name: 'map', dependencies: ['concurrent'] }
   function _map (cap, then) {
     return function map (collection, concurrency, iterator, done) {
       if (arguments.length === 2) { iterator = concurrency; concurrency = CONCURRENT; }
@@ -105,7 +99,6 @@
     };
   }
 
-  // { name: 'each', dependencies: ['map'] }
   function _each (concurrency) {
     return _map(concurrency, then);
     function then (collection, done) {
@@ -115,7 +108,6 @@
     }
   }
 
-  // { name: 'filter', dependencies: ['map'] }
   function _filter (concurrency) {
     return _map(concurrency, then);
     function then (collection, done) {
@@ -136,7 +128,6 @@
     }
   }
 
-  // { name: 'emitter', dependencies: ['core'] }
   function _emitter (thing) {
     var evt = {};
     if (thing === undefined) { thing = {}; }
@@ -170,7 +161,6 @@
     return thing;
   }
 
-  // { name: 'queue', dependencies: ['emitter'] }
   function _queue (worker, concurrency) {
     var q = [], load = 0, max = concurrency || 1, paused;
     var qq = _emitter({
@@ -204,7 +194,6 @@
     return qq;
   }
 
-  // { name: 'outro', dependencies: ['core'] }
   var λ = {
     curry: _curry,
     concurrent: _concurrent,
