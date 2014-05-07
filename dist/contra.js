@@ -1,13 +1,13 @@
 /**
  * contra - Asynchronous flow control with a functional taste to it
- * @version v1.5.5
+ * @version v1.5.6
  * @link https://github.com/bevacqua/contra
  * @license MIT
  */
 (function (Object, root, undefined) {
   'use strict';
 
-  var undef = 'undefined';
+  var undef = '' + undefined;
   var SERIAL = 1;
   var CONCURRENT = Infinity;
   var getKeys = Object.keys;
