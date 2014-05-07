@@ -81,6 +81,7 @@
   },
   "devDependencies": {
     "assert": "~1.1.0",
+    "gulp": "^3.6.2",
     "gulp-bump": "~0.1.0",
     "gulp-clean": "~0.2.3",
     "gulp-concat": "~2.1.7",
@@ -94,7 +95,6 @@
     "jshint": "~2.4.1",
     "jshint-stylish": "~0.1.5",
     "jshint-tap": "0.0.1",
-    "mocha": "~1.17.0",
-    "gulp": "~3.5.5"
+    "mocha": "~1.17.0"
   }
 }
