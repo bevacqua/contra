@@ -1,3 +1,11 @@
+# 1.6.0 Much Synchronous
+
+- `λ.emitter` takes an optional `options` object
+
+Changes
+
+- `λ.emitter` runs _synchronously_ by default
+
 # 1.5.6 Such Very Golf
 
 - Some more code reduction
