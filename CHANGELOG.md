@@ -1,4 +1,4 @@
-# 1.6.0 Much Synchronous
+# 1.6.1 Much Synchronous
 
 - `λ.emitter` takes an optional `options` object
 
