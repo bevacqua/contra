@@ -133,7 +133,8 @@
     }
   }
 
-  function _emitter (thing) {
+  function _emitter (thing, options) {
+    var opts = options || {};
     var evt = {};
     if (thing === undefined) { thing = {}; }
     thing.on = function (type, fn) {
@@ -159,7 +160,7 @@
       if (type === 'error' && !et) { throw args.length === 1 ? args[0] : args; }
       if (!et) { return; }
       evt[type] = et.filter(function emitter (listen) {
-        debounce(listen, args);
+        if (opts.async) { listen.apply(null, args); } else { debounce(listen, args); }
         return !listen._once;
       });
     };

@@ -35,7 +35,7 @@ Functional
 Uncategorized
 
 - [`λ.queue`](#%CE%BBqueueworker-cap1)
-- [`λ.emitter`](#%CE%BBemitterthing)
+- [`λ.emitter`](#%CE%BBemitterthing-options)
 - [`λ.curry`](#%CE%BBcurryfn-arguments)
 
 # Install
@@ -329,7 +329,7 @@ q.on('drain', function () {
 
 <sub>[_Back to top_](#quick-links)</sub>
 
-## `λ.emitter(thing={})`
+## `λ.emitter(thing={}, options={})`
 
 Augments `thing` with the event emitter methods listed below. If `thing` isn't provided, an event emitter is created for you.
 
@@ -338,6 +338,10 @@ Augments `thing` with the event emitter methods listed below. If `thing` isn't p
 - `on(type, fn)` Registers an event listener `fn` for `type` events
 - `once(type, fn)` Same as `on`, but the listener is discarded after one callback
 - `off(type, fn)` Unregisters an event listener `fn` from `type` events
+
+The emitter can be configured with the following options, too.
+
+- `async` Debounce listeners asynchronously. By default they're executed in sequence.
 
 ```js
 var thing = λ.emitter(); // also, λ.emitter({ foo: 'bar' })
