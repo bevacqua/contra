@@ -1,6 +1,6 @@
 /**
  * contra - Asynchronous flow control with a functional taste to it
- * @version v1.5.6
+ * @version v1.6.0
  * @link https://github.com/bevacqua/contra
  * @license MIT
  */
@@ -90,8 +90,9 @@
 
   function _map (cap, then, attached) {
     var map = function (collection, concurrency, iterator, done) {
-      if (arguments.length === 2) { iterator = concurrency; concurrency = CONCURRENT; }
-      if (arguments.length === 3 && typeof concurrency !== 'number') { done = iterator; iterator = concurrency; concurrency = CONCURRENT; }
+      var args = arguments;
+      if (args.length === 2) { iterator = concurrency; concurrency = CONCURRENT; }
+      if (args.length === 3 && typeof concurrency !== 'number') { done = iterator; iterator = concurrency; concurrency = CONCURRENT; }
       var keys = getKeys(collection);
       var tasks = a(collection) ? [] : {};
       keys.forEach(function insert (key) {
@@ -138,7 +139,8 @@
     }
   }
 
-  function _emitter (thing) {
+  function _emitter (thing, options) {
+    var opts = options || {};
     var evt = {};
     if (thing === undefined) { thing = {}; }
     thing.on = function (type, fn) {
@@ -164,7 +166,7 @@
       if (type === 'error' && !et) { throw args.length === 1 ? args[0] : args; }
       if (!et) { return; }
       evt[type] = et.filter(function emitter (listen) {
-        debounce(listen, args);
+        if (opts.async) { listen.apply(null, args); } else { debounce(listen, args); }
         return !listen._once;
       });
     };
