@@ -1,6 +1,6 @@
 /**
  * contra - Asynchronous flow control with a functional taste to it
- * @version v1.6.2
+ * @version v1.6.3
  * @link https://github.com/bevacqua/contra
  * @license MIT
  */
@@ -10,7 +10,7 @@
   var undef = '' + undefined;
   var SERIAL = 1;
   var CONCURRENT = Infinity;
-  var getKeys = Object.keys;
+
   function noop () {}
   function a (o) { return Object.prototype.toString.call(o) === '[object Array]'; }
   function atoa (a, n) { return Array.prototype.slice.call(a, n); }
@@ -33,11 +33,11 @@
   // cross-platform ticker
   var si = typeof setImmediate === 'function', tick;
   if (si) {
-    tick = setImmediate;
+    tick = function (fn) { setImmediate(fn); };
   } else if (typeof process !== undef && process.nextTick) {
     tick = process.nextTick;
   } else {
-    tick = setTimeout;
+    tick = function (fn) { setTimeout(fn, 0); };
   }
 
   function _curry () {
@@ -69,7 +69,7 @@
     if (!done) { done = concurrency; concurrency = CONCURRENT; }
     var d = once(done);
     var q = _queue(worker, concurrency);
-    var keys = getKeys(tasks);
+    var keys = Object.keys(tasks);
     var results = a(tasks) ? [] : {};
     q.unshift(keys);
     q.on('drain', function completed () { d(null, results); });
@@ -93,7 +93,7 @@
       var args = arguments;
       if (args.length === 2) { iterator = concurrency; concurrency = CONCURRENT; }
       if (args.length === 3 && typeof concurrency !== 'number') { done = iterator; iterator = concurrency; concurrency = CONCURRENT; }
-      var keys = getKeys(collection);
+      var keys = Object.keys(collection);
       var tasks = a(collection) ? [] : {};
       keys.forEach(function insert (key) {
         tasks[key] = function iterate (cb) {
@@ -128,7 +128,7 @@
         }
         function ofilter () {
           var filtered = {};
-          getKeys(collection).forEach(function omapper (key) {
+          Object.keys(collection).forEach(function omapper (key) {
             if (exists(null, key)) { filtered[key] = collection[key]; }
           });
           return filtered;
