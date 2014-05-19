@@ -1,6 +1,6 @@
 /**
  * contra - Asynchronous flow control with a functional taste to it
- * @version v1.6.1
+ * @version v1.6.2
  * @link https://github.com/bevacqua/contra
  * @license MIT
  */
@@ -206,7 +206,7 @@
     return qq;
   }
 
-  var λ = {
+  var contra = {
     curry: _curry,
     concurrent: _concurrent,
     series: _series,
@@ -220,8 +220,8 @@
 
   // cross-platform export
   if (typeof module !== undef && module.exports) {
-    module.exports = λ;
+    module.exports = contra;
   } else {
-    root.contra = λ;
+    root.contra = contra;
   }
 })(Object, this);
