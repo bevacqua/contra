@@ -1,6 +1,6 @@
 'use strict';
 
-var λ = typeof contra !== 'undefined' ? contra : require('..');
+var contra = typeof contra !== 'undefined' ? contra : require('..');
 var a = typeof assert !== 'undefined' ? assert : require('assert');
 
 a.falsy = function (value, message) { a.equal(false, !!value, message); };
@@ -26,7 +26,7 @@ describe('waterfall()', function () {
       a.equal(result, 'b');
       done();
     }
-    λ.waterfall([b,c],d);
+    contra.waterfall([b,c],d);
   });
 });
 
@@ -52,7 +52,7 @@ describe('series()', function () {
       a.equal(results[1], 'b');
       done();
     }
-    λ.series([b,c],d);
+    contra.series([b,c],d);
   });
 
   it('should run tasks in a series as object', function (done) {
@@ -76,7 +76,7 @@ describe('series()', function () {
       a.equal(results.f, 'b');
       done();
     }
-    λ.series({ e: b, f: c }, d);
+    contra.series({ e: b, f: c }, d);
   });
 
   it('should short-circuit on error', function (done) {
@@ -99,7 +99,7 @@ describe('series()', function () {
       a.falsy(results);
       done();
     }
-    λ.series([b,c],d);
+    contra.series([b,c],d);
   });
 });
 
@@ -125,7 +125,7 @@ describe('concurrent()', function () {
       a.equal(results[1], 'b');
       done();
     }
-    λ.concurrent([b,c],d);
+    contra.concurrent([b,c],d);
   });
 
   it('should run tasks concurrently as object', function (done) {
@@ -149,7 +149,7 @@ describe('concurrent()', function () {
       a.equal(results.d, 'b');
       done();
     }
-    λ.concurrent({ a: b, d: c }, d);
+    contra.concurrent({ a: b, d: c }, d);
   });
 
   it('should short-circuit on error', function (done) {
@@ -165,7 +165,7 @@ describe('concurrent()', function () {
       a.falsy(results);
       done();
     }
-    λ.concurrent([b,c],d);
+    contra.concurrent([b,c],d);
   });
 });
 
@@ -176,7 +176,7 @@ describe('curry()', function () {
       a.equal(c, 3);
       a.equal(d, 'c');
     };
-    var applied = λ.curry(fn, 1, 3, 'c');
+    var applied = contra.curry(fn, 1, 3, 'c');
     applied();
   });
 
@@ -188,11 +188,11 @@ describe('curry()', function () {
       a.equal(e, 'd');
       a.equal(f, 'e');
     };
-    var applied = λ.curry(fn, 1, 3, 'c');
+    var applied = contra.curry(fn, 1, 3, 'c');
     applied('d', 'e');
   });
 
-  it('should play well with λ.series', function (done) {
+  it('should play well with contra.series', function (done) {
     var cb = false, cc = false;
     function b (n, next) {
       a.equal(n, 1);
@@ -215,9 +215,9 @@ describe('curry()', function () {
       a.equal(results[1], 'b');
       done();
     }
-    λ.series([
-      λ.curry(b, 1),
-      λ.curry(c, ['a']),
+    contra.series([
+      contra.curry(b, 1),
+      contra.curry(c, ['a']),
     ], d);
   });
 });
@@ -235,7 +235,7 @@ describe('each()', function () {
       a.falsy(results);
       done();
     }
-    λ.each(['b','c'],t,d);
+    contra.each(['b','c'],t,d);
   });
 
   it('should loop object concurrently', function (done) {
@@ -250,7 +250,7 @@ describe('each()', function () {
       a.falsy(results);
       done();
     }
-    λ.each({ a: 'b', b: 'c' }, t, d);
+    contra.each({ a: 'b', b: 'c' }, t, d);
   });
 
   it('should short-circuit on error', function (done) {
@@ -262,7 +262,7 @@ describe('each()', function () {
       a.falsy(results);
       done();
     }
-    λ.each(['b','c','e'],t,d);
+    contra.each(['b','c','e'],t,d);
   });
 
   it('should pass array keys to iterator', function(done){
@@ -282,7 +282,7 @@ describe('each()', function () {
       done();
     }
 
-    λ.each(items, iterator, d);
+    contra.each(items, iterator, d);
   });
 
   it('should pass object keys to iterator', function(done){
@@ -302,7 +302,7 @@ describe('each()', function () {
       done();
     }
 
-    λ.each(items, iterator, d);
+    contra.each(items, iterator, d);
   });
 });
 
@@ -319,7 +319,7 @@ describe('each.series()', function () {
       a.falsy(results);
       done();
     }
-    λ.each.series(['b','c'],t,d);
+    contra.each.series(['b','c'],t,d);
   });
 
   it('should loop object in a series', function (done) {
@@ -334,7 +334,7 @@ describe('each.series()', function () {
       a.falsy(results);
       done();
     }
-    λ.each.series({ a: 'b', b: 'c' }, t, d);
+    contra.each.series({ a: 'b', b: 'c' }, t, d);
   });
 
   it('should short-circuit on error', function (done) {
@@ -349,7 +349,7 @@ describe('each.series()', function () {
       a.falsy(results);
       done();
     }
-    λ.each.series(['b','c'],t,d);
+    contra.each.series(['b','c'],t,d);
   });
 });
 
@@ -365,7 +365,7 @@ describe('map()', function () {
       a.deepEqual(results, [4, 5]);
       done();
     }
-    λ.map(['b','c'],t,d);
+    contra.map(['b','c'],t,d);
   });
 
   it('should map object concurrently', function (done) {
@@ -379,7 +379,7 @@ describe('map()', function () {
       a.deepEqual(results, { a: 4, b: 5 });
       done();
     }
-    λ.map({ a: 'b', b: 'c' }, t, d);
+    contra.map({ a: 'b', b: 'c' }, t, d);
   });
 
   it('should short-circuit on error', function (done) {
@@ -391,7 +391,7 @@ describe('map()', function () {
       a.falsy(results);
       done();
     }
-    λ.map(['b','c','e'],t,d);
+    contra.map(['b','c','e'],t,d);
   });
 
   it('should pass array keys to iterator', function(done){
@@ -418,7 +418,7 @@ describe('map()', function () {
       done();
     }
 
-    λ.map(items, iterator, d);
+    contra.map(items, iterator, d);
   });
 
   it('should pass object keys to iterator', function(done){
@@ -445,7 +445,7 @@ describe('map()', function () {
       done();
     }
 
-    λ.map(items, iterator, d);
+    contra.map(items, iterator, d);
   });
 });
 
@@ -461,7 +461,7 @@ describe('map.series()', function () {
       a.deepEqual(results, [4, 5]);
       done();
     }
-    λ.map.series(['b','c'],t,d);
+    contra.map.series(['b','c'],t,d);
   });
 
   it('should map object in a series', function (done) {
@@ -475,7 +475,7 @@ describe('map.series()', function () {
       a.deepEqual(results, { a: 4, b: 5 });
       done();
     }
-    λ.map.series({ a: 'b', b: 'c' }, t, d);
+    contra.map.series({ a: 'b', b: 'c' }, t, d);
   });
 
   it('should fail on error', function (done) {
@@ -487,7 +487,7 @@ describe('map.series()', function () {
       a.falsy(results);
       done();
     }
-    λ.map.series(['b','c'],t,d);
+    contra.map.series(['b','c'],t,d);
   });
 
   it('should short-circuit on error', function (done) {
@@ -502,7 +502,7 @@ describe('map.series()', function () {
       a.falsy(results);
       done();
     }
-    λ.map.series(['b','c'],t,d);
+    contra.map.series(['b','c'],t,d);
   });
 });
 
@@ -518,7 +518,7 @@ describe('filter()', function () {
       a.deepEqual(results, ['b', 'c']);
       done();
     }
-    λ.filter([1,2,'b',3,'c',5],t,d);
+    contra.filter([1,2,'b',3,'c',5],t,d);
   });
 
   it('should filter object concurrently', function (done) {
@@ -531,7 +531,7 @@ describe('filter()', function () {
       a.deepEqual(results, { a: 'b', b: 'c' });
       done();
     }
-    λ.filter({ n: 3, a: 'b', b: 'c', c: 4, d: 5, e: 6 }, t, d);
+    contra.filter({ n: 3, a: 'b', b: 'c', c: 4, d: 5, e: 6 }, t, d);
   });
 
   it('should short-circuit on error', function (done) {
@@ -543,7 +543,7 @@ describe('filter()', function () {
       a.falsy(results);
       done();
     }
-    λ.filter(['b','c','e'],t,d);
+    contra.filter(['b','c','e'],t,d);
   });
 
   it('should pass array keys to iterator', function(done){
@@ -563,7 +563,7 @@ describe('filter()', function () {
       done();
     }
 
-    λ.filter(items, iterator, d);
+    contra.filter(items, iterator, d);
   });
 
   it('should pass object keys to iterator', function(done){
@@ -583,7 +583,7 @@ describe('filter()', function () {
       done();
     }
 
-    λ.filter(items, iterator, d);
+    contra.filter(items, iterator, d);
   });
 });
 
@@ -598,7 +598,7 @@ describe('filter.series()', function () {
       a.deepEqual(results, ['b', 'c']);
       done();
     }
-    λ.filter.series([1,2,'b',3,'c',5],t,d);
+    contra.filter.series([1,2,'b',3,'c',5],t,d);
   });
 
   it('should filter object in a series', function (done) {
@@ -611,7 +611,7 @@ describe('filter.series()', function () {
       a.deepEqual(results, { a: 'b', b: 'c' });
       done();
     }
-    λ.filter.series({ n: 3, a: 'b', b: 'c', c: 4, d: 5, e: 6 }, t, d);
+    contra.filter.series({ n: 3, a: 'b', b: 'c', c: 4, d: 5, e: 6 }, t, d);
   });
 });
 
@@ -628,7 +628,7 @@ describe('queue()', function () {
       a.ok(ww);
       done();
     }
-    var q = λ.queue(w);
+    var q = contra.queue(w);
     q.push('a', d);
   });
 
@@ -644,7 +644,7 @@ describe('queue()', function () {
       a.ok(ww);
       done();
     }
-    var q = λ.queue(w);
+    var q = contra.queue(w);
     q.pause();
     q.push('a', d);
     a.equal(q.pending.length, 1);
@@ -663,7 +663,7 @@ describe('queue()', function () {
       a.ok(ww);
       done();
     }
-    var q = λ.queue(w);
+    var q = contra.queue(w);
     q.push('a', d);
   });
 
@@ -679,7 +679,7 @@ describe('queue()', function () {
       a.falsy(ww);
       done();
     }
-    var q = λ.queue(w);
+    var q = contra.queue(w);
     q.on('drain', drained);
     q.push([], d);
   });
@@ -689,7 +689,7 @@ describe('emitter()', function () {
   it('should just work', function (done) {
     var thing = { foo: 'bar' };
 
-    λ.emitter(thing);
+    contra.emitter(thing);
 
     a.ok(thing.emit);
     a.ok(thing.on);
@@ -706,7 +706,7 @@ describe('emitter()', function () {
   });
 
   it('should just work without arguments', function (done) {
-    var thing = λ.emitter();
+    var thing = contra.emitter();
 
     a.ok(thing.emit);
     a.ok(thing.on);
@@ -726,7 +726,7 @@ describe('emitter()', function () {
     var thing = { foo: 'bar' };
     var c = 0;
 
-    λ.emitter(thing);
+    contra.emitter(thing);
 
     function me () {
       c++;
@@ -746,7 +746,7 @@ describe('emitter()', function () {
   it('shouldn\'t blow up on careless off() calls', function () {
     var thing = { foo: 'bar' };
 
-    λ.emitter(thing);
+    contra.emitter(thing);
 
     // the thing event type doesn't even exist.
     thing.off('something', function () {});
@@ -755,7 +755,7 @@ describe('emitter()', function () {
   it('should turn off on() listeners', function (done) {
     var thing = { foo: 'bar' };
 
-    λ.emitter(thing);
+    contra.emitter(thing);
 
     function me () {
       a.fail(null, null, 'invoked on() listener');
@@ -770,7 +770,7 @@ describe('emitter()', function () {
   it('should turn off once() listeners', function (done) {
     var thing = { foo: 'bar' };
 
-    λ.emitter(thing);
+    contra.emitter(thing);
 
     function me () {
       a.fail(null, null, 'invoked once() listener');
@@ -785,7 +785,7 @@ describe('emitter()', function () {
   it('should blow up on error if no listeners', function (done) {
     var thing = { foo: 'bar' };
 
-    λ.emitter(thing);
+    contra.emitter(thing);
 
     a.throws(thing.emit.bind(thing, 'error'));
     done();
@@ -794,7 +794,7 @@ describe('emitter()', function () {
   it('should work just fine with at least one error listener', function (done) {
     var thing = { foo: 'bar' };
 
-    λ.emitter(thing);
+    contra.emitter(thing);
 
     thing.on('error', function () {
       done();

@@ -200,7 +200,7 @@
     return qq;
   }
 
-  var λ = {
+  var contra = {
     curry: _curry,
     concurrent: _concurrent,
     series: _series,
@@ -214,8 +214,8 @@
 
   // cross-platform export
   if (typeof module !== undef && module.exports) {
-    module.exports = λ;
+    module.exports = contra;
   } else {
-    root.contra = λ;
+    root.contra = contra;
   }
 })(Object, this);

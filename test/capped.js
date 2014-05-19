@@ -1,6 +1,6 @@
 'use strict';
 
-var λ = typeof contra !== 'undefined' ? contra : require('..');
+var contra = typeof contra !== 'undefined' ? contra : require('..');
 var a = typeof assert !== 'undefined' ? assert : require('assert');
 
 a.falsy = function (value, message) { a.equal(false, !!value, message); };
@@ -33,7 +33,7 @@ describe('concurrent()', function () {
       done();
     }
 
-    λ.concurrent(tasks, 4, d);
+    contra.concurrent(tasks, 4, d);
   });
 });
 
@@ -60,6 +60,6 @@ describe('map()', function () {
       done();
     }
 
-    λ.map(items, 4, mapper, d);
+    contra.map(items, 4, mapper, d);
   });
 });
