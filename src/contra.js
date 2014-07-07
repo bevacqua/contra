@@ -160,7 +160,7 @@
       if (type === 'error' && !et) { throw args.length === 1 ? args[0] : args; }
       if (!et) { return; }
       evt[type] = et.filter(function emitter (listen) {
-        if (opts.async) { debounce(listen, args); } else { listen.apply(null, args); }
+        if (opts.async) { debounce(listen, args, thing); } else { listen.apply(thing, args); }
         return !listen._once;
       });
     };

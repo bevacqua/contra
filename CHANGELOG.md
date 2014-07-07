@@ -1,3 +1,7 @@
+# 1.6.4 Context Emission
+
+- `λ.emitter` properly sets `this` to the event emitter object
+
 # 1.6.1 Much Synchronous
 
 - `λ.emitter` takes an optional `options` object
