@@ -1,3 +1,7 @@
+# 1.6.5 Throw Up
+
+- `λ.emitter` takes a `throws` option that can turn off error-throwing
+
 # 1.6.4 Context Emission
 
 - `λ.emitter` properly sets `this` to the event emitter object
