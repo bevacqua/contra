@@ -342,6 +342,7 @@ Augments `thing` with the event emitter methods listed below. If `thing` isn't p
 The emitter can be configured with the following options, too.
 
 - `async` Debounce listeners asynchronously. By default they're executed in sequence.
+- `throws` Throw an exception if an `error` event is emitted and no listeners are defined. Defaults to `true`.
 
 ```js
 var thing = λ.emitter(); // also, λ.emitter({ foo: 'bar' })
@@ -363,7 +364,7 @@ thing.emit('something', 5);
 
 Returns `thing`.
 
-Events of type `error` have a special behavior. `λ.emitter` will throw if there are no `error` listeners when an error event is emitted.
+Events of type `error` have a special behavior. `λ.emitter` will throw if there are no `error` listeners when an error event is emitted. This behavior can be turned off setting `throws: false` in the options.
 
 ```js
 var thing = { foo: 'bar' };
