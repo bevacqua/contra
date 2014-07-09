@@ -1,6 +1,6 @@
 /**
  * contra - Asynchronous flow control with a functional taste to it
- * @version v1.6.4
+ * @version v1.6.5
  * @link https://github.com/bevacqua/contra
  * @license MIT
  */
@@ -163,7 +163,7 @@
       var args = atoa(arguments);
       var type = args.shift();
       var et = evt[type];
-      if (type === 'error' && !et) { throw args.length === 1 ? args[0] : args; }
+      if (type === 'error' && opts.throws !== false && !et) { throw args.length === 1 ? args[0] : args; }
       if (!et) { return; }
       evt[type] = et.filter(function emitter (listen) {
         if (opts.async) { debounce(listen, args, thing); } else { listen.apply(thing, args); }
