@@ -1,6 +1,6 @@
 /**
  * contra - Asynchronous flow control with a functional taste to it
- * @version v1.6.6
+ * @version v1.6.7
  * @link https://github.com/bevacqua/contra
  * @license MIT
  */
