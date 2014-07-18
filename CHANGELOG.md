@@ -1,3 +1,7 @@
+# 1.6.7 Carbon Emitter
+
+- New options to turn off event listeners on `λ.emitter` objects
+
 # 1.6.5 Throw Up
 
 - `λ.emitter` takes a `throws` option that can turn off error-throwing

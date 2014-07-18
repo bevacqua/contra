@@ -338,6 +338,8 @@ Augments `thing` with the event emitter methods listed below. If `thing` isn't p
 - `on(type, fn)` Registers an event listener `fn` for `type` events
 - `once(type, fn)` Same as `on`, but the listener is discarded after one callback
 - `off(type, fn)` Unregisters an event listener `fn` from `type` events
+- `off(type)` Unregisters all event listeners from `type` events
+- `off()` Unregisters all event listeners
 
 The emitter can be configured with the following options, too.
 

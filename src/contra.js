@@ -149,9 +149,16 @@
       thing.on(type, fn);
     };
     thing.off = function (type, fn) {
-      var et = evt[type];
-      if (!et) { return; }
-      et.splice(et.indexOf(fn), 1);
+      var c = arguments.length;
+      if (c === 1) {
+        delete evt[type];
+      } else if (c === 0) {
+        evt = {};
+      } else {
+        var et = evt[type];
+        if (!et) { return; }
+        et.splice(et.indexOf(fn), 1);
+      }
     };
     thing.emit = function () {
       var args = atoa(arguments);
