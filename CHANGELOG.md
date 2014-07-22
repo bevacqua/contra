@@ -1,3 +1,7 @@
+# 1.6.8 Cascade of Events
+
+- `λ.emitter` methods return the emitter object for chaining
+
 # 1.6.7 Carbon Emitter
 
 - New options to turn off event listeners on `λ.emitter` objects

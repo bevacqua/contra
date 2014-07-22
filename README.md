@@ -331,7 +331,7 @@ q.on('drain', function () {
 
 ## `λ.emitter(thing={}, options={})`
 
-Augments `thing` with the event emitter methods listed below. If `thing` isn't provided, an event emitter is created for you.
+Augments `thing` with the event emitter methods listed below. If `thing` isn't provided, an event emitter is created for you. Emitter methods return the `thing` for chaining.
 
 - `thing` Optional. Writable JavaScript object
 - `emit(type, ...arguments)` Emits an event of type `type`, passing arguments

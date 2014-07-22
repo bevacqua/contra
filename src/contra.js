@@ -143,10 +143,12 @@
       } else {
         evt[type].push(fn);
       }
+      return thing;
     };
     thing.once = function (type, fn) {
       fn._once = true; // thing.off(fn) still works!
       thing.on(type, fn);
+      return thing;
     };
     thing.off = function (type, fn) {
       var c = arguments.length;
@@ -156,20 +158,22 @@
         evt = {};
       } else {
         var et = evt[type];
-        if (!et) { return; }
+        if (!et) { return thing; }
         et.splice(et.indexOf(fn), 1);
       }
+      return thing;
     };
     thing.emit = function () {
       var args = atoa(arguments);
       var type = args.shift();
       var et = evt[type];
       if (type === 'error' && opts.throws !== false && !et) { throw args.length === 1 ? args[0] : args; }
-      if (!et) { return; }
+      if (!et) { return thing; }
       evt[type] = et.filter(function emitter (listen) {
         if (opts.async) { debounce(listen, args, thing); } else { listen.apply(thing, args); }
         return !listen._once;
       });
+      return thing;
     };
     return thing;
   }
