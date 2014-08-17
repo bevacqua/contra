@@ -1,3 +1,7 @@
+# 1.6.9 Context Emission Revisited
+
+- Fixed the context passed to event listeners
+
 # 1.6.8 Cascade of Events
 
 - `λ.emitter` methods return the emitter object for chaining
