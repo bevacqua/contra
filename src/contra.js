@@ -168,7 +168,7 @@
       var args = atoa(arguments);
       var type = args.shift();
       var et = evt[type];
-      if (type === 'error' && opts.throws !== false && !et) { throw args.length === 1 ? args[0] : args; }
+      if (type === 'error' && opts['throws'] !== false && !et) { throw args.length === 1 ? args[0] : args; }
       if (!et) { return thing; }
       evt[type] = et.filter(function emitter (listen) {
         if (opts.async) { debounce(listen, args, ctx); } else { listen.apply(ctx, args); }
