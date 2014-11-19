@@ -1,3 +1,7 @@
+# 1.7.0 Heaven
+
+- Fixed a bug where `done` callbacks weren't optional
+
 # 1.6.9 Context Emission Revisited
 
 - Fixed the context passed to event listeners

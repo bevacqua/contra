@@ -60,7 +60,7 @@
   }
 
   function _concurrent (tasks, concurrency, done) {
-    if (!done) { done = concurrency; concurrency = CONCURRENT; }
+    if (typeof concurrency === 'function') { done = concurrency; concurrency = CONCURRENT; }
     var d = once(done);
     var q = _queue(worker, concurrency);
     var keys = Object.keys(tasks);
@@ -98,7 +98,7 @@
           }
         };
       });
-      _concurrent(tasks, cap || concurrency, then ? then(collection, done) : done);
+      _concurrent(tasks, cap || concurrency, then ? then(collection, once(done)) : done);
     };
     if (!attached) { map.series = _map(SERIAL, then, true); }
     return map;
