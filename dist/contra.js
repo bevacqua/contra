@@ -1,6 +1,6 @@
 /**
  * contra - Asynchronous flow control with a functional taste to it
- * @version v1.6.10
+ * @version v1.7.0
  * @link https://github.com/bevacqua/contra
  * @license MIT
  */
@@ -66,7 +66,7 @@
   }
 
   function _concurrent (tasks, concurrency, done) {
-    if (!done) { done = concurrency; concurrency = CONCURRENT; }
+    if (typeof concurrency === 'function') { done = concurrency; concurrency = CONCURRENT; }
     var d = once(done);
     var q = _queue(worker, concurrency);
     var keys = Object.keys(tasks);
@@ -104,7 +104,7 @@
           }
         };
       });
-      _concurrent(tasks, cap || concurrency, then ? then(collection, done) : done);
+      _concurrent(tasks, cap || concurrency, then ? then(collection, once(done)) : done);
     };
     if (!attached) { map.series = _map(SERIAL, then, true); }
     return map;
