@@ -147,7 +147,7 @@ Using objects
 Executes tasks in series. `done` gets all the results. Results get passed as an array or hash to an optional `done` callback. Task order is preserved in results.
 
 - `tasks` Collection of functions with the `(next)` signature. Can be an array or an object
-- `done` <Opti></Opti>onal function with the `(err, results)` signature
+- `done` Optional function with the `(err, results)` signature
 
 ```js
 λ.series([
