@@ -164,18 +164,22 @@
       return thing;
     };
     thing.emit = function () {
-      var ctx = this;
       var args = atoa(arguments);
-      var type = args.shift();
-      var et = evt[type];
-      if (type === 'error' && opts.throws !== false && !et) { throw args.length === 1 ? args[0] : args; }
-      if (!et) { return thing; }
-      evt[type] = et.filter(function emitter (listen) {
-        if (opts.async) { debounce(listen, args, ctx); } else { listen.apply(ctx, args); }
-        return !listen._once;
-      });
-      return thing;
+      return thing.emitterSnapshot(args.shift()).apply(this, args);
     };
+    thing.emitterSnapshot = function (type) {
+      var et = (evt[type] || []).slice(0);
+      return function () {
+        var args = atoa(arguments);
+        var ctx = this || thing;
+        if (type === 'error' && opts.throws !== false && !et.length) { throw args.length === 1 ? args[0] : args; }
+        evt[type] = et.filter(function emitter (listen) {
+          if (opts.async) { debounce(listen, args, ctx); } else { listen.apply(ctx, args); }
+          return !listen._once;
+        });
+        return thing;
+      };
+    }
     return thing;
   }
 

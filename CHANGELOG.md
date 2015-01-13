@@ -1,3 +1,7 @@
+# 1.8.0 Hell
+
+- Updated `λ.emitter` to match functionality in `contra.emitter` package
+
 # 1.7.0 Heaven
 
 - Fixed a bug where `done` callbacks weren't optional
