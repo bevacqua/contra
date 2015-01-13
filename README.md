@@ -334,12 +334,29 @@ q.on('drain', function () {
 Augments `thing` with the event emitter methods listed below. If `thing` isn't provided, an event emitter is created for you. Emitter methods return the `thing` for chaining.
 
 - `thing` Optional. Writable JavaScript object
-- `emit(type, ...arguments)` Emits an event of type `type`, passing arguments
+- `emit(type, ...arguments)` Emits an event of type `type`, passing any `...arguments`
+- `emitterSnapshot(type)` Returns a function you can call, passing any `...arguments`
 - `on(type, fn)` Registers an event listener `fn` for `type` events
 - `once(type, fn)` Same as `on`, but the listener is discarded after one callback
 - `off(type, fn)` Unregisters an event listener `fn` from `type` events
 - `off(type)` Unregisters all event listeners from `type` events
 - `off()` Unregisters all event listeners
+
+The `emitterSnapshot(type)` method lets you remove all event listeners before emitting an event that might add more event listeners which shouldn't be removed. In the example below, `thing` removes all events and then emits a `'destroy'` event, resulting in a `'create'` event handler being attached. If we just used `thing.off()` after emitting the destroy event, the `'create'` event handler would be wiped out too _(or the consumer would have to know implementation details as to avoid this issue)_.
+
+```js
+var thing = λ.emitter();
+
+thing.on('foo', foo);
+thing.on('bar', bar);
+thing.on('destroy', function () {
+  thing.on('create', reinitialize);
+});
+
+var destroy = thing.emitterSnapshot('destroy');
+thing.off();
+destroy();
+```
 
 The emitter can be configured with the following options, too.
 
