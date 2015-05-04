@@ -1,3 +1,7 @@
+# 1.8.1 Snapchat
+
+- Fixed a use case where the consumer turned the emitter `.off` from within the event listener
+
 # 1.8.0 Hell
 
 - Updated `λ.emitter` to match functionality in `contra.emitter` package
