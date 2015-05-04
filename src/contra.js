@@ -173,9 +173,9 @@
         var args = atoa(arguments);
         var ctx = this || thing;
         if (type === 'error' && opts.throws !== false && !et.length) { throw args.length === 1 ? args[0] : args; }
-        evt[type] = et.filter(function emitter (listen) {
+        et.forEach(function emitter (listen) {
           if (opts.async) { debounce(listen, args, ctx); } else { listen.apply(ctx, args); }
-          return !listen._once;
+          if (listen._once) { thing.off(type, listen); }
         });
         return thing;
       };
