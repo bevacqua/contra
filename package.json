@@ -23,6 +23,7 @@
     "promises",
     "q"
   ],
+  "main": "src/contra.js",
   "scripts": {
     "build": "browserify -s contra -do dist/contra.js src/contra.js && uglifyjs -m -c -o dist/contra.min.js dist/contra.js",
     "build-shim": "browserify -do dist/contra.shim.js src/contra.shim.js && uglifyjs -m -c -o dist/contra.shim.min.js dist/contra.shim.js",

@@ -32,8 +32,7 @@
     "test",
     "resources",
     "index.js",
-    "shim.js",
-    "gulpfile.js"
+    "shim.js"
   ],
   "dependencies": {},
   "devDependencies": {
