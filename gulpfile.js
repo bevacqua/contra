@@ -10,6 +10,7 @@ var rename = require('gulp-rename');
 var header = require('gulp-header');
 var uglify = require('gulp-uglify');
 var size = require('gulp-size');
+var browserify = require('browserify');
 
 var extended = [
   '/**',
@@ -55,7 +56,8 @@ gulp.task('build-shim', ['bump', 'test', 'clean'], function () {
 gulp.task('build', ['build-shim'], function () {
   var pkg = require('./package.json');
 
-  return gulp.src('./src/contra.js')
+  return browserify('./src/contra.js')
+    .bundle()
     .pipe(header(extended, { pkg : pkg } ))
     .pipe(gulp.dest('./dist'))
     .pipe(rename('contra.min.js'))

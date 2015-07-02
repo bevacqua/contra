@@ -4,8 +4,8 @@
   "version": "1.8.1",
   "homepage": "https://github.com/bevacqua/contra",
   "author": {
-    "name": "Nicolas Bevacqua",
     "email": "ng@bevacqua.io",
+    "name": "Nicolas Bevacqua",
     "url": "http://bevacqua.io"
   },
   "license": "MIT",
@@ -14,41 +14,51 @@
     "url": "git://github.com/bevacqua/contra.git"
   },
   "keywords": [
-    "async",
     "a",
+    "async",
     "asynchronous",
-    "flow",
     "control",
+    "flow",
+    "generator",
     "promises",
-    "q",
-    "generator"
+    "q"
   ],
   "scripts": {
     "test": "mocha --reporter tap && jshint --reporter node_modules/jshint-tap/jshint-tap.js test/*.js"
   },
   "testling": {
-    "harness": "mocha",
-    "files": [
-      "src/contra.js",
-      "src/contra.shim.js",
-      "test/*.js"
-    ],
     "browsers": {
+      "android-browser": [
+        4.2
+      ],
       "chrome": [
-        5,
         15,
         20,
         25,
         30,
+        5,
         "canary"
       ],
       "firefox": [
-        3.6,
         10,
         15,
         20,
         25,
+        3.6,
         "nightly"
+      ],
+      "ie": [
+        10,
+        6,
+        7,
+        8,
+        9
+      ],
+      "ipad": [
+        6
+      ],
+      "iphone": [
+        6
       ],
       "opera": [
         15,
@@ -60,27 +70,18 @@
         4,
         5.1,
         6
-      ],
-      "ie": [
-        6,
-        7,
-        8,
-        9,
-        10
-      ],
-      "iphone": [
-        6
-      ],
-      "ipad": [
-        6
-      ],
-      "android-browser": [
-        4.2
       ]
-    }
+    },
+    "files": [
+      "src/contra.js",
+      "src/contra.shim.js",
+      "test/*.js"
+    ],
+    "harness": "mocha"
   },
   "devDependencies": {
     "assert": "~1.1.0",
+    "browserify": "10.2.4",
     "gulp": "^3.6.2",
     "gulp-bump": "~0.1.0",
     "gulp-clean": "~0.2.3",
@@ -96,5 +97,9 @@
     "jshint-stylish": "~0.1.5",
     "jshint-tap": "0.0.1",
     "mocha": "~1.17.0"
+  },
+  "dependencies": {
+    "atoa": "1.0.0",
+    "ticky": "1.0.0"
   }
 }
