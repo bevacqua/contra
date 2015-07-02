@@ -1,3 +1,7 @@
+# 1.9.0 Modularity Paradise
+
+- Split the monolithic source code into individual modules
+
 # 1.8.1 Snapchat
 
 - Fixed a use case where the consumer turned the emitter `.off` from within the event listener
