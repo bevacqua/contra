@@ -28,11 +28,9 @@
     ".*",
     "package.json",
     "node_modules",
-    "src",
     "test",
     "resources",
-    "index.js",
-    "shim.js"
+    "*.js"
   ],
   "dependencies": {},
   "devDependencies": {
