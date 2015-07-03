@@ -1,3 +1,7 @@
+# 1.9.1 Requirements Met
+
+- Moved modules out of `src` directory so that they can be required like `contra/emitter`
+
 # 1.9.0 Modularity Paradise
 
 - Split the monolithic source code into individual modules
