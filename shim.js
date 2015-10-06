@@ -1,1 +1,1 @@
-require('./src/contra.shim.js');
+require('./contra.shim.js');
