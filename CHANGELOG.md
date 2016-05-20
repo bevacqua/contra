@@ -1,4 +1,4 @@
-# 1.9.1 Ticky Tac
+# 1.9.3 Ticky Tac
 
 - Bump `ticky@1.0.1`
 
