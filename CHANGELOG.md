@@ -1,3 +1,7 @@
+# 1.9.1 Ticky Tac
+
+- Bump `ticky@1.0.1`
+
 # 1.9.1 Requirements Met
 
 - Moved modules out of `src` directory so that they can be required like `contra/emitter`
