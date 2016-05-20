@@ -95,6 +95,6 @@
   },
   "dependencies": {
     "atoa": "1.0.0",
-    "ticky": "1.0.0"
+    "ticky": "1.0.1"
   }
 }
