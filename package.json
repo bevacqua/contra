@@ -91,7 +91,7 @@
     "jshint-stylish": "~0.1.5",
     "jshint-tap": "0.0.1",
     "mocha": "~1.17.0",
-    "uglify-js": "2.4.23"
+    "uglify-js": "3.6.8"
   },
   "dependencies": {
     "atoa": "1.0.0",
